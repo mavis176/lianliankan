@@ -1,20 +1,2113 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>暖喵咖啡馆 · 连连看与模拟经营 (Purr & Coffee Match)</title>
-    <meta name="description" content="治愈系日式暖色调连连看+猫咪咖啡馆模拟装修经营小游戏，支持18个难度递进关卡、折线消除算法、家具升级、互动猫咪及Web Audio合成音效。" />
-    <meta property="og:title" content="暖喵咖啡馆 · 连连看与模拟经营 (Purr & Coffee Match)" />
-    <meta property="og:description" content="治愈系日式暖色调连连看+猫咪咖啡馆模拟装修经营小游戏，支持18个难度递进关卡、折线消除算法、家具升级、互动猫咪及Web Audio合成音效。" />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  </head>
-  <body class="bg-[#FAF7F2] text-stone-800 antialiased select-none overflow-x-hidden">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>暖喵咖啡馆 · 深度经营日志与食材连连看</title>
+  <style>
+    /* -------------------------------------------------------------
+       ZERO-DEPENDENCY PURE NATIVE CSS STYLESHEET
+       Warm & Healing Japanese Cafe Palette (#FAF7F2, #FAF5EE, #8C603D)
+       100% Inline - Works Completely Offline on Any Mobile Browser
+       ------------------------------------------------------------- */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      min-height: 100dvh;
+      background-color: #FAF7F2;
+      color: #2C2219;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Mobile Container Frame */
+    .app-viewport {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      height: 100dvh;
+      max-height: 100dvh;
+      background-color: #FAF7F2;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 0 35px rgba(60, 40, 20, 0.12);
+    }
+
+    /* Top Status Bar */
+    .top-bar {
+      height: 52px;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(250, 247, 242, 0.96);
+      border-bottom: 1px solid #E8DEC8;
+      flex-shrink: 0;
+      z-index: 30;
+    }
+    .status-group {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: #FFFDF9;
+      border: 1px solid #D9CDB8;
+      padding: 3px 8px;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .status-pill-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+    .status-pill-label {
+      font-size: 8px;
+      color: #8C6544;
+      font-weight: 500;
+    }
+    .status-pill-val {
+      font-size: 11px;
+      font-weight: 700;
+      color: #2C2219;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-icon-subtle {
+      height: 32px;
+      padding: 0 8px;
+      border-radius: 10px;
+      background: #FFFDF9;
+      border: 1px solid #D9CDB8;
+      color: #5C4434;
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+      transition: all 0.12s ease;
+    }
+    .btn-icon-subtle:active {
+      transform: translateY(1px);
+      background: #F4ECE1;
+    }
+
+    /* 3 Management Navigation Tabs */
+    .tab-bar {
+      height: 42px;
+      padding: 4px 12px;
+      display: flex;
+      gap: 6px;
+      background: #F6EFE6;
+      border-bottom: 1px solid #E8DEC8;
+      flex-shrink: 0;
+      z-index: 25;
+    }
+    .tab-item {
+      flex: 1;
+      border: none;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #7D6652;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tab-item.active {
+      background: #FFFDF9;
+      color: #2C2219;
+      font-weight: 700;
+      border: 1px solid #D8C9B4;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    /* Main Scrollable Body */
+    .body-scroll {
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Narrative Text Log Window */
+    .log-card {
+      width: 100%;
+      background: #FFFDF9;
+      border: 1px solid #E2D6C2;
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 2px 6px rgba(107, 72, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .log-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #EFE7D8;
+      margin-bottom: 8px;
+    }
+    .log-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #3B2C20;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .log-badge {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #F5EFEB;
+      color: #8C6544;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #10B981;
+      box-shadow: 0 0 6px #10B981;
+    }
+    .log-content-box {
+      height: 100px;
+      max-height: 120px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-right: 4px;
+    }
+    .log-entry {
+      font-size: 11px;
+      line-height: 1.45;
+      padding: 6px 8px;
+      border-radius: 10px;
+      background: #FAF8F5;
+      color: #554332;
+      animation: fadeIn 0.25s ease-out;
+    }
+    .log-entry.highlight {
+      background: #FBF6EE;
+      border-left: 2px solid #C49B71;
+      color: #332417;
+      font-weight: 500;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Sub-Panels */
+    .module-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+    .panel-header-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2px;
+    }
+    .panel-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #5C4434;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .panel-sub {
+      font-size: 10px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      color: #8C6544;
+    }
+
+    /* Phase Filter Pills */
+    .filter-pills {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pill-filter-btn {
+      border: none;
+      padding: 3px 8px;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 600;
+      background: #EFE8DA;
+      color: #6B533E;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .pill-filter-btn.active {
+      background: #8C603D;
+      color: #FFFFFF;
+    }
+
+    /* Cards */
+    .card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .content-card {
+      width: 100%;
+      padding: 10px 12px;
+      background: #FFFDF9;
+      border: 1px solid #E2D6C2;
+      border-radius: 14px;
+      box-shadow: 0 1px 4px rgba(107, 72, 42, 0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+    .content-card.locked {
+      background: rgba(245, 242, 235, 0.6);
+      border-color: rgba(232, 222, 200, 0.6);
+      opacity: 0.65;
+    }
+    .content-card.completed {
+      background: #F9F6F0;
+      border-color: #E8DEC8;
+      opacity: 0.95;
+    }
+    .card-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 0;
+    }
+    .card-icon-box {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #F5EFEB;
+      border: 1px solid #E2D6C2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .card-text-col {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      flex: 1;
+    }
+    .card-title-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .stage-tag {
+      font-size: 9px;
+      font-family: ui-monospace, monospace;
+      font-weight: 700;
+      background: #EFE8DA;
+      color: #6B533E;
+      padding: 1px 4px;
+      border-radius: 4px;
+    }
+    .card-main-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #2C2219;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-desc {
+      font-size: 10px;
+      color: #78614E;
+      margin-top: 2px;
+      line-height: 1.25;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-cost-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+      font-size: 9px;
+      font-family: ui-monospace, monospace;
+      font-weight: 700;
+      color: #8C6544;
+    }
+    .cost-badge {
+      background: #FAF4EB;
+      border: 1px solid #E8DEC8;
+      padding: 1px 4px;
+      border-radius: 4px;
+    }
+    .btn-upgrade {
+      border: none;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #FFFFFF;
+      background: linear-gradient(135deg, #D97706, #B45309);
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(180, 83, 9, 0.2);
+      transition: all 0.12s;
+      flex-shrink: 0;
+    }
+    .btn-upgrade:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 2px rgba(180, 83, 9, 0.2);
+    }
+    .btn-upgrade:disabled {
+      background: #E8DEC8;
+      color: #8C7560;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .tag-completed {
+      font-size: 10px;
+      font-weight: 700;
+      color: #065F46;
+      background: #D1FAE5;
+      border: 1px solid #A7F3D0;
+      padding: 3px 8px;
+      border-radius: 8px;
+    }
+
+    /* Cash Register Box */
+    .cash-register-card {
+      width: 100%;
+      background: linear-gradient(135deg, #FFFDF9, #FAF3E8);
+      border: 1px solid #D9CDB8;
+      border-radius: 14px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .register-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .register-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #3B2C20;
+    }
+    .register-val {
+      font-size: 10px;
+      color: #8C6544;
+      margin-top: 2px;
+    }
+    .coin-hl {
+      font-weight: 700;
+      color: #D97706;
+      font-family: ui-monospace, monospace;
+    }
+
+    /* Cat Status Meters */
+    .cat-meters-card {
+      width: 100%;
+      background: #FFFDF9;
+      border: 1px solid #E2D6C2;
+      border-radius: 14px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .meter-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .meter-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 600;
+      color: #6B533E;
+    }
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: #EFE7D8;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-fill-gold {
+      height: 100%;
+      background: linear-gradient(90deg, #FBBF24, #F59E0B);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    .progress-fill-pink {
+      height: 100%;
+      background: linear-gradient(90deg, #F472B6, #EC4899);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    .cat-action-btns {
+      display: flex;
+      gap: 8px;
+      padding-top: 4px;
+    }
+    .cat-btn {
+      flex: 1;
+      padding: 6px;
+      border-radius: 10px;
+      background: #FAF4EB;
+      border: 1px solid #E5DAC8;
+      color: #5C4434;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .cat-btn:active {
+      transform: scale(0.97);
+      background: #F3EADA;
+    }
+
+    /* Bottom Action Bar */
+    .action-footer {
+      width: 100%;
+      padding: 10px 14px 16px;
+      background: rgba(250, 247, 242, 0.98);
+      border-top: 1px solid #E8DEC8;
+      flex-shrink: 0;
+      z-index: 30;
+    }
+    .btn-big-procure {
+      width: 100%;
+      height: 48px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #D97706, #B45309);
+      color: #FFFFFF;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(180, 83, 9, 0.28);
+      transition: all 0.12s;
+    }
+    .btn-big-procure:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 6px rgba(180, 83, 9, 0.25);
+    }
+    .level-badge-inner {
+      background: rgba(0,0,0,0.22);
+      color: #FEF3C7;
+      font-size: 11px;
+      font-family: ui-monospace, monospace;
+      padding: 2px 7px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* -------------------------------------------------------------
+       PUZZLE VIEW STYLES
+       ------------------------------------------------------------- */
+    .puzzle-view {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-color: #FAF5EE;
+      padding: 10px 12px;
+      overflow: hidden;
+    }
+    .puzzle-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding-bottom: 6px;
+      flex-shrink: 0;
+      z-index: 20;
+    }
+    .btn-back {
+      height: 38px;
+      padding: 0 10px;
+      border-radius: 12px;
+      background: #FFFDF8;
+      border: 2px solid #6B482A;
+      box-shadow: 0 2px 0 #6B482A;
+      color: #5A381E;
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .btn-back:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 0 #6B482A;
+    }
+    .puzzle-level-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 0;
+    }
+    .level-title-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .puzzle-title-text {
+      font-size: 13px;
+      font-weight: 900;
+      color: #5A381E;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .puzzle-mode-tag {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 1px 4px;
+      border-radius: 4px;
+      background: #FEF3C7;
+      color: #92400E;
+      border: 1px solid #FCD34D;
+    }
+    .puzzle-progress-text {
+      font-size: 10px;
+      font-weight: 700;
+      color: #8C623E;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .progress-pill {
+      background: #8C603D;
+      color: #FFFFFF;
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      padding: 1px 6px;
+      border-radius: 8px;
+    }
+    .clock-container {
+      min-width: 48px;
+      height: 38px;
+      padding: 0 8px;
+      background: #FFFDF8;
+      border: 2px solid #6B482A;
+      border-radius: 12px;
+      box-shadow: 0 2px 0 #6B482A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 900;
+      font-family: ui-monospace, monospace;
+      color: #6B482A;
+      flex-shrink: 0;
+    }
+
+    /* Power-ups Row */
+    .powerups-bar {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding-bottom: 6px;
+      flex-shrink: 0;
+      z-index: 20;
+    }
+    .powerup-btn {
+      position: relative;
+      height: 38px;
+      border-radius: 12px;
+      background: #FFFDF8;
+      border: 2px solid #6B482A;
+      box-shadow: 0 2px 0 #6B482A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: #5A381E;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .powerup-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 0 #6B482A;
+    }
+    .powerup-badge {
+      position: absolute;
+      bottom: -4px;
+      right: -4px;
+      background: #6B482A;
+      color: #FFFFFF;
+      font-size: 9px;
+      font-family: ui-monospace, monospace;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 8px;
+      border: 1px solid #FFFFFF;
+    }
+
+    /* LianLianKan Board Canvas & Frame */
+    .board-center-area {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      z-index: 10;
+    }
+    #particleCanvas {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 30;
+    }
+    .board-frame {
+      position: relative;
+      background: #7D5537;
+      border: 4px solid #8C603C;
+      border-radius: 20px;
+      box-shadow: 0 5px 0 #5C3D26;
+      padding: 2px;
+    }
+    .tiles-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .tile-btn {
+      position: absolute;
+      border: none;
+      background: transparent;
+      padding: 2px;
+      cursor: pointer;
+    }
+    .tile-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: #FFFDF8;
+      border: 2px solid #8C6541;
+      border-radius: 12px;
+      box-shadow: 0 2px 0 #734F30;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .tile-inner.selected {
+      background: #FFFDF5;
+      border-color: #F59E0B;
+      box-shadow: 0 0 0 3px #FDE68A, 0 3px 6px rgba(245, 158, 11, 0.4);
+      transform: scale(1.08);
+      z-index: 15;
+    }
+    .tile-obstacle {
+      width: 100%;
+      height: 100%;
+      background: #8B5A2B;
+      border: 2px solid #5C3D26;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+      opacity: 0.92;
+    }
+    .tile-ice-overlay {
+      position: absolute;
+      inset: 0;
+      border-radius: 10px;
+      background: rgba(186, 230, 253, 0.45);
+      border: 2px solid #38BDF8;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 900;
+    }
+
+    /* Puzzle Footer Progress Bar */
+    .puzzle-footer {
+      width: 100%;
+      padding-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-shrink: 0;
+      z-index: 20;
+    }
+    .progress-track-outer {
+      flex: 1;
+      height: 36px;
+      background: #FFFDF8;
+      border: 2px solid #6B482A;
+      border-radius: 12px;
+      padding: 3px;
+      box-shadow: 0 2px 0 #6B482A;
+      display: flex;
+      align-items: center;
+    }
+    .progress-track-inner {
+      width: 100%;
+      height: 100%;
+      background: #E8DCBF;
+      border-radius: 8px;
+      overflow: hidden;
+      padding: 1px;
+    }
+    .progress-fill-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #A5D67D, #86C852);
+      border-radius: 6px;
+      transition: width 0.3s ease;
+    }
+    .score-badge {
+      padding: 0 12px;
+      height: 36px;
+      border-radius: 12px;
+      background: #FFFDF8;
+      border: 2px solid #6B482A;
+      box-shadow: 0 2px 0 #6B482A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 900;
+      font-family: ui-monospace, monospace;
+      color: #5A381E;
+      flex-shrink: 0;
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.72);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .modal-box {
+      width: 100%;
+      max-width: 340px;
+      background: #FFFDF8;
+      border: 2px solid #6B482A;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      padding: 20px;
+      text-align: center;
+      animation: modalPop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes modalPop {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .level-select-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      max-height: 280px;
+      overflow-y: auto;
+      padding: 10px 0;
+    }
+    .level-grid-item {
+      padding: 8px 4px;
+      border-radius: 10px;
+      background: #FAF4EB;
+      border: 1px solid #D9CDB8;
+      color: #5C4434;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+    .level-grid-item.current {
+      background: #FEF3C7;
+      border-color: #F59E0B;
+      color: #92400E;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Single Mobile App Viewport Container -->
+  <div class="app-viewport">
+
+    <!-- ======================================================== -->
+    <!-- VIEW 1: 【主页 · 猫咪咖啡馆日志】(3大深度子系统)            -->
+    <!-- ======================================================== -->
+    <div id="viewJournal" class="app-viewport" style="box-shadow: none;">
+      <!-- Top Status Bar -->
+      <header class="top-bar">
+        <div class="status-group">
+          <!-- 星光灵感 -->
+          <div class="status-pill">
+            <span style="font-size: 13px;">⭐</span>
+            <div class="status-pill-text">
+              <span class="status-pill-label">星光灵感</span>
+              <span id="headerStars" class="status-pill-val">4</span>
+            </div>
+          </div>
+          <!-- 营业金币 -->
+          <div class="status-pill">
+            <span style="font-size: 13px;">🪙</span>
+            <div class="status-pill-text">
+              <span class="status-pill-label">营业金币</span>
+              <span id="headerCoins" class="status-pill-val">450</span>
+            </div>
+          </div>
+          <!-- 驻店猫咪数 -->
+          <div class="status-pill">
+            <span style="font-size: 12px;">🐾</span>
+            <span id="headerCats" class="status-pill-val" style="color: #5C4434;">0 只</span>
+          </div>
+        </div>
+
+        <div class="top-actions">
+          <button id="btnLevelSelect" class="btn-icon-subtle">选关</button>
+          <button id="btnToggleSoundJournal" class="btn-icon-subtle" style="width: 32px; padding: 0;">🔊</button>
+        </div>
+      </header>
+
+      <!-- 3 Navigation Tabs -->
+      <nav class="tab-bar">
+        <button id="tabBtnRenovate" onclick="switchJournalTab('renovate')" class="tab-item active">空间施工 (15)</button>
+        <button id="tabBtnDrinks" onclick="switchJournalTab('drinks')" class="tab-item">饮品研发 (6)</button>
+        <button id="tabBtnCats" onclick="switchJournalTab('cats')" class="tab-item">猫咪与日常</button>
+      </nav>
+
+      <!-- Scrollable Main Body Area -->
+      <main class="body-scroll">
+        <!-- Live Narrative Text Window -->
+        <section class="log-card">
+          <div class="log-card-header">
+            <div class="log-title">
+              <span>📖</span>
+              <span>猫咪咖啡馆随笔 · 营业手记</span>
+            </div>
+            <div class="log-badge">
+              <span class="pulse-dot"></span>
+              <span id="passiveRateBadge">+0 币/分</span>
+            </div>
+          </div>
+          <div id="journalLogsContainer" class="log-content-box"></div>
+        </section>
+
+        <!-- SUB-TAB 1: 空间施工 (15 Stages) -->
+        <div id="panelRenovate" class="module-panel">
+          <div class="panel-header-line">
+            <div class="panel-title">
+              <span>🔨</span> 空间翻新与施工阶段
+            </div>
+            <span id="stagesProgressText" class="panel-sub">已竣工 2 / 15</span>
+          </div>
+          <!-- Phase Filter Pills -->
+          <div class="filter-pills">
+            <button onclick="setPhaseFilter('all')" id="filterAll" class="pill-filter-btn active">全部 (15)</button>
+            <button onclick="setPhaseFilter('early')" id="filterEarly" class="pill-filter-btn">初期·毛坯</button>
+            <button onclick="setPhaseFilter('mid')" id="filterMid" class="pill-filter-btn">中期·核心</button>
+            <button onclick="setPhaseFilter('late')" id="filterLate" class="pill-filter-btn">后期·乐园</button>
+          </div>
+          <div id="stagesCardsContainer" class="card-list"></div>
+        </div>
+
+        <!-- SUB-TAB 2: 饮品研发 (6 Drinks + Cash Register) -->
+        <div id="panelDrinks" class="module-panel hidden">
+          <!-- Cash Register Idle Box -->
+          <div class="cash-register-card">
+            <div class="register-info">
+              <span style="font-size: 22px;">💰</span>
+              <div>
+                <div class="register-title">吧台收银机 · 被动营收</div>
+                <div class="register-val">
+                  累积金币: <span id="cashRegisterAmount" class="coin-hl">0</span> 🪙
+                  <span id="cashRateText" style="font-size: 9px; color: #A38E7A; margin-left: 4px;">(+0 币/分)</span>
+                </div>
+              </div>
+            </div>
+            <button onclick="collectCashRegister()" class="btn-upgrade" style="padding: 5px 12px;">提取</button>
+          </div>
+
+          <div class="panel-header-line">
+            <div class="panel-title">
+              <span>☕</span> 咖啡馆饮品菜单研发
+            </div>
+            <span id="drinksProgressText" class="panel-sub">已研发 1 / 6</span>
+          </div>
+          <div id="drinksCardsContainer" class="card-list"></div>
+        </div>
+
+        <!-- SUB-TAB 3: 猫咪与日常 (Cat Satiety/Mood + 12 Customer Stories) -->
+        <div id="panelCats" class="module-panel hidden">
+          <div class="cat-meters-card">
+            <div class="panel-header-line">
+              <div class="panel-title">
+                <span>🐾</span> 驻店猫咪状态监测
+              </div>
+              <span style="font-size: 9px; color: #A38265;">喂食与逗弄可回复</span>
+            </div>
+            <div id="catsMetersContainer"></div>
+          </div>
+
+          <div class="module-panel">
+            <div class="panel-header-line">
+              <div class="panel-title">
+                <span>📜</span> 顾客与日常突发记录 (12)
+              </div>
+              <span id="eventsCountText" class="panel-sub">解锁 3 / 12</span>
+            </div>
+            <div id="eventsCardsContainer" class="card-list"></div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Bottom Fixed Action Bar -->
+      <footer class="action-footer">
+        <button id="btnStartProcure" class="btn-big-procure">
+          <span style="font-size: 16px;">🐾</span>
+          <span>开始采购食材</span>
+          <span id="journalLevelBadge" class="level-badge-inner">第 1 关</span>
+          <span style="font-size: 11px;">▶</span>
+        </button>
+      </footer>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- VIEW 2: 【关卡页 · 连连看】(30关，步数/限时，冰块与木箱)       -->
+    <!-- ======================================================== -->
+    <div id="viewPuzzle" class="puzzle-view hidden">
+      <!-- Top Puzzle Header -->
+      <header class="puzzle-header">
+        <button id="btnBackToJournal" class="btn-back">
+          <span>⬅</span>
+          <span>返回</span>
+        </button>
+
+        <div class="puzzle-level-info">
+          <div class="level-title-row">
+            <span id="puzzleLevelTitle" class="puzzle-title-text">第 1 关</span>
+            <span id="modeBadge" class="puzzle-mode-tag">限时</span>
+          </div>
+          <div class="puzzle-progress-text">
+            <span>剩余配对:</span>
+            <span id="pairProgress" class="progress-pill">0 / 18</span>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <div id="clockBox" class="clock-container">
+            <span id="timerText">01:30</span>
+          </div>
+          <button id="btnToggleSoundPuzzle" class="btn-icon-subtle" style="width: 34px; height: 38px; border-radius: 12px; border: 2px solid #6B482A; box-shadow: 0 2px 0 #6B482A; padding: 0;">🔊</button>
+        </div>
+      </header>
+
+      <!-- Power-ups Bar -->
+      <div class="powerups-bar">
+        <button id="btnHint" class="powerup-btn">
+          <span>💡</span>
+          <span>提示</span>
+          <span id="badgeHint" class="powerup-badge">x3</span>
+        </button>
+        <button id="btnShuffle" class="powerup-btn">
+          <span>🔄</span>
+          <span>重排</span>
+          <span id="badgeShuffle" class="powerup-badge">x2</span>
+        </button>
+        <button id="btnFreeze" class="powerup-btn">
+          <span>⏳</span>
+          <span id="freezeText">加时/步</span>
+          <span id="badgeFreeze" class="powerup-badge">x1</span>
+        </button>
+      </div>
+
+      <!-- Main Board (>70% Screen Area, Exact getBoundingClientRect Center Coordinates) -->
+      <main id="boardContainer" class="board-center-area">
+        <canvas id="particleCanvas"></canvas>
+        <div id="boardInner" class="board-frame">
+          <div id="tilesWrapper" class="tiles-wrapper"></div>
+        </div>
+      </main>
+
+      <!-- Bottom Progress Bar -->
+      <footer class="puzzle-footer">
+        <div class="progress-track-outer">
+          <div class="progress-track-inner">
+            <div id="clearanceBar" class="progress-fill-bar" style="width: 4%;"></div>
+          </div>
+        </div>
+        <div class="score-badge">
+          <span id="scoreText">得分: 0</span>
+        </div>
+      </footer>
+    </div>
+
+    <!-- VICTORY MODAL -->
+    <div id="modalVictory" class="modal-backdrop hidden">
+      <div class="modal-box">
+        <span style="font-size: 36px; display: inline-block;">🎉</span>
+        <h2 style="font-size: 18px; font-weight: 900; color: #5A381E; margin-top: 4px;">食材采购成功！🐾</h2>
+        <div style="font-size: 22px; margin: 8px 0; color: #F59E0B;">⭐⭐⭐</div>
+        <p style="font-size: 11px; color: #8C623E; margin-bottom: 14px;">新鲜香浓原料已送达咖啡馆，获得了新灵感！</p>
+
+        <div style="display: flex; justify-content: center; gap: 14px; background: #FAF5EE; border: 1px solid rgba(107,72,42,0.15); border-radius: 12px; padding: 10px; margin-bottom: 16px;">
+          <div style="font-family: ui-monospace, monospace; font-weight: 900; color: #D97706; font-size: 12px;">
+            <span>⭐</span> <span id="vicStarsEarned">+3 星光灵感</span>
+          </div>
+          <div style="font-family: ui-monospace, monospace; font-weight: 900; color: #D97706; font-size: 12px;">
+            <span>🪙</span> <span id="vicCoinsEarned">+120 营业金币</span>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <button id="btnBackToJournalFromVic" class="btn-upgrade" style="width: 100%; height: 42px; font-size: 13px;">
+            返回咖啡馆装扮 📖
+          </button>
+          <button id="btnNextLevel" class="btn-back" style="width: 100%; height: 38px; justify-content: center; font-size: 12px;">
+            继续采购下一关 🐾
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEVEL SELECT MODAL -->
+    <div id="modalLevelSelect" class="modal-backdrop hidden">
+      <div class="modal-box" style="max-height: 80vh; display: flex; flex-direction: column;">
+        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #E8DEC8; padding-bottom: 8px;">
+          <h3 style="font-size: 14px; font-weight: 900; color: #5A381E; display: flex; align-items: center; gap: 5px;">
+            <span>🗺️</span> 关卡选择 (共 30 关)
+          </h3>
+          <button onclick="document.getElementById('modalLevelSelect').classList.add('hidden')" style="width: 26px; height: 26px; border-radius: 50%; border: 1px solid #D9CDB8; background: #FAF4EB; color: #6B482A; font-size: 11px; cursor: pointer;">✕</button>
+        </div>
+        <div id="levelSelectList" class="level-select-grid"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ========================================================
+    // ZERO-DEPENDENCY PURE JAVASCRIPT ENGINE
+    // Web Audio Synthesizer, Dual-Page Router, 3-Module Cafe System
+    // 30 Levels LianLianKan (Time/Moves, Crates, Ice Layer)
+    // ========================================================
+
+    // --- 1. Web Audio Synthesizer ---
+    class SoundManager {
+      constructor() { this.ctx = null; this.enabled = true; }
+      getCtx() {
+        if (!this.ctx) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (AC) this.ctx = new AC();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+        return this.ctx;
+      }
+      playSelect() {
+        if (!this.enabled) return;
+        const c = this.getCtx(); if (!c) return;
+        const o = c.createOscillator(), g = c.createGain();
+        o.type = 'sine'; o.frequency.setValueAtTime(540, c.currentTime);
+        o.frequency.exponentialRampToValueAtTime(880, c.currentTime + 0.05);
+        g.gain.setValueAtTime(0.12, c.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.05);
+        o.connect(g); g.connect(c.destination);
+        o.start(); o.stop(c.currentTime + 0.06);
+      }
+      playMatch(combo = 1) {
+        if (!this.enabled) return;
+        const c = this.getCtx(); if (!c) return;
+        const now = c.currentTime;
+        const baseFreq = 523.25 * Math.pow(1.059, Math.min(12, combo * 2));
+        [baseFreq, baseFreq * 1.25, baseFreq * 1.5].forEach((f, i) => {
+          const t = now + i * 0.035, o = c.createOscillator(), g = c.createGain();
+          o.type = 'triangle'; o.frequency.setValueAtTime(f, t);
+          g.gain.setValueAtTime(0.14, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+          o.connect(g); g.connect(c.destination);
+          o.start(t); o.stop(t + 0.19);
+        });
+      }
+      playIceCrack() {
+        if (!this.enabled) return;
+        const c = this.getCtx(); if (!c) return;
+        const now = c.currentTime;
+        [1800, 2400, 3200].forEach((f, i) => {
+          const t = now + i * 0.02, o = c.createOscillator(), g = c.createGain();
+          o.type = 'sawtooth'; o.frequency.setValueAtTime(f, t);
+          o.frequency.exponentialRampToValueAtTime(f * 0.4, t + 0.08);
+          g.gain.setValueAtTime(0.15, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.09);
+          o.connect(g); g.connect(c.destination);
+          o.start(t); o.stop(t + 0.1);
+        });
+      }
+      playMeow(pitch = 600) {
+        if (!this.enabled) return;
+        const c = this.getCtx(); if (!c) return;
+        const o = c.createOscillator(), g = c.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(pitch, c.currentTime);
+        o.frequency.exponentialRampToValueAtTime(pitch * 1.4, c.currentTime + 0.08);
+        o.frequency.exponentialRampToValueAtTime(pitch * 0.85, c.currentTime + 0.22);
+        g.gain.setValueAtTime(0.18, c.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.24);
+        o.connect(g); g.connect(c.destination);
+        o.start(); o.stop(c.currentTime + 0.25);
+      }
+      playVictory() {
+        if (!this.enabled) return;
+        const c = this.getCtx(); if (!c) return;
+        const notes = [523.25, 659.25, 783.99, 1046.5];
+        notes.forEach((f, i) => {
+          const t = c.currentTime + i * 0.1, o = c.createOscillator(), g = c.createGain();
+          o.type = 'sine'; o.frequency.setValueAtTime(f, t);
+          g.gain.setValueAtTime(0.18, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+          o.connect(g); g.connect(c.destination);
+          o.start(t); o.stop(t + 0.3);
+        });
+      }
+    }
+    const sound = new SoundManager();
+
+    // --- 2. Master Data (15 Stages, 6 Drinks, 12 Events, 30 Levels) ---
+    const JOURNAL_STAGES = [
+      { stage: 1, phase: 'early', id: 'stage_1_cleanup', name: '清扫建筑废料', subtitle: '清除毛坯房旧瓦砾与碎砖，打扫出整洁明亮的地面框架', costStars: 1, costCoins: 60, icon: '🧹', log: '【08:00】清运了三车碎瓦砾，阳光终于毫无阻隔地铺在地板上。' },
+      { stage: 2, phase: 'early', id: 'stage_2_floor', name: '铺设胡桃木地板', subtitle: '选用天然防水耐磨胡桃木，散发幽静森林原木香', costStars: 1, costCoins: 120, icon: '🪵', log: '【09:30】胡桃木地板泛着温润的哑光色泽，踩上去悄无声息。' },
+      { stage: 3, phase: 'early', id: 'stage_3_wall', name: '粉刷暖白珪藻土墙面', subtitle: '吸附异味、调湿透气的暖白质感，构筑温馨呼吸感', costStars: 2, costCoins: 180, icon: '🎨', log: '【11:15】刚粉刷好的暖白墙壁衬托着窗影，屋子里立刻亮堂温和了起来。' },
+      { stage: 4, phase: 'early', id: 'stage_4_window', name: '修复复古拱形采光窗', subtitle: '安装双层隔音玻璃与黄铜把手，锁住午后的温暖阳光', costStars: 2, costCoins: 240, icon: '🪟', log: '【14:00】拱形木窗修复完毕，微风拂动纱帘，光线柔和得刚刚好。' },
+      { stage: 5, phase: 'mid', id: 'stage_5_bar', name: '搭建实木一体工作台', subtitle: '加厚实木台面与内嵌水槽，咖啡师的核心舞台', costStars: 2, costCoins: 320, icon: '☕', log: '【10:00】实木吧台稳固成型，台面边缘打磨出圆润的手感弧度。' },
+      { stage: 6, phase: 'mid', id: 'stage_6_pourover_kit', name: '采购手冲咖啡器具组', subtitle: '细口黄铜手冲壶、三孔陶滤杯与天然原浆滤纸', costStars: 3, costCoins: 420, icon: '🫖', log: '【12:30】试冲了第一壶埃塞俄比亚水洗豆，茉莉与柑橘香气四溢。' },
+      { stage: 7, phase: 'mid', id: 'stage_7_grinder', name: '安装意式商用磨豆机', subtitle: '64mm平刀温控研磨，精准萃取每一颗咖啡豆的风味因子', costStars: 3, costCoins: 520, icon: '⚙️', log: '【14:20】电动磨豆机低沉轰鸣，极细研磨的咖啡粉泛着金棕油脂光泽。' },
+      { stage: 8, phase: 'mid', id: 'stage_8_sofa', name: '摆放窗边双人位软沙发', subtitle: '焦糖色灯芯绒靠垫与高弹海绵，久坐也不会疲惫', costStars: 3, costCoins: 650, icon: '🛋️', log: '【15:45】沙发安放就位，陷进柔软靠背里，看着窗外街道发呆格外治愈。' },
+      { stage: 9, phase: 'mid', id: 'stage_9_carpet', name: '铺设复古编织羊毛地毯', subtitle: '几何纹理手织毯，猫爪肉垫踩在上面最舒服', costStars: 3, costCoins: 780, icon: '🧶', log: '【17:10】羊毛地毯吸音又保暖，整间咖啡馆的脚步声都变得轻柔细语。' },
+      { stage: 10, phase: 'late', id: 'stage_10_cat_custard', name: '领养第一只小橘猫「奶黄包」', subtitle: '圆滚滚胖嘟嘟，性情温和黏人，最喜欢用下巴蹭人', costStars: 4, costCoins: 900, icon: '🐱', catId: 'custard', catName: '奶黄包', log: '【10:30】小橘猫「奶黄包」正式入住！嗅了嗅吧台后在阳光下舒服地伸大懒腰。' },
+      { stage: 11, phase: 'late', id: 'stage_11_cattree', name: '搭建通顶多层猫爬架', subtitle: '剑麻抓柱、太空舱瞭望台与云朵吊床', costStars: 4, costCoins: 1050, icon: '🏰', log: '【13:40】「奶黄包」两步窜到最高的透明太空舱里，居高临下俯瞰领地。' },
+      { stage: 12, phase: 'late', id: 'stage_12_feeder', name: '添置自动喂食器与活水盆', subtitle: '恒温循环活氧流水，保障猫主子的日常健康', costStars: 4, costCoins: 1200, icon: '🥣', log: '【15:10】流水喷泉咕嘟咕嘟冒泡，猫咪们好奇地用爪子蘸水玩得不亦乐乎。' },
+      { stage: 13, phase: 'late', id: 'stage_13_cat_dango', name: '领养漫步三花猫「小碎花」', subtitle: '优雅灵动的玳瑁三花，巡视全场的猫界高冷掌柜', costStars: 5, costCoins: 1400, icon: '🐈', catId: 'dango', catName: '小碎花', log: '【16:20】三花猫「小碎花」迈着猫步踱入店中，优雅巡视每一个角落。' },
+      { stage: 14, phase: 'late', id: 'stage_14_grass_bed', name: '种植鲜嫩猫草与悬空跳板', subtitle: '无土水培多汁小麦草，墙面游乐空中走廊', costStars: 5, costCoins: 1650, icon: '🌿', log: '【17:40】两只猫咪一前一后穿过墙面跳板，惬意地嚼着水嫩的猫草尖。' },
+      { stage: 15, phase: 'late', id: 'stage_15_neon_grand', name: '点亮猫爪霓虹灯与旗舰盛宴', subtitle: '门头复古黄铜手写招牌与常客夜市，成为街角最温馨的明灯', costStars: 6, costCoins: 2000, icon: '✨', log: '【19:30】夜幕降临，门头的猫爪暖黄招牌亮起，整个街角都被咖啡香与呼噜声温暖包围！' }
+    ];
+
+    const DRINK_MENU = [
+      { id: 'drink_pourover', name: '耶加雪菲手冲单品', icon: '☕', level: 1, costCoins: 100, passiveCoinRate: 3, bonusCoinPerLevel: 10, desc: '花香与明亮柑橘调，手冲咖啡入门经典' },
+      { id: 'drink_americano', name: '经典冰美式', icon: '🧊', level: 0, costCoins: 250, passiveCoinRate: 5, bonusCoinPerLevel: 15, desc: '深烘拼配浓缩与纯净冰水，醒脑必备' },
+      { id: 'drink_latte', name: '丝绒浓郁拿铁', icon: '🥛', level: 0, costCoins: 450, passiveCoinRate: 8, bonusCoinPerLevel: 25, desc: '细腻微奶泡与坚果醇香交织，口感顺滑' },
+      { id: 'drink_macchiato', name: '焦糖玛奇朵', icon: '🍯', level: 0, costCoins: 750, passiveCoinRate: 12, bonusCoinPerLevel: 35, desc: '香草风味糖浆覆以手淋海盐焦糖网格' },
+      { id: 'drink_matcha', name: '宇治抹茶鲜奶', icon: '🍵', level: 0, costCoins: 1100, passiveCoinRate: 18, bonusCoinPerLevel: 50, desc: '石臼研磨纯抹茶，茶香清冽回甘悠长' },
+      { id: 'drink_cocoa_paw', name: '猫爪棉花糖热可可', icon: '🍫', level: 0, costCoins: 1600, passiveCoinRate: 25, bonusCoinPerLevel: 75, desc: '法芙娜可可融化，漂浮手作Q弹猫爪棉花糖' }
+    ];
+
+    const CUSTOMER_EVENTS = [
+      { id: 'evt_1', title: '雨天避雨的学生', guest: '戴眼镜的高中生', icon: '🌧️', log: '窗外下起暴雨，少年推开店门，点了一杯热可可，安安静静写完了数学作业。', unlockStageReq: 2 },
+      { id: 'evt_2', title: '小橘猫的探头初遇', guest: '流浪橘猫「奶黄包」', icon: '🐾', log: '门缝外传来微弱的喵呜声，一根胡子沾着草籽的小橘猫探头探脑地打量着吧台。', unlockStageReq: 3 },
+      { id: 'evt_3', title: '疲惫的插画师', guest: '抱着画板的短发女孩', icon: '🎨', log: '画师在窗边坐了一下午，铅笔沙沙作响，速写本上满是小猫在阳光下打盹的姿态。', unlockStageReq: 4 },
+      { id: 'evt_4', title: '第一批豆子烘焙香', guest: '老街坊陈爷爷', icon: '🫘', log: '陈爷爷顺着香气走进来赞叹：“这老街十几年没闻到这么地道纯粹的豆子香了！”', unlockStageReq: 6 },
+      { id: 'evt_5', title: '邻居送来的猫罐头', guest: '隔壁花店的店主阿姨', icon: '🥫', log: '阿姨抱着一捧新鲜尤加利叶和两罐金枪鱼泥进门，笑着说要犒劳辛苦当掌柜的小猫。', unlockStageReq: 8 },
+      { id: 'evt_6', title: '午后双猫踩奶协奏曲', guest: '奶黄包 & 小碎花', icon: '💤', log: '两只猫咪挤在羊毛毯上，前爪有节奏地起伏踩奶，呼噜声汇成了治愈的催眠曲。', unlockStageReq: 10 },
+      { id: 'evt_7', title: '手冲咖啡盲品测试', guest: '资深咖啡烘焙师', icon: '☕', log: '专业杯测师品尝后连连点头：“萃取干净、酸质活泼，这杯单品水准相当惊艳！”', unlockStageReq: 11 },
+      { id: 'evt_8', title: '猫咪爬架捉迷藏', guest: '常客小林', icon: '🏰', log: '奶黄包躲在最高层的猫洞里，只露出一截尾巴尖晃来晃去，逗得全场客人忍俊不禁。', unlockStageReq: 12 },
+      { id: 'evt_9', title: '暖阳下的猫草丰收', guest: '小碎花', icon: '🌿', log: '小碎花眯着眼睛咔嚓咔嚓嚼着新收割的嫩麦草，吃饱后心满意足地舔着前爪。', unlockStageReq: 14 },
+      { id: 'evt_10', title: '冬夜街角的那盏明灯', guest: '加班归途的白领', icon: '🏮', log: '“下班路上看到那盏暖黄猫爪灯亮着，心里一下子就踏实了。”客人在留言簿上写道。', unlockStageReq: 15 },
+      { id: 'evt_11', title: '常客赠送手作陶瓷猫碗', guest: '陶艺工作室学徒', icon: '🥣', log: '送来了一只带有手绘猫爪印的烧制陶碗，奶黄包立刻把脑袋埋进去吃得格外香甜。', unlockStageReq: 15 },
+      { id: 'evt_12', title: '咖啡馆一周岁生日派对', guest: '全体爱猫老常客', icon: '🎂', log: '小小的咖啡馆里挤满了常客与笑声，猫咪们戴着小领结，共享特制金枪鱼生日蛋糕！', unlockStageReq: 15 }
+    ];
+
+    // 30 Progressive Levels
+    const CAFE_LEVELS = [
+      { level: 1, name: '初夏清晨', mode: 'time', rows: 6, cols: 6, timeLimit: 90, pairs: 18, obstacleCount: 0, frozenCount: 0, starsReward: 2, coinsReward: 80 },
+      { level: 2, name: '晨曦咖啡豆', mode: 'time', rows: 6, cols: 6, timeLimit: 85, pairs: 18, obstacleCount: 0, frozenCount: 0, starsReward: 2, coinsReward: 90 },
+      { level: 3, name: '松木烘焙坊', mode: 'time', rows: 6, cols: 6, timeLimit: 80, pairs: 18, obstacleCount: 0, frozenCount: 0, starsReward: 2, coinsReward: 100 },
+      { level: 4, name: '步数初试', mode: 'moves', rows: 6, cols: 6, movesLimit: 26, pairs: 18, obstacleCount: 0, frozenCount: 0, starsReward: 2, coinsReward: 110 },
+      { level: 5, name: '起步考核', mode: 'time', rows: 6, cols: 6, timeLimit: 75, pairs: 18, obstacleCount: 0, frozenCount: 0, starsReward: 3, coinsReward: 130 },
+      { level: 6, name: '旧木箱障碍', mode: 'time', rows: 8, cols: 8, timeLimit: 120, pairs: 30, obstacleCount: 4, frozenCount: 0, starsReward: 3, coinsReward: 140 },
+      { level: 7, name: '工坊储物间', mode: 'time', rows: 8, cols: 8, timeLimit: 110, pairs: 30, obstacleCount: 4, frozenCount: 0, starsReward: 3, coinsReward: 150 },
+      { level: 8, name: '货架迷宫', mode: 'moves', rows: 8, cols: 8, movesLimit: 42, pairs: 30, obstacleCount: 4, frozenCount: 0, starsReward: 3, coinsReward: 160 },
+      { level: 9, name: '午后焦糖', mode: 'time', rows: 8, cols: 8, timeLimit: 105, pairs: 29, obstacleCount: 6, frozenCount: 0, starsReward: 3, coinsReward: 170 },
+      { level: 10, name: '猫咪巡逻', mode: 'time', rows: 8, cols: 8, timeLimit: 100, pairs: 29, obstacleCount: 6, frozenCount: 0, starsReward: 3, coinsReward: 180 },
+      { level: 11, name: '箱中捉迷藏', mode: 'moves', rows: 8, cols: 8, movesLimit: 40, pairs: 29, obstacleCount: 6, frozenCount: 0, starsReward: 3, coinsReward: 190 },
+      { level: 12, name: '烘焙研磨', mode: 'time', rows: 8, cols: 8, timeLimit: 95, pairs: 28, obstacleCount: 8, frozenCount: 0, starsReward: 3, coinsReward: 200 },
+      { level: 13, name: '曲奇香气', mode: 'moves', rows: 8, cols: 8, movesLimit: 38, pairs: 28, obstacleCount: 8, frozenCount: 0, starsReward: 3, coinsReward: 210 },
+      { level: 14, name: '窗边暖阳', mode: 'time', rows: 8, cols: 8, timeLimit: 90, pairs: 28, obstacleCount: 8, frozenCount: 0, starsReward: 3, coinsReward: 220 },
+      { level: 15, name: '半程晋级', mode: 'moves', rows: 8, cols: 8, movesLimit: 36, pairs: 28, obstacleCount: 8, frozenCount: 0, starsReward: 4, coinsReward: 250 },
+      { level: 16, name: '初遇薄冰', mode: 'time', rows: 8, cols: 8, timeLimit: 110, pairs: 30, obstacleCount: 4, frozenCount: 4, starsReward: 4, coinsReward: 260 },
+      { level: 17, name: '冰封鲜奶', mode: 'moves', rows: 8, cols: 8, movesLimit: 40, pairs: 30, obstacleCount: 4, frozenCount: 6, starsReward: 4, coinsReward: 270 },
+      { level: 18, name: '冷萃风味', mode: 'time', rows: 8, cols: 8, timeLimit: 100, pairs: 29, obstacleCount: 6, frozenCount: 6, starsReward: 4, coinsReward: 280 },
+      { level: 19, name: '冰霜阻隔', mode: 'moves', rows: 8, cols: 8, movesLimit: 38, pairs: 29, obstacleCount: 6, frozenCount: 8, starsReward: 4, coinsReward: 290 },
+      { level: 20, name: '严冬试炼', mode: 'time', rows: 8, cols: 8, timeLimit: 95, pairs: 28, obstacleCount: 8, frozenCount: 8, starsReward: 4, coinsReward: 300 },
+      { level: 21, name: '大网格开拓', mode: 'time', rows: 8, cols: 10, timeLimit: 135, pairs: 37, obstacleCount: 6, frozenCount: 8, starsReward: 4, coinsReward: 320 },
+      { level: 22, name: '深烘回甘', mode: 'moves', rows: 8, cols: 10, movesLimit: 50, pairs: 37, obstacleCount: 6, frozenCount: 10, starsReward: 4, coinsReward: 340 },
+      { level: 23, name: '冰晶拿铁', mode: 'time', rows: 8, cols: 10, timeLimit: 125, pairs: 36, obstacleCount: 8, frozenCount: 10, starsReward: 4, coinsReward: 360 },
+      { level: 24, name: '步数极限', mode: 'moves', rows: 8, cols: 10, movesLimit: 46, pairs: 36, obstacleCount: 8, frozenCount: 12, starsReward: 4, coinsReward: 380 },
+      { level: 25, name: '迷雾密室', mode: 'time', rows: 8, cols: 10, timeLimit: 115, pairs: 35, obstacleCount: 10, frozenCount: 12, starsReward: 5, coinsReward: 400 },
+      { level: 26, name: '终极大网格', mode: 'time', rows: 10, cols: 10, timeLimit: 160, pairs: 46, obstacleCount: 8, frozenCount: 12, starsReward: 5, coinsReward: 420 },
+      { level: 27, name: '棋盘破冰者', mode: 'moves', rows: 10, cols: 10, movesLimit: 58, pairs: 46, obstacleCount: 8, frozenCount: 14, starsReward: 5, coinsReward: 440 },
+      { level: 28, name: '猫咪大师试炼', mode: 'time', rows: 10, cols: 10, timeLimit: 140, pairs: 45, obstacleCount: 10, frozenCount: 14, starsReward: 5, coinsReward: 460 },
+      { level: 29, name: '巅峰智谋', mode: 'moves', rows: 10, cols: 10, movesLimit: 54, pairs: 44, obstacleCount: 12, frozenCount: 16, starsReward: 5, coinsReward: 480 },
+      { level: 30, name: '传奇旗舰盛典', mode: 'time', rows: 10, cols: 10, timeLimit: 130, pairs: 43, obstacleCount: 14, frozenCount: 16, starsReward: 6, coinsReward: 600 }
+    ];
+
+    // --- 3. App State & Persistence ---
+    const STORAGE_KEY = 'purr_cafe_native_zero_dep_v1';
+    let stars = 4, coins = 450;
+    let unlockedStages = new Set(['stage_1_cleanup', 'stage_2_floor']);
+    let unlockedDrinks = new Set(['drink_pourover']);
+    let journalLogs = [
+      '铺面刚刚租下，空荡荡的地板上积着一层薄灰。门缝外有一只流浪小橘猫探头探脑。',
+      JOURNAL_STAGES[0].log,
+      JOURNAL_STAGES[1].log
+    ];
+    let currentLevel = 1;
+    let currentPhaseFilter = 'all';
+    let currentTab = 'renovate';
+    let cashRegister = 0;
+    let catSatiety = 80, catMood = 90;
+
+    // Load LocalStorage
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const p = JSON.parse(saved);
+        if (typeof p.stars === 'number') stars = p.stars;
+        if (typeof p.coins === 'number') coins = p.coins;
+        if (Array.isArray(p.unlockedStages)) unlockedStages = new Set(p.unlockedStages);
+        if (Array.isArray(p.unlockedDrinks)) unlockedDrinks = new Set(p.unlockedDrinks);
+        if (Array.isArray(p.journalLogs) && p.journalLogs.length > 0) journalLogs = p.journalLogs;
+        if (typeof p.currentLevel === 'number') currentLevel = p.currentLevel;
+        if (typeof p.cashRegister === 'number') cashRegister = p.cashRegister;
+      }
+    } catch(e) {}
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          stars, coins, unlockedStages: Array.from(unlockedStages),
+          unlockedDrinks: Array.from(unlockedDrinks),
+          journalLogs, currentLevel, cashRegister
+        }));
+      } catch(e) {}
+    }
+
+    // Passive Coin Generation (every 10s gives 1/6th minute rate)
+    setInterval(() => {
+      let rate = 0;
+      DRINK_MENU.forEach(d => {
+        if (unlockedDrinks.has(d.id)) rate += d.passiveCoinRate;
+      });
+      if (rate > 0) {
+        cashRegister += Math.ceil(rate / 6);
+        updateCashRegisterDisplay();
+      }
+    }, 10000);
+
+    function updateCashRegisterDisplay() {
+      const el = document.getElementById('cashRegisterAmount');
+      if (el) el.innerText = cashRegister;
+      const rateEl = document.getElementById('passiveRateBadge');
+      let rate = 0;
+      DRINK_MENU.forEach(d => { if (unlockedDrinks.has(d.id)) rate += d.passiveCoinRate; });
+      if (rateEl) rateEl.innerText = '+' + rate + ' 币/分';
+      const cRate = document.getElementById('cashRateText');
+      if (cRate) cRate.innerText = '(+' + rate + ' 币/分)';
+    }
+
+    function collectCashRegister() {
+      if (cashRegister <= 0) return;
+      coins += cashRegister;
+      const collected = cashRegister;
+      cashRegister = 0;
+      sound.playVictory();
+      const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+      journalLogs.push('【' + timeStr + ' 提取】从吧台收银机提取了 ' + collected + ' 营业金币 🪙');
+      saveState();
+      renderJournal();
+    }
+
+    // --- 4. Journal Navigation & Rendering ---
+    function switchJournalTab(tab) {
+      currentTab = tab;
+      ['renovate', 'drinks', 'cats'].forEach(t => {
+        const btn = document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1));
+        const panel = document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1));
+        if (t === tab) {
+          btn.className = 'tab-item active';
+          panel.classList.remove('hidden');
+        } else {
+          btn.className = 'tab-item';
+          panel.classList.add('hidden');
+        }
+      });
+      renderJournal();
+    }
+
+    function setPhaseFilter(phase) {
+      currentPhaseFilter = phase;
+      ['All', 'Early', 'Mid', 'Late'].forEach(p => {
+        const btn = document.getElementById('filter' + p);
+        if (p.toLowerCase() === phase) {
+          btn.className = 'pill-filter-btn active';
+        } else {
+          btn.className = 'pill-filter-btn';
+        }
+      });
+      renderStages();
+    }
+
+    function renderJournal() {
+      document.getElementById('headerStars').innerText = stars;
+      document.getElementById('headerCoins').innerText = coins.toLocaleString();
+      document.getElementById('journalLevelBadge').innerText = '第 ' + currentLevel + ' 关';
+      document.getElementById('stagesProgressText').innerText = '已竣工 ' + unlockedStages.size + ' / ' + JOURNAL_STAGES.length;
+      document.getElementById('drinksProgressText').innerText = '已研发 ' + unlockedDrinks.size + ' / ' + DRINK_MENU.length;
+
+      // Count cats
+      const hasCustard = unlockedStages.has('stage_10_cat_custard');
+      const hasDango = unlockedStages.has('stage_13_cat_dango');
+      const catCount = (hasCustard ? 1 : 0) + (hasDango ? 1 : 0);
+      document.getElementById('headerCats').innerText = catCount + ' 只';
+
+      // Logs
+      const logsBox = document.getElementById('journalLogsContainer');
+      logsBox.innerHTML = '';
+      journalLogs.forEach(entry => {
+        const div = document.createElement('div');
+        const isHighlight = entry.startsWith('【');
+        div.className = 'log-entry ' + (isHighlight ? 'highlight' : '');
+        div.innerText = entry;
+        logsBox.appendChild(div);
+      });
+      logsBox.scrollTop = logsBox.scrollHeight;
+
+      updateCashRegisterDisplay();
+      renderStages();
+      renderDrinks();
+      renderCatsAndEvents();
+    }
+
+    function renderStages() {
+      const cardsBox = document.getElementById('stagesCardsContainer');
+      cardsBox.innerHTML = '';
+      const filtered = JOURNAL_STAGES.filter(s => currentPhaseFilter === 'all' || s.phase === currentPhaseFilter);
+
+      filtered.forEach(item => {
+        const isUnlocked = unlockedStages.has(item.id);
+        const idx = JOURNAL_STAGES.findIndex(s => s.id === item.id);
+        const prevUnlocked = idx === 0 || unlockedStages.has(JOURNAL_STAGES[idx - 1].id);
+        const canAfford = stars >= item.costStars && coins >= item.costCoins;
+        const isAvail = prevUnlocked && !isUnlocked;
+
+        const card = document.createElement('div');
+        card.className = 'content-card ' + (isUnlocked ? 'completed' : isAvail ? '' : 'locked');
+
+        card.innerHTML = `
+          <div class="card-left">
+            <div class="card-icon-box">${item.icon}</div>
+            <div class="card-text-col">
+              <div class="card-title-line">
+                <span class="stage-tag">${item.stage}</span>
+                <span class="card-main-title">${item.name}</span>
+              </div>
+              <div class="card-desc">${item.subtitle}</div>
+              ${!isUnlocked ? `<div class="card-cost-line">
+                <span class="cost-badge">⭐ ${item.costStars}</span>
+                <span class="cost-badge">🪙 ${item.costCoins}</span>
+              </div>` : ''}
+            </div>
+          </div>
+          <div>
+            ${isUnlocked
+              ? '<span class="tag-completed">✓ 已竣工</span>'
+              : isAvail
+              ? `<button onclick="unlockStage('${item.id}')" class="btn-upgrade" ${!canAfford ? 'disabled' : ''}>${canAfford ? '施工' : '缺少'}</button>`
+              : '<span style="font-size: 9px; color: #A38E7A; background: #EFEAE0; padding: 2px 6px; border-radius: 6px;">未解锁</span>'
+            }
+          </div>
+        `;
+        cardsBox.appendChild(card);
+      });
+    }
+
+    function renderDrinks() {
+      const box = document.getElementById('drinksCardsContainer');
+      box.innerHTML = '';
+      DRINK_MENU.forEach(item => {
+        const isUnlocked = unlockedDrinks.has(item.id);
+        const canAfford = coins >= item.costCoins;
+        const card = document.createElement('div');
+        card.className = 'content-card ' + (isUnlocked ? '' : 'locked');
+
+        card.innerHTML = `
+          <div class="card-left">
+            <div class="card-icon-box">${item.icon}</div>
+            <div class="card-text-col">
+              <div class="card-title-line">
+                <span class="card-main-title">${item.name}</span>
+                <span style="font-size: 9px; color: #B45309; font-weight: 700; background: #FEF3C7; padding: 1px 4px; border-radius: 4px;">+${item.passiveCoinRate}币/分</span>
+              </div>
+              <div class="card-desc">${item.desc}</div>
+              <div style="font-size: 9px; color: #047857; font-weight: 600; margin-top: 2px;">通关加成: +${item.bonusCoinPerLevel} 币/关</div>
+            </div>
+          </div>
+          <div>
+            ${isUnlocked
+              ? '<span style="font-size: 10px; font-weight: 700; color: #B45309; background: #FEF3C7; border: 1px solid #FDE68A; padding: 2px 6px; border-radius: 6px;">售卖中</span>'
+              : `<button onclick="unlockDrink('${item.id}')" class="btn-upgrade" ${!canAfford ? 'disabled' : ''}>🪙 ${item.costCoins}</button>`
+            }
+          </div>
+        `;
+        box.appendChild(card);
+      });
+    }
+
+    function renderCatsAndEvents() {
+      // Meters
+      const mBox = document.getElementById('catsMetersContainer');
+      mBox.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div class="meter-row">
+            <div class="meter-label-row">
+              <span>🐟 猫咪全员饱腹度</span>
+              <span style="font-weight: 700; color: #B45309; font-family: ui-monospace, monospace;">${catSatiety} %</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill-gold" style="width: ${catSatiety}%;"></div>
+            </div>
+          </div>
+          <div class="meter-row">
+            <div class="meter-label-row">
+              <span>💖 猫咪心满意足度</span>
+              <span style="font-weight: 700; color: #E11D48; font-family: ui-monospace, monospace;">${catMood} %</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill-pink" style="width: ${catMood}%;"></div>
+            </div>
+          </div>
+          <div class="cat-action-btns">
+            <button onclick="feedCat()" class="cat-btn">🥣 喂食冻干 (-20🪙)</button>
+            <button onclick="petCat()" class="cat-btn">🐾 摸头逗猫 (+5🪙)</button>
+          </div>
+        </div>
+      `;
+
+      // Events list
+      const eBox = document.getElementById('eventsCardsContainer');
+      eBox.innerHTML = '';
+      let unlockedEvtCount = 0;
+      CUSTOMER_EVENTS.forEach(evt => {
+        const isUnlocked = unlockedStages.size >= evt.unlockStageReq;
+        if (isUnlocked) unlockedEvtCount++;
+        const card = document.createElement('div');
+        card.className = 'content-card ' + (isUnlocked ? '' : 'locked');
+
+        card.innerHTML = `
+          <div style="display: flex; align-items: flex-start; gap: 8px; width: 100%;">
+            <span style="font-size: 16px; margin-top: 1px;">${evt.icon}</span>
+            <div style="flex: 1; min-width: 0;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12px; font-weight: 700; color: #3B2C20;">${evt.title}</span>
+                <span style="font-size: 9px; color: #A38E7A;">${evt.guest}</span>
+              </div>
+              <div style="font-size: 10px; color: #6B533E; margin-top: 2px; line-height: 1.35;">${isUnlocked ? evt.log : '完成施工阶段 ' + evt.unlockStageReq + ' 后解锁见闻'}</div>
+            </div>
+          </div>
+        `;
+        eBox.appendChild(card);
+      });
+      document.getElementById('eventsCountText').innerText = '解锁 ' + unlockedEvtCount + ' / ' + CUSTOMER_EVENTS.length;
+    }
+
+    function feedCat() {
+      if (coins < 20) { alert('金币不足，先去连连看赚点金币吧！'); return; }
+      coins -= 20;
+      catSatiety = Math.min(100, catSatiety + 15);
+      sound.playMeow(620);
+      const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+      journalLogs.push('【' + timeStr + ' 投喂】递上了一小份金枪鱼冻干，两只小猫吃得津津有味 (饱腹度 ' + catSatiety + '%)');
+      saveState();
+      renderJournal();
+    }
+
+    function petCat() {
+      coins += 5;
+      catMood = Math.min(100, catMood + 10);
+      sound.playMeow(780);
+      const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+      journalLogs.push('【' + timeStr + ' 逗猫】轻轻抚摸了小猫的下巴，发出了清脆的呼噜呼噜声 (+5 🪙)');
+      saveState();
+      renderJournal();
+    }
+
+    window.unlockStage = function(id) {
+      const stage = JOURNAL_STAGES.find(s => s.id === id);
+      if (!stage) return;
+      if (stars >= stage.costStars && coins >= stage.costCoins) {
+        stars -= stage.costStars;
+        coins -= stage.costCoins;
+        unlockedStages.add(stage.id);
+        journalLogs.push(stage.log);
+        sound.playVictory();
+        if (stage.catId) setTimeout(() => sound.playMeow(650), 300);
+        saveState();
+        renderJournal();
+      }
+    };
+
+    window.unlockDrink = function(id) {
+      const d = DRINK_MENU.find(m => m.id === id);
+      if (!d) return;
+      if (coins >= d.costCoins) {
+        coins -= d.costCoins;
+        unlockedDrinks.add(d.id);
+        sound.playVictory();
+        const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+        journalLogs.push('【' + timeStr + ' 研发】成功推出新饮品「' + d.name + '」！被动营收 +' + d.passiveCoinRate + ' 币/分');
+        saveState();
+        renderJournal();
+      }
+    };
+
+    // --- 5. Hardcore LianLianKan Engine ---
+    const ICONS = ['☕', '🍰', '🥐', '🍩', '🐾', '🥛', '🍓', '🍵', '🍪', '🥪', '🧁', '🍯'];
+    let rows = 6, cols = 6;
+    let grid = [], frozenMap = [];
+    let selectedTile = null;
+    let clearedCount = 0, totalPairs = 18;
+    let timeLeft = 90, movesLeft = 25;
+    let currentLevelConfig = CAFE_LEVELS[0];
+    let isFrozen = false;
+    let timerInterval = null;
+    let score = 0, combo = 0;
+    let hintsLeft = 3, shufflesLeft = 2, freezesLeft = 1;
+
+    function isLineEmpty(g, p1, p2) {
+      if (p1.r === p2.r) {
+        const minC = Math.min(p1.c, p2.c), maxC = Math.max(p1.c, p2.c);
+        for (let c = minC + 1; c < maxC; c++) if (g[p1.r][c] !== 0) return false;
+        return true;
+      }
+      if (p1.c === p2.c) {
+        const minR = Math.min(p1.r, p2.r), maxR = Math.max(p1.r, p2.r);
+        for (let r = minR + 1; r < maxR; r++) if (g[r][p1.c] !== 0) return false;
+        return true;
+      }
+      return false;
+    }
+    function check0Turn(g, p1, p2) {
+      if ((p1.r === p2.r || p1.c === p2.c) && isLineEmpty(g, p1, p2)) return [p1, p2];
+      return null;
+    }
+    function check1Turn(g, p1, p2) {
+      const c1 = { r: p1.r, c: p2.c };
+      if (g[c1.r][c1.c] === 0 && isLineEmpty(g, p1, c1) && isLineEmpty(g, c1, p2)) return [p1, c1, p2];
+      const c2 = { r: p2.r, c: p1.c };
+      if (g[c2.r][c2.c] === 0 && isLineEmpty(g, p1, c2) && isLineEmpty(g, c2, p2)) return [p1, c2, p2];
+      return null;
+    }
+    function check2Turn(g, p1, p2) {
+      const dirs = [{dr: -1, dc: 0}, {dr: 1, dc: 0}, {dr: 0, dc: -1}, {dr: 0, dc: 1}];
+      let best = null, minDist = Infinity;
+      for (const d of dirs) {
+        let cr = p1.r + d.dr, cc = p1.c + d.dc;
+        while (cr >= 0 && cr <= rows + 1 && cc >= 0 && cc <= cols + 1) {
+          if (g[cr][cc] !== 0) break;
+          const s1 = { r: cr, c: cc };
+          const sub = check1Turn(g, s1, p2);
+          if (sub) {
+            const dist = Math.abs(p1.r - cr) + Math.abs(p1.c - cc) + Math.abs(cr - sub[1].r) + Math.abs(cc - sub[1].c) + Math.abs(sub[1].r - p2.r) + Math.abs(sub[1].c - p2.c);
+            if (dist < minDist) { minDist = dist; best = [p1, s1, sub[1], p2]; }
+          }
+          cr += d.dr; cc += d.dc;
+        }
+      }
+      return best;
+    }
+    function findPath(g, p1, p2) {
+      if (p1.r === p2.r && p1.c === p2.c) return null;
+      if (g[p1.r][p1.c] <= 0 || g[p1.r][p1.c] !== g[p2.r][p2.c]) return null;
+      const p0 = check0Turn(g, p1, p2); if (p0) return p0;
+      const p1Turn = check1Turn(g, p1, p2); if (p1Turn) return p1Turn;
+      return check2Turn(g, p1, p2);
+    }
+
+    // Canvas laser
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [], activeLine = null, cellSize = 42;
+
+    function renderCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (activeLine) {
+        activeLine.opacity -= 0.04;
+        if (activeLine.opacity <= 0) activeLine = null;
+        else {
+          ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.globalAlpha = activeLine.opacity;
+          ctx.strokeStyle = '#FBBF24'; ctx.lineWidth = 6;
+          ctx.shadowColor = '#F59E0B'; ctx.shadowBlur = 16;
+          ctx.beginPath();
+          activeLine.pts.forEach((pt, i) => { if (i === 0) ctx.moveTo(pt.x, pt.y); else ctx.lineTo(pt.x, pt.y); });
+          ctx.stroke();
+          ctx.lineWidth = 3; ctx.strokeStyle = '#FFFDF5'; ctx.stroke();
+          ctx.restore();
+        }
+      }
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.life++; p.x += p.vx; p.y += p.vy; p.alpha = 1 - p.life / p.maxLife;
+        if (p.life >= p.maxLife) particles.splice(i, 1);
+        else {
+          ctx.save(); ctx.globalAlpha = p.alpha;
+          if (p.isPaw) { ctx.font = '12px sans-serif'; ctx.fillText('🐾', p.x, p.y); }
+          else { ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill(); }
+          ctx.restore();
+        }
+      }
+      requestAnimationFrame(renderCanvas);
+    }
+    requestAnimationFrame(renderCanvas);
+
+    function triggerSparks(center) {
+      for (let i = 0; i < 16; i++) {
+        const angle = Math.random() * Math.PI * 2, spd = 2 + Math.random() * 4;
+        particles.push({
+          x: center.x, y: center.y, vx: Math.cos(angle) * spd, vy: Math.sin(angle) * spd,
+          color: ['#F59E0B', '#FBBF24', '#38BDF8', '#FFFDF8'][Math.floor(Math.random() * 4)],
+          size: 2.5 + Math.random() * 2.5, life: 0, maxLife: 20 + Math.random() * 10, alpha: 1,
+          isPaw: i % 4 === 0
+        });
+      }
+    }
+
+    function initPuzzle(lvlNum = currentLevel) {
+      currentLevel = lvlNum;
+      currentLevelConfig = CAFE_LEVELS.find(l => l.level === currentLevel) || CAFE_LEVELS[0];
+      rows = currentLevelConfig.rows;
+      cols = currentLevelConfig.cols;
+      clearedCount = 0;
+      totalPairs = currentLevelConfig.pairs;
+      score = 0; combo = 0;
+      hintsLeft = 3; shufflesLeft = 2; freezesLeft = 1;
+      selectedTile = null;
+
+      document.getElementById('puzzleLevelTitle').innerText = '第 ' + currentLevel + ' 关 · ' + currentLevelConfig.name;
+      document.getElementById('modeBadge').innerText = currentLevelConfig.mode === 'moves' ? '步数模式' : '限时模式';
+
+      if (currentLevelConfig.mode === 'moves') {
+        movesLeft = currentLevelConfig.movesLimit || 30;
+        document.getElementById('timerText').innerText = movesLeft + ' 步';
+      } else {
+        timeLeft = currentLevelConfig.timeLimit || 90;
+        isFrozen = false;
+        const m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+        const s = String(timeLeft % 60).padStart(2, '0');
+        document.getElementById('timerText').innerText = m + ':' + s;
+      }
+
+      // Generate board
+      grid = Array.from({ length: rows + 2 }, () => Array(cols + 2).fill(0));
+      frozenMap = Array.from({ length: rows + 2 }, () => Array(cols + 2).fill(false));
+
+      const totalInnerCells = rows * cols;
+      const obstacles = currentLevelConfig.obstacleCount || 0;
+      const playable = totalInnerCells - obstacles;
+      const actualPairs = Math.floor(playable / 2);
+
+      const pool = [];
+      const distinctTypes = Math.min(ICONS.length, Math.max(6, Math.floor(actualPairs / 3)));
+      for (let i = 0; i < actualPairs; i++) {
+        const t = (i % distinctTypes) + 1;
+        pool.push(t, t);
+      }
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+
+      let pIdx = 0;
+      for (let r = 1; r <= rows; r++) {
+        for (let c = 1; c <= cols; c++) {
+          if (obstacles > 0 && Math.random() < (obstacles / totalInnerCells) && pIdx < pool.length) {
+            grid[r][c] = -1; // -1 represents crate obstacle
+          } else if (pIdx < pool.length) {
+            grid[r][c] = pool[pIdx++];
+          }
+        }
+      }
+
+      // Distribute frozen tiles
+      let fCount = currentLevelConfig.frozenCount || 0;
+      while (fCount > 0) {
+        const rr = Math.floor(Math.random() * rows) + 1;
+        const cc = Math.floor(Math.random() * cols) + 1;
+        if (grid[rr][cc] > 0 && !frozenMap[rr][cc]) {
+          frozenMap[rr][cc] = true;
+          fCount--;
+        }
+      }
+
+      updateBadges();
+      resizeBoard();
+      renderTiles();
+
+      if (timerInterval) clearInterval(timerInterval);
+      if (currentLevelConfig.mode === 'time') {
+        timerInterval = setInterval(() => {
+          if (!isFrozen && timeLeft > 0) {
+            timeLeft--;
+            const m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+            const s = String(timeLeft % 60).padStart(2, '0');
+            document.getElementById('timerText').innerText = m + ':' + s;
+            if (timeLeft === 0) {
+              clearInterval(timerInterval);
+              alert('时间耗尽！猫咪们想要再试一次！');
+              showJournalView();
+            }
+          }
+        }, 1000);
+      }
+    }
+
+    function updateBadges() {
+      document.getElementById('badgeHint').innerText = 'x' + hintsLeft;
+      document.getElementById('badgeShuffle').innerText = 'x' + shufflesLeft;
+      document.getElementById('badgeFreeze').innerText = 'x' + freezesLeft;
+      document.getElementById('scoreText').innerText = '得分: ' + score;
+      document.getElementById('pairProgress').innerText = clearedCount + ' / ' + totalPairs;
+      const pct = Math.min(100, (clearedCount / totalPairs) * 100);
+      document.getElementById('clearanceBar').style.width = pct + '%';
+    }
+
+    function resizeBoard() {
+      const cont = document.getElementById('boardContainer');
+      const maxW = cont.clientWidth - 12;
+      const maxH = cont.clientHeight - 12;
+      cellSize = Math.min(46, Math.floor(Math.min(maxW / (cols + 2), maxH / (rows + 2))));
+      const bW = cellSize * (cols + 2), bH = cellSize * (rows + 2);
+      const bInner = document.getElementById('boardInner');
+      bInner.style.width = bW + 'px'; bInner.style.height = bH + 'px';
+      canvas.width = cont.clientWidth; canvas.height = cont.clientHeight;
+    }
+
+    function renderTiles() {
+      const wrapper = document.getElementById('tilesWrapper');
+      wrapper.innerHTML = '';
+      for (let r = 1; r <= rows; r++) {
+        for (let c = 1; c <= cols; c++) {
+          const v = grid[r][c];
+          if (v === 0) continue;
+          const isObstacle = v === -1;
+          const isIce = frozenMap[r][c];
+
+          const btn = document.createElement('button');
+          btn.id = 'tile-' + r + '-' + c;
+          btn.style.left = (c * cellSize) + 'px';
+          btn.style.top = (r * cellSize) + 'px';
+          btn.style.width = cellSize + 'px';
+          btn.style.height = cellSize + 'px';
+          btn.className = 'tile-btn';
+
+          if (isObstacle) {
+            btn.innerHTML = '<div class="tile-obstacle">📦</div>';
+          } else {
+            const isSel = selectedTile && selectedTile.r === r && selectedTile.c === c;
+            btn.innerHTML = `
+              <div class="tile-inner ${isSel ? 'selected' : ''}">
+                ${ICONS[(v - 1) % ICONS.length]}
+                ${isIce ? '<div class="tile-ice-overlay">🧊</div>' : ''}
+              </div>
+            `;
+            btn.onclick = () => onTileClick(r, c);
+          }
+
+          wrapper.appendChild(btn);
+        }
+      }
+    }
+
+    function getCanvasPointsForPath(path) {
+      const canvasRect = canvas.getBoundingClientRect();
+      const bInner = document.getElementById('boardInner');
+      const bRect = bInner.getBoundingClientRect();
+      const cellW = bRect.width / (cols + 2);
+      const cellH = bRect.height / (rows + 2);
+
+      return path.map(pt => {
+        const el = document.getElementById('tile-' + pt.r + '-' + pt.c);
+        if (el) {
+          const tRect = el.getBoundingClientRect();
+          return {
+            x: tRect.left + tRect.width / 2 - canvasRect.left,
+            y: tRect.top + tRect.height / 2 - canvasRect.top
+          };
+        }
+        return {
+          x: bRect.left + (pt.c + 0.5) * cellW - canvasRect.left,
+          y: bRect.top + (pt.r + 0.5) * cellH - canvasRect.top
+        };
+      });
+    }
+
+    function onTileClick(r, c) {
+      if (grid[r][c] <= 0) return;
+      sound.playSelect();
+      if (!selectedTile) {
+        selectedTile = { r, c }; renderTiles(); return;
+      }
+      if (selectedTile.r === r && selectedTile.c === c) {
+        selectedTile = null; renderTiles(); return;
+      }
+
+      // Decrement moves if move limit mode
+      if (currentLevelConfig.mode === 'moves') {
+        movesLeft--;
+        document.getElementById('timerText').innerText = movesLeft + ' 步';
+      }
+
+      const path = findPath(grid, selectedTile, { r, c });
+      if (path) {
+        const p1 = selectedTile, p2 = { r, c };
+        const canvasPts = getCanvasPointsForPath(path);
+        activeLine = { pts: canvasPts, opacity: 1 };
+        triggerSparks(canvasPts[0]); triggerSparks(canvasPts[canvasPts.length - 1]);
+
+        const p1Ice = frozenMap[p1.r][p1.c];
+        const p2Ice = frozenMap[p2.r][p2.c];
+
+        if (p1Ice || p2Ice) {
+          sound.playIceCrack();
+          if (p1Ice) frozenMap[p1.r][p1.c] = false; else grid[p1.r][p1.c] = 0;
+          if (p2Ice) frozenMap[p2.r][p2.c] = false; else grid[p2.r][p2.c] = 0;
+          score += 60;
+        } else {
+          grid[p1.r][p1.c] = 0; grid[p2.r][p2.c] = 0;
+          clearedCount++; combo++;
+          score += 100 + (combo - 1) * 35;
+          sound.playMatch(combo);
+        }
+
+        selectedTile = null;
+        renderTiles();
+        updateBadges();
+
+        if (clearedCount >= totalPairs) {
+          if (timerInterval) clearInterval(timerInterval);
+          sound.playVictory();
+          const earnedStars = currentLevelConfig.starsReward || 3;
+          let earnedCoins = currentLevelConfig.coinsReward || 120;
+          DRINK_MENU.forEach(d => { if (unlockedDrinks.has(d.id)) earnedCoins += d.bonusCoinPerLevel; });
+
+          stars += earnedStars;
+          coins += earnedCoins;
+          document.getElementById('vicStarsEarned').innerText = '+' + earnedStars + ' 星光灵感';
+          document.getElementById('vicCoinsEarned').innerText = '+' + earnedCoins + ' 营业金币';
+
+          const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+          journalLogs.push('【' + timeStr + ' 采购】第 ' + currentLevel + ' 关食材采购大获全胜！(+' + earnedStars + ' ⭐, +' + earnedCoins + ' 🪙)');
+          saveState();
+          document.getElementById('modalVictory').classList.remove('hidden');
+        } else if (currentLevelConfig.mode === 'moves' && movesLeft <= 0) {
+          alert('步数耗尽！再接再厉喵！');
+          showJournalView();
+        }
+      } else {
+        selectedTile = { r, c }; renderTiles();
+        if (currentLevelConfig.mode === 'moves' && movesLeft <= 0) {
+          alert('步数用完啦！');
+          showJournalView();
+        }
+      }
+    }
+
+    // Power-ups
+    document.getElementById('btnHint').onclick = () => {
+      if (hintsLeft <= 0) return;
+      for (let r1 = 1; r1 <= rows; r1++) {
+        for (let c1 = 1; c1 <= cols; c1++) {
+          if (grid[r1][c1] <= 0) continue;
+          for (let r2 = 1; r2 <= rows; r2++) {
+            for (let c2 = 1; c2 <= cols; c2++) {
+              if (r1 === r2 && c1 === c2) continue;
+              if (grid[r1][c1] === grid[r2][c2]) {
+                const path = findPath(grid, { r: r1, c: c1 }, { r: r2, c: c2 });
+                if (path) {
+                  hintsLeft--; updateBadges();
+                  activeLine = { pts: getCanvasPointsForPath(path), opacity: 1 };
+                  return;
+                }
+              }
+            }
+          }
+        }
+      }
+    };
+
+    document.getElementById('btnShuffle').onclick = () => {
+      if (shufflesLeft <= 0) return;
+      shufflesLeft--;
+      const remaining = [];
+      for (let r = 1; r <= rows; r++) for (let c = 1; c <= cols; c++) if (grid[r][c] > 0) remaining.push(grid[r][c]);
+      for (let i = remaining.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1)); [remaining[i], remaining[j]] = [remaining[j], remaining[i]];
+      }
+      let idx = 0;
+      for (let r = 1; r <= rows; r++) for (let c = 1; c <= cols; c++) if (grid[r][c] > 0) grid[r][c] = remaining[idx++];
+      updateBadges(); renderTiles();
+    };
+
+    document.getElementById('btnFreeze').onclick = () => {
+      if (freezesLeft <= 0) return;
+      freezesLeft--;
+      if (currentLevelConfig.mode === 'moves') {
+        movesLeft += 6;
+        document.getElementById('timerText').innerText = movesLeft + ' 步';
+      } else {
+        isFrozen = true; timeLeft += 15;
+        document.getElementById('freezeText').innerText = '冰冻中';
+        setTimeout(() => { isFrozen = false; document.getElementById('freezeText').innerText = '加时/步'; }, 10000);
+      }
+      updateBadges();
+    };
+
+    // View Transitions
+    function showJournalView() {
+      document.getElementById('viewJournal').classList.remove('hidden');
+      document.getElementById('viewPuzzle').classList.add('hidden');
+      if (timerInterval) clearInterval(timerInterval);
+      renderJournal();
+    }
+    function showPuzzleView(lvl = currentLevel) {
+      document.getElementById('viewJournal').classList.add('hidden');
+      document.getElementById('viewPuzzle').classList.remove('hidden');
+      initPuzzle(lvl);
+    }
+
+    // Modal Level Select
+    document.getElementById('btnLevelSelect').onclick = () => {
+      const list = document.getElementById('levelSelectList');
+      list.innerHTML = '';
+      CAFE_LEVELS.forEach(lvl => {
+        const btn = document.createElement('button');
+        const isCurrent = lvl.level === currentLevel;
+        btn.className = 'level-grid-item ' + (isCurrent ? 'current' : '');
+        btn.innerHTML = `<span style="font-family: ui-monospace, monospace; font-size: 11px;">${lvl.level}</span><span style="font-size: 8px;">${lvl.mode === 'moves' ? '步数' : '限时'}</span>`;
+        btn.onclick = () => {
+          document.getElementById('modalLevelSelect').classList.add('hidden');
+          showPuzzleView(lvl.level);
+        };
+        list.appendChild(btn);
+      });
+      document.getElementById('modalLevelSelect').classList.remove('hidden');
+    };
+
+    // Event Bindings
+    document.getElementById('btnStartProcure').onclick = () => showPuzzleView(currentLevel);
+    document.getElementById('btnBackToJournal').onclick = () => showJournalView();
+    document.getElementById('btnBackToJournalFromVic').onclick = () => {
+      document.getElementById('modalVictory').classList.add('hidden');
+      showJournalView();
+    };
+    document.getElementById('btnNextLevel').onclick = () => {
+      document.getElementById('modalVictory').classList.add('hidden');
+      currentLevel = Math.min(30, currentLevel + 1);
+      showPuzzleView(currentLevel);
+    };
+
+    const toggleSound = () => {
+      sound.enabled = !sound.enabled;
+      const text = sound.enabled ? '🔊' : '🔇';
+      document.getElementById('btnToggleSoundJournal').innerText = text;
+      document.getElementById('btnToggleSoundPuzzle').innerText = text;
+    };
+    document.getElementById('btnToggleSoundJournal').onclick = toggleSound;
+    document.getElementById('btnToggleSoundPuzzle').onclick = toggleSound;
+
+    window.onresize = () => {
+      if (!document.getElementById('viewPuzzle').classList.contains('hidden')) {
+        resizeBoard(); renderTiles();
+      }
+    };
+
+    // First load
+    showJournalView();
+  </script>
+</body>
 </html>

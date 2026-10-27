@@ -1,5 +1,5 @@
 /**
- * Cat Cafe & LianLianKan Types
+ * Cat Cafe & LianLianKan Expanded Types
  */
 
 export interface Point {
@@ -7,24 +7,15 @@ export interface Point {
   c: number;
 }
 
-export interface RenovationItem {
-  id: string;
-  name: string;
-  category: 'cleanup' | 'floor' | 'bar' | 'cattree' | 'cat' | 'furniture' | 'decor' | 'sign';
-  costStars: number;
-  costCoins: number;
-  unlocked: boolean;
-  title: string;
-  desc: string;
-  icon: string;
-  requiredPrevId?: string;
-}
+export type ConstructionPhase = 'early' | 'mid' | 'late';
 
 export interface JournalStage {
   stage: number;
   id: string;
   name: string;
   subtitle: string;
+  phase: ConstructionPhase;
+  phaseTitle: string;
   costStars: number;
   costCoins: number;
   narrativeLog: string;
@@ -33,17 +24,34 @@ export interface JournalStage {
   icon: string;
 }
 
-export interface CatData {
+export interface DrinkMenuItem {
   id: string;
   name: string;
-  breed: string;
+  subtitle: string;
+  desc: string;
+  icon: string;
+  costCoins: number;
+  bonusPercent: number; // e.g. +10% to +20% bonus coins from clears
+  idleIncomePerMin: number; // Passive idle coins generated
+}
+
+export interface CustomerEvent {
+  id: string;
+  title: string;
+  character: string;
+  story: string;
+  icon: string;
+  rewardCoins: number;
+  triggerMinStage: number;
+}
+
+export interface CatPetStatus {
+  id: string;
+  name: string;
   emoji: string;
-  avatarColor: string;
-  personality: string;
-  favoriteSnack: string;
-  unlocked: boolean;
-  unlockItemId: string;
-  soundPitch: number;
+  satiety: number; // 0-100 饱腹度
+  moodText: string; // 心情状态
+  favFood: string;
 }
 
 export interface CafeLevelConfig {
@@ -53,7 +61,10 @@ export interface CafeLevelConfig {
   rows: number;
   cols: number;
   iconCount: number;
-  timeLimit: number; // in seconds
+  mode: 'time' | 'moves';
+  timeLimit: number; // in seconds (for time mode)
+  movesLimit?: number; // for moves mode
+  frozenCount?: number; // number of initial ice tiles 🧊
   obstacleType: 'none' | 'corners' | 'centerCross' | 'pillars' | 'random4' | 'maze';
   targetScores: [number, number, number]; // 1, 2, 3 stars
   rewardStars: number;
@@ -68,13 +79,4 @@ export interface LevelProgress {
   stars: number;
   highScore: number;
   unlocked: boolean;
-}
-
-export interface CafeState {
-  coins: number;
-  stars: number;
-  unlockedItems: string[];
-  adoptedCats: string[];
-  idleCoins: number;
-  lastCollectTime: number;
 }

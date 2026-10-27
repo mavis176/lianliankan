@@ -145,6 +145,34 @@ class SoundController {
   }
 
   /**
+   * Ice block cracking / shattering effect
+   */
+  public playIceCrack(): void {
+    if (!this.soundEnabled) return;
+    const ctx = this.getContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+    [1200, 1800, 2400, 3200].forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.015);
+      osc.frequency.exponentialRampToValueAtTime(freq * 0.5, now + idx * 0.015 + 0.08);
+
+      gain.gain.setValueAtTime(0.12, now + idx * 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.015 + 0.09);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now + idx * 0.015);
+      osc.stop(now + idx * 0.015 + 0.1);
+    });
+  }
+
+  /**
    * Cute synthesized Cat "Meow" / "Purr"
    */
   public playMeow(pitchOffset: number = 0): void {

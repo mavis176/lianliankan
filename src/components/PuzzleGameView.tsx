@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, Pause, Volume2, VolumeX, Lightbulb, RefreshCw, Clock } from 'lucide-react';
+import { ArrowLeft, Pause, Volume2, VolumeX, Lightbulb, RefreshCw, Clock, Footprints } from 'lucide-react';
 import { CatClock } from './CatClock';
 import { CafeLevel, Point } from '../types/cafe';
 import { LianLianKanBoard } from './LianLianKanBoard';
@@ -8,12 +8,14 @@ import { ParticleCanvas, ParticleCanvasRef } from './ParticleCanvas';
 interface PuzzleGameViewProps {
   level: CafeLevel;
   grid: number[][];
+  frozenMap?: boolean[][];
   selectedTile: Point | null;
   hintedPair: [Point, Point] | null;
   onTileClick: (r: number, c: number, rect: { x: number; y: number; width: number; height: number }) => void;
   boardContainerRef: React.RefObject<HTMLDivElement | null>;
   particleCanvasRef: React.RefObject<ParticleCanvasRef | null>;
   timeLeft: number;
+  movesLeft?: number;
   isFrozen: boolean;
   score: number;
   clearedPairs: number;
@@ -35,12 +37,14 @@ interface PuzzleGameViewProps {
 export const PuzzleGameView: React.FC<PuzzleGameViewProps> = ({
   level,
   grid,
+  frozenMap,
   selectedTile,
   hintedPair,
   onTileClick,
   boardContainerRef,
   particleCanvasRef,
   timeLeft,
+  movesLeft,
   isFrozen,
   score,
   clearedPairs,
@@ -76,7 +80,7 @@ export const PuzzleGameView: React.FC<PuzzleGameViewProps> = ({
         <div className="flex-1 flex flex-col items-center justify-center min-w-0 px-1">
           <div className="flex items-center gap-1.5">
             <span className="text-xs sm:text-base font-black text-[#5A381E] truncate">
-              第 {level.id} 关 · {level.title.replace(/第 \d+ 关 · /, '')}
+              {level.id > 100 ? level.title : `第 ${level.id} 关 · ${level.title.replace(/第 \d+ 关 · /, '')}`}
             </span>
           </div>
           <div className="flex items-center gap-2 text-[11px] font-bold text-[#8C623E]">
@@ -87,9 +91,21 @@ export const PuzzleGameView: React.FC<PuzzleGameViewProps> = ({
           </div>
         </div>
 
-        {/* Right: Clock & Settings */}
+        {/* Right: Clock or Moves Limit + Settings */}
         <div className="flex items-center gap-1.5 shrink-0">
-          <CatClock timeLeft={timeLeft} isFrozen={isFrozen} />
+          {level.mode === 'moves' ? (
+            <div className="h-10 px-2.5 bg-[#FFFDF8] border-2 border-[#6B482A] rounded-xl flex items-center justify-center gap-1.5 shadow-[0_2px_0_#6B482A]">
+              <Footprints className="w-3.5 h-3.5 text-amber-600" />
+              <div className="flex flex-col leading-none text-left">
+                <span className="text-[8px] text-[#8C623E] font-medium">剩余步数</span>
+                <span className={`text-xs font-black font-mono ${(movesLeft ?? 0) <= 5 ? 'text-rose-600 animate-pulse' : 'text-[#5A381E]'}`}>
+                  {movesLeft ?? 0}
+                </span>
+              </div>
+            </div>
+          ) : (
+            <CatClock timeLeft={timeLeft} isFrozen={isFrozen} />
+          )}
 
           <button
             onClick={onToggleSound}
@@ -180,6 +196,7 @@ export const PuzzleGameView: React.FC<PuzzleGameViewProps> = ({
           rows={level.rows}
           cols={level.cols}
           grid={grid}
+          frozenMap={frozenMap}
           selectedTile={selectedTile}
           hintedPair={hintedPair}
           onTileClick={onTileClick}

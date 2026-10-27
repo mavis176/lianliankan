@@ -241,8 +241,9 @@ export function createSolvableBoard(
   rows: number,
   cols: number,
   iconCount: number,
-  obstaclePattern: 'none' | 'corners' | 'centerCross' | 'pillars' | 'random4' | 'maze' = 'none'
-): { grid: number[][]; initialMatchCount: number } {
+  obstaclePattern: 'none' | 'corners' | 'centerCross' | 'pillars' | 'random4' | 'maze' = 'none',
+  frozenCount: number = 0
+): { grid: number[][]; frozenMap: boolean[][]; initialMatchCount: number } {
   const totalR = rows + 2;
   const totalC = cols + 2;
 
@@ -266,7 +267,6 @@ export function createSolvableBoard(
       obstacleSet.delete(`${removed.r},${removed.c}`);
       playableCells.push(removed);
     } else {
-      // Very rare case: add dummy obstacle at center
       const mid = playableCells.pop()!;
       obstacleSet.add(`${mid.r},${mid.c}`);
     }
@@ -281,20 +281,36 @@ export function createSolvableBoard(
     tilePool.push(type, type);
   }
 
+  const generateFrozenMap = (pCells: Point[], matchP1?: Point, matchP2?: Point): boolean[][] => {
+    const fMap: boolean[][] = Array.from({ length: totalR }, () => Array(totalC).fill(false));
+    if (frozenCount <= 0) return fMap;
+
+    const candidates = pCells.filter(c => 
+      !(matchP1 && matchP1.r === c.r && matchP1.c === c.c) &&
+      !(matchP2 && matchP2.r === c.r && matchP2.c === c.c)
+    );
+
+    // Shuffle candidates
+    const shuffled = [...candidates].sort(() => Math.random() - 0.5);
+    const countToFreeze = Math.min(frozenCount, shuffled.length - 2);
+    for (let i = 0; i < countToFreeze; i++) {
+      fMap[shuffled[i].r][shuffled[i].c] = true;
+    }
+    return fMap;
+  };
+
   // Shuffle tile pool until a valid match exists
   let attempts = 0;
   while (attempts < 50) {
     attempts++;
-    // Fisher-Yates shuffle
     for (let i = tilePool.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [tilePool[i], tilePool[j]] = [tilePool[j], tilePool[i]];
     }
 
-    // Build grid
     const grid: number[][] = Array.from({ length: totalR }, () => Array(totalC).fill(0));
     for (const obs of obstacleList) {
-      grid[obs.r][obs.c] = -1; // -1 represents indestructible obstacle block
+      grid[obs.r][obs.c] = -1;
     }
 
     for (let i = 0; i < playableCells.length; i++) {
@@ -304,11 +320,11 @@ export function createSolvableBoard(
 
     const match = findAnyMatch(grid, rows, cols);
     if (match) {
-      return { grid, initialMatchCount: 1 };
+      const frozenMap = generateFrozenMap(playableCells, match.p1, match.p2);
+      return { grid, frozenMap, initialMatchCount: 1 };
     }
   }
 
-  // If random attempts didn't immediately create a valid match, place at least one guaranteed pair adjacent
   const grid: number[][] = Array.from({ length: totalR }, () => Array(totalC).fill(0));
   for (const obs of obstacleList) {
     grid[obs.r][obs.c] = -1;
@@ -318,15 +334,17 @@ export function createSolvableBoard(
     grid[cell.r][cell.c] = tilePool[i];
   }
 
-  // Ensure first two cells have same type
   if (playableCells.length >= 2) {
     const p1 = playableCells[0];
     const p2 = playableCells[1];
     grid[p1.r][p1.c] = 1;
     grid[p2.r][p2.c] = 1;
+    const frozenMap = generateFrozenMap(playableCells, p1, p2);
+    return { grid, frozenMap, initialMatchCount: 1 };
   }
 
-  return { grid, initialMatchCount: 1 };
+  const frozenMap = generateFrozenMap(playableCells);
+  return { grid, frozenMap, initialMatchCount: 1 };
 }
 
 /**

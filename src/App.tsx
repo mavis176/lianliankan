@@ -12,8 +12,15 @@ import { VictoryModal } from './components/VictoryModal';
 import { GameOverModal } from './components/GameOverModal';
 import { PauseModal } from './components/PauseModal';
 import { ExportSingleFileModal } from './components/ExportSingleFileModal';
-import { CAFE_LEVELS, JOURNAL_STAGES, INITIAL_JOURNAL_LOG } from './data/cafeData';
-import { Point, LevelProgress, JournalStage } from './types/cafe';
+import {
+  CAFE_LEVELS,
+  JOURNAL_STAGES,
+  INITIAL_JOURNAL_LOG,
+  DRINK_MENU_ITEMS,
+  generateEndlessLevel,
+  CAT_INTERACTIONS,
+} from './data/cafeData';
+import { Point, LevelProgress, JournalStage, DrinkMenuItem, CatPetStatus, CafeLevelConfig } from './types/cafe';
 import {
   createSolvableBoard,
   findPath,
@@ -22,7 +29,7 @@ import {
 } from './utils/pathFinder';
 import { sound } from './utils/audio';
 
-const STORAGE_KEY = 'purr_cafe_journal_v5';
+const STORAGE_KEY = 'purr_cafe_journal_v6_expanded';
 
 export default function App() {
   const particleCanvasRef = useRef<ParticleCanvasRef | null>(null);
@@ -30,23 +37,54 @@ export default function App() {
   const timerRef = useRef<number | null>(null);
   const comboTimerRef = useRef<number | null>(null);
   const freezeTimerRef = useRef<number | null>(null);
+  const idleTimerRef = useRef<number | null>(null);
 
-  // Decoupled Views: 'CAFE' (Pure-Text Narrative & Card Journal) vs 'PUZZLE' (Focused Mobile LianLianKan)
+  // Decoupled Views: 'CAFE' (3-Module Journal) vs 'PUZZLE' (Focused Mobile LianLianKan)
   const [currentView, setCurrentView] = useState<'CAFE' | 'PUZZLE'>('CAFE');
 
-  // Currency & Journal Progression
-  const [stars, setStars] = useState<number>(3);
-  const [coins, setCoins] = useState<number>(350);
+  // Currency & Progression
+  const [stars, setStars] = useState<number>(4);
+  const [coins, setCoins] = useState<number>(450);
   const [unlockedStages, setUnlockedStages] = useState<Set<string>>(
-    new Set(['stage_1_floor'])
+    new Set(['stage_1_cleanup', 'stage_2_floor'])
+  );
+  const [unlockedDrinks, setUnlockedDrinks] = useState<Set<string>>(
+    new Set(['drink_pourover'])
   );
   const [journalLogs, setJournalLogs] = useState<string[]>([
     INITIAL_JOURNAL_LOG,
     JOURNAL_STAGES[0].narrativeLog,
+    JOURNAL_STAGES[1].narrativeLog,
   ]);
 
-  // Levels & Progress
+  // Cats Status
+  const [catStatuses, setCatStatuses] = useState<Record<string, CatPetStatus>>({
+    custard: {
+      id: 'custard',
+      name: '奶黄包',
+      emoji: '🐱',
+      satiety: 85,
+      moodText: '呼噜呼噜 💤',
+      favFood: '深海三文鱼冻干',
+    },
+    flower: {
+      id: 'flower',
+      name: '小碎花',
+      emoji: '🐈',
+      satiety: 80,
+      moodText: '伸懒腰踩奶 ✨',
+      favFood: '鲜虾酥脆条',
+    },
+  });
+
+  // Idle Revenue
+  const [idleCoinsPending, setIdleCoinsPending] = useState<number>(15);
+
+  // Levels & Progress (1~30 levels + endless mode)
   const [currentLevelId, setCurrentLevelId] = useState<number>(1);
+  const [endlessTier, setEndlessTier] = useState<number>(1);
+  const [activeCustomLevel, setActiveCustomLevel] = useState<CafeLevelConfig | null>(null);
+
   const [progressList, setProgressList] = useState<LevelProgress[]>(() => {
     return CAFE_LEVELS.map(l => ({
       levelId: l.id,
@@ -56,10 +94,15 @@ export default function App() {
     }));
   });
 
-  const currentLevel = CAFE_LEVELS.find(l => l.id === currentLevelId) || CAFE_LEVELS[0];
+  // Resolve current level config
+  const currentLevel: CafeLevelConfig =
+    activeCustomLevel ||
+    CAFE_LEVELS.find(l => l.id === currentLevelId) ||
+    CAFE_LEVELS[0];
 
   // Board State
   const [grid, setGrid] = useState<number[][]>([]);
+  const [frozenMap, setFrozenMap] = useState<boolean[][]>([]);
   const [selectedTile, setSelectedTile] = useState<Point | null>(null);
   const [hintedPair, setHintedPair] = useState<[Point, Point] | null>(null);
 
@@ -71,6 +114,7 @@ export default function App() {
   const [combo, setCombo] = useState<number>(0);
   const [maxCombo, setMaxCombo] = useState<number>(0);
   const [timeLeft, setTimeLeft] = useState<number>(90);
+  const [movesLeft, setMovesLeft] = useState<number>(30);
   const [isFrozen, setIsFrozen] = useState<boolean>(false);
   const [clearedPairs, setClearedPairs] = useState<number>(0);
   const [totalInitialPairs, setTotalInitialPairs] = useState<number>(18);
@@ -99,8 +143,10 @@ export default function App() {
         if (typeof parsed.stars === 'number') setStars(parsed.stars);
         if (typeof parsed.coins === 'number') setCoins(parsed.coins);
         if (Array.isArray(parsed.unlockedStages)) setUnlockedStages(new Set(parsed.unlockedStages));
+        if (Array.isArray(parsed.unlockedDrinks)) setUnlockedDrinks(new Set(parsed.unlockedDrinks));
         if (Array.isArray(parsed.journalLogs) && parsed.journalLogs.length > 0) setJournalLogs(parsed.journalLogs);
         if (typeof parsed.currentLevelId === 'number') setCurrentLevelId(parsed.currentLevelId);
+        if (typeof parsed.endlessTier === 'number') setEndlessTier(parsed.endlessTier);
         if (Array.isArray(parsed.progressList)) setProgressList(parsed.progressList);
       }
     } catch {
@@ -111,29 +157,63 @@ export default function App() {
   const saveProgressToStorage = useCallback((
     newStars: number,
     newCoins: number,
-    newUnlockedStages: Set<string>,
+    newStages: Set<string>,
+    newDrinks: Set<string>,
     newLogs: string[],
     newProgList: LevelProgress[],
-    nextLvl: number
+    nextLvl: number,
+    eTier: number
   ) => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         stars: newStars,
         coins: newCoins,
-        unlockedStages: Array.from(newUnlockedStages),
+        unlockedStages: Array.from(newStages),
+        unlockedDrinks: Array.from(newDrinks),
         journalLogs: newLogs,
         progressList: newProgList,
         currentLevelId: nextLvl,
+        endlessTier: eTier,
       }));
     } catch {
       // ignore
     }
   }, []);
 
+  // Idle Income Interval (runs in background)
+  useEffect(() => {
+    idleTimerRef.current = window.setInterval(() => {
+      const idleRate = DRINK_MENU_ITEMS
+        .filter(d => unlockedDrinks.has(d.id))
+        .reduce((sum, d) => sum + d.idleIncomePerMin, 4);
+
+      const added = Math.max(1, Math.round(idleRate / 6)); // every 10s
+      setIdleCoinsPending(prev => Math.min(500, prev + added));
+    }, 10000);
+
+    return () => {
+      if (idleTimerRef.current) clearInterval(idleTimerRef.current);
+    };
+  }, [unlockedDrinks]);
+
   // Initialize Level
-  const initLevel = useCallback((lvlId: number) => {
-    const lvl = CAFE_LEVELS.find(l => l.id === lvlId) || CAFE_LEVELS[0];
-    setCurrentLevelId(lvl.id);
+  const initLevel = useCallback((lvlId: number, customLvl?: CafeLevelConfig) => {
+    let lvl: CafeLevelConfig;
+    if (customLvl) {
+      lvl = customLvl;
+      setActiveCustomLevel(customLvl);
+      setCurrentLevelId(customLvl.id);
+    } else if (lvlId > 100) {
+      const tier = lvlId - 100;
+      lvl = generateEndlessLevel(tier);
+      setActiveCustomLevel(lvl);
+      setCurrentLevelId(lvl.id);
+    } else {
+      lvl = CAFE_LEVELS.find(l => l.id === lvlId) || CAFE_LEVELS[0];
+      setActiveCustomLevel(null);
+      setCurrentLevelId(lvl.id);
+    }
+
     setSelectedTile(null);
     setHintedPair(null);
     setScore(0);
@@ -143,6 +223,7 @@ export default function App() {
     setCombo(0);
     setMaxCombo(0);
     setTimeLeft(lvl.timeLimit);
+    setMovesLeft(lvl.movesLimit || 35);
     setIsFrozen(false);
     setHintsLeft(3);
     setShufflesLeft(2);
@@ -152,11 +233,12 @@ export default function App() {
     setCoinsEarned(0);
     setGameState('PLAYING');
 
-    const { grid: initialGrid } = createSolvableBoard(
+    const { grid: initialGrid, frozenMap: initialFrozen } = createSolvableBoard(
       lvl.rows,
       lvl.cols,
       lvl.iconCount,
-      lvl.obstacleType
+      lvl.obstacleType,
+      lvl.frozenCount || 0
     );
 
     let activeCount = 0;
@@ -167,6 +249,7 @@ export default function App() {
     }
     setTotalInitialPairs(Math.floor(activeCount / 2));
     setGrid(initialGrid);
+    setFrozenMap(initialFrozen);
   }, []);
 
   // Mount setup
@@ -174,9 +257,9 @@ export default function App() {
     initLevel(currentLevelId);
   }, [currentLevelId, initLevel]);
 
-  // Timer Tick (only ticks when actively playing in PUZZLE view)
+  // Timer Tick (only ticks in 'time' mode when playing in PUZZLE view)
   useEffect(() => {
-    if (gameState !== 'PLAYING' || currentView !== 'PUZZLE') {
+    if (gameState !== 'PLAYING' || currentView !== 'PUZZLE' || currentLevel.mode !== 'time') {
       if (timerRef.current) clearInterval(timerRef.current);
       return;
     }
@@ -198,23 +281,20 @@ export default function App() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [gameState, isFrozen, currentView]);
+  }, [gameState, isFrozen, currentView, currentLevel.mode]);
 
-  // Pet Cat Reward
-  const handlePetCatBonus = (bonus: number) => {
-    const nextCoins = coins + bonus;
+  // Collect Cash Register Idle Coins
+  const handleCollectIdleCoins = () => {
+    if (idleCoinsPending <= 0) return;
+    sound.ensureContext();
+    sound.playCoin();
+    const nextCoins = coins + idleCoinsPending;
     setCoins(nextCoins);
-    saveProgressToStorage(stars, nextCoins, unlockedStages, journalLogs, progressList, currentLevelId);
+    setIdleCoinsPending(0);
+    saveProgressToStorage(stars, nextCoins, unlockedStages, unlockedDrinks, journalLogs, progressList, currentLevelId, endlessTier);
   };
 
-  // Add Log Entry
-  const handleAddLog = (entry: string) => {
-    const nextLogs = [...journalLogs, entry];
-    setJournalLogs(nextLogs);
-    saveProgressToStorage(stars, coins, unlockedStages, nextLogs, progressList, currentLevelId);
-  };
-
-  // Unlock Facility / Narrative Stage
+  // Unlock Construction Stage
   const handleUnlockStage = (stage: JournalStage) => {
     sound.ensureContext();
     sound.playVictory();
@@ -224,19 +304,91 @@ export default function App() {
 
     const nextStars = stars - stage.costStars;
     const nextCoins = coins - stage.costCoins;
-    const nextUnlocked = new Set(unlockedStages);
-    nextUnlocked.add(stage.id);
+    const nextStages = new Set(unlockedStages);
+    nextStages.add(stage.id);
 
     const nextLogs = [...journalLogs, stage.narrativeLog];
     setStars(nextStars);
     setCoins(nextCoins);
-    setUnlockedStages(nextUnlocked);
+    setUnlockedStages(nextStages);
     setJournalLogs(nextLogs);
 
-    saveProgressToStorage(nextStars, nextCoins, nextUnlocked, nextLogs, progressList, currentLevelId);
+    saveProgressToStorage(nextStars, nextCoins, nextStages, unlockedDrinks, nextLogs, progressList, currentLevelId, endlessTier);
   };
 
-  // Handle Tile Click with Exact Coordinate getBoundingClientRect Path Line
+  // Unlock Drink Recipe
+  const handleUnlockDrink = (drink: DrinkMenuItem) => {
+    sound.ensureContext();
+    sound.playVictory();
+    const nextCoins = coins - drink.costCoins;
+    const nextDrinks = new Set(unlockedDrinks);
+    nextDrinks.add(drink.id);
+
+    const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+    const logEntry = `【${timeStr} 研发】新饮品「${drink.name}」研制成功并上架！全店营业额永久提升 +${drink.bonusPercent}% ✨`;
+    const nextLogs = [...journalLogs, logEntry];
+
+    setCoins(nextCoins);
+    setUnlockedDrinks(nextDrinks);
+    setJournalLogs(nextLogs);
+
+    saveProgressToStorage(stars, nextCoins, unlockedStages, nextDrinks, nextLogs, progressList, currentLevelId, endlessTier);
+  };
+
+  // Pet Cat Interaction
+  const handlePetCat = (catId: string) => {
+    sound.ensureContext();
+    sound.playMeow(catId === 'custard' ? 620 : 780);
+    sound.playPurr();
+    sound.playCoin();
+
+    const bonus = catId === 'custard' ? 4 : 5;
+    const nextCoins = coins + bonus;
+    setCoins(nextCoins);
+
+    const quotes = CAT_INTERACTIONS[catId as keyof typeof CAT_INTERACTIONS] || [];
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+    const logEntry = `【${timeStr} 互动】${randomQuote} (+${bonus} 🪙)`;
+    const nextLogs = [...journalLogs, logEntry];
+    setJournalLogs(nextLogs);
+
+    saveProgressToStorage(stars, nextCoins, unlockedStages, unlockedDrinks, nextLogs, progressList, currentLevelId, endlessTier);
+  };
+
+  // Feed Cat Interaction
+  const handleFeedCat = (catId: string) => {
+    if (coins < 5) return;
+    sound.ensureContext();
+    sound.playCoin();
+    sound.playPurr();
+
+    const nextCoins = coins - 5;
+    setCoins(nextCoins);
+
+    setCatStatuses(prev => {
+      const current = prev[catId];
+      if (!current) return prev;
+      return {
+        ...prev,
+        [catId]: {
+          ...current,
+          satiety: Math.min(100, current.satiety + 15),
+          moodText: '满足地舔爪 💖',
+        },
+      };
+    });
+
+    const catName = catId === 'custard' ? '奶黄包' : '小碎花';
+    const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+    const logEntry = `【${timeStr} 投喂】你为「${catName}」添了满满一碗进口主食肉泥，它吧唧吧唧吃得一干二净！(-5 🪙)`;
+    const nextLogs = [...journalLogs, logEntry];
+    setJournalLogs(nextLogs);
+
+    saveProgressToStorage(stars, nextCoins, unlockedStages, unlockedDrinks, nextLogs, progressList, currentLevelId, endlessTier);
+  };
+
+  // Handle Tile Click with Exact Coordinate getBoundingClientRect Path Line & Ice Shatter
   const handleTileClick = (r: number, c: number, rect: { x: number; y: number; width: number; height: number }) => {
     sound.ensureContext();
     if (gameState !== 'PLAYING') return;
@@ -257,6 +409,15 @@ export default function App() {
       return;
     }
 
+    // In moves limit mode, each match attempt consumes a move
+    if (currentLevel.mode === 'moves') {
+      const nextMoves = movesLeft - 1;
+      setMovesLeft(nextMoves);
+      if (nextMoves <= 0) {
+        // Checked after elimination if failed
+      }
+    }
+
     // Check path connection (max 2 turns)
     const pathResult = findPath(grid, selectedTile, { r, c }, currentLevel.rows, currentLevel.cols);
 
@@ -274,7 +435,6 @@ export default function App() {
           const cellW = bRect.width / (currentLevel.cols + 2);
           const cellH = bRect.height / (currentLevel.rows + 2);
 
-          // Calculate exact center coordinates via getBoundingClientRect for perfect alignment
           const canvasPoints = pathResult.path.map(pt => {
             const tileEl = document.getElementById(`tile-${pt.r}-${pt.c}`);
             if (tileEl) {
@@ -284,7 +444,6 @@ export default function App() {
                 y: tRect.top + tRect.height / 2 - canvasRect.top,
               };
             }
-            // Corridor point or already cleared tile
             return {
               x: bRect.left + (pt.c + 0.5) * cellW - canvasRect.left,
               y: bRect.top + (pt.r + 0.5) * cellH - canvasRect.top,
@@ -300,7 +459,29 @@ export default function App() {
         }
       }
 
-      // Update Combo & Sound
+      // Check if either tile is frozen 🧊
+      const p1Frozen = frozenMap?.[p1.r]?.[p1.c] ?? false;
+      const p2Frozen = frozenMap?.[p2.r]?.[p2.c] ?? false;
+
+      let nextFrozen = frozenMap.map(row => [...row]);
+      let nextGrid = grid.map(row => [...row]);
+
+      if (p1Frozen || p2Frozen) {
+        // Ice Shatter Mechanic!
+        sound.playIceCrack();
+        if (p1Frozen) nextFrozen[p1.r][p1.c] = false;
+        if (p2Frozen) nextFrozen[p2.r][p2.c] = false;
+
+        setFrozenMap(nextFrozen);
+        setSelectedTile(null);
+        setHintedPair(null);
+
+        // Score bonus for ice crack
+        setScore(s => s + 50);
+        return;
+      }
+
+      // Neither is frozen -> standard elimination
       const nextCombo = combo + 1;
       setCombo(nextCombo);
       setMaxCombo(prev => Math.max(prev, nextCombo));
@@ -320,7 +501,7 @@ export default function App() {
       setComboBonus(cb => cb + cBonus);
       setScore(s => s + earned);
 
-      // Combo pop text
+      // Combo pop
       if (nextCombo >= 2) {
         const comboText =
           nextCombo >= 5
@@ -343,8 +524,6 @@ export default function App() {
         setTimeout(() => setComboNotice(null), 1200);
       }
 
-      // Eliminate tiles from grid
-      const nextGrid = grid.map(row => [...row]);
       nextGrid[p1.r][p1.c] = 0;
       nextGrid[p2.r][p2.c] = 0;
       setGrid(nextGrid);
@@ -366,25 +545,36 @@ export default function App() {
       if (remainingTiles === 0) {
         if (timerRef.current) clearInterval(timerRef.current);
 
-        const tBonus = timeLeft * 10;
+        const tBonus = currentLevel.mode === 'time' ? timeLeft * 10 : (movesLeft - 1) * 20;
         const finalScore = score + earned + tBonus;
         setTimeBonus(tBonus);
         setScore(finalScore);
 
-        // Calculate Stars Earned (1 to 3)
         let sEarned = 1;
         if (finalScore >= currentLevel.targetScores[2]) sEarned = 3;
         else if (finalScore >= currentLevel.targetScores[1]) sEarned = 2;
         setStarsEarned(sEarned);
 
-        // Coins earned: 50 base + 20 per star + time/2
-        const cEarned = 50 + sEarned * 20 + Math.floor(timeLeft / 2);
+        // Drinks bonus percentage
+        const drinkBonus = DRINK_MENU_ITEMS
+          .filter(d => unlockedDrinks.has(d.id))
+          .reduce((sum, d) => sum + d.bonusPercent, 0);
+
+        const baseRewardCoins = currentLevel.rewardCoins || (50 + sEarned * 25);
+        const bonusCoins = Math.round(baseRewardCoins * (drinkBonus / 100));
+        const cEarned = baseRewardCoins + bonusCoins;
         setCoinsEarned(cEarned);
 
         const newStars = stars + sEarned;
         const newCoins = coins + cEarned;
         setStars(newStars);
         setCoins(newCoins);
+
+        let newTier = endlessTier;
+        if (currentLevel.id > 100) {
+          newTier = Math.max(endlessTier, currentLevel.id - 100 + 1);
+          setEndlessTier(newTier);
+        }
 
         const nextProg = progressList.map(p => {
           if (p.levelId === currentLevel.id) {
@@ -401,22 +591,28 @@ export default function App() {
         });
         setProgressList(nextProg);
 
-        const nextLvlId = Math.min(CAFE_LEVELS.length, currentLevel.id + 1);
+        const nextLvlId = Math.min(30, currentLevel.id + 1);
 
-        // Append victory procurement log to journal!
         const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
-        const victoryLog = `【${timeStr} 采购】第 ${currentLevel.id} 关食材采购大获全胜，带回了新鲜香浓原料！(+${sEarned} ⭐, +${cEarned} 🪙)`;
+        const victoryLog = `【${timeStr} 采购】${currentLevel.title} 采购大获全胜！带回了顶级原料，营业收益加成 +${drinkBonus}%！(+${sEarned} ⭐, +${cEarned} 🪙)`;
         const updatedLogs = [...journalLogs, victoryLog];
         setJournalLogs(updatedLogs);
 
-        saveProgressToStorage(newStars, newCoins, unlockedStages, updatedLogs, nextProg, nextLvlId);
+        saveProgressToStorage(newStars, newCoins, unlockedStages, unlockedDrinks, updatedLogs, nextProg, nextLvlId, newTier);
 
         sound.playVictory();
         setGameState('VICTORY');
         return;
       }
 
-      // Auto-shuffle if board is deadlocked
+      // Check if out of moves in moves mode
+      if (currentLevel.mode === 'moves' && (movesLeft - 1) <= 0) {
+        sound.playGameOver();
+        setGameState('GAMEOVER');
+        return;
+      }
+
+      // Auto-shuffle if deadlocked
       const nextMatch = findAnyMatch(nextGrid, currentLevel.rows, currentLevel.cols);
       if (!nextMatch) {
         setTimeout(() => {
@@ -427,13 +623,18 @@ export default function App() {
         }, 300);
       }
     } else {
-      // Not connectable -> switch selection
+      // Not connectable
       if (grid[r][c] > 0) {
         sound.playSelect();
         setSelectedTile({ r, c });
       } else {
         sound.playDeselect();
         setSelectedTile(null);
+      }
+
+      if (currentLevel.mode === 'moves' && movesLeft <= 0) {
+        sound.playGameOver();
+        setGameState('GAMEOVER');
       }
     }
   };
@@ -471,7 +672,11 @@ export default function App() {
     sound.playFreeze();
     setFreezesLeft(f => f - 1);
     setIsFrozen(true);
-    setTimeLeft(t => Math.min(currentLevel.timeLimit, t + 15));
+    if (currentLevel.mode === 'moves') {
+      setMovesLeft(m => m + 5);
+    } else {
+      setTimeLeft(t => Math.min(currentLevel.timeLimit, t + 15));
+    }
 
     if (freezeTimerRef.current) clearTimeout(freezeTimerRef.current);
     freezeTimerRef.current = window.setTimeout(() => {
@@ -501,16 +706,19 @@ export default function App() {
 
   return (
     <div className="w-full h-full min-h-[100dvh] bg-[#FAF7F2] flex flex-col items-center justify-center overflow-x-hidden font-sans select-none">
-      {/* Central mobile-first viewport */}
       <div className="w-full max-w-md h-full min-h-[100dvh] flex flex-col justify-between shadow-2xl relative bg-[#FAF7F2]">
         
-        {/* VIEW 1: CAFE JOURNAL (Pure-Text Narrative & Card Management) */}
+        {/* VIEW 1: CAFE JOURNAL (3 Deep Modules: Stages, Drinks, Cats & Events) */}
         {currentView === 'CAFE' ? (
           <CafeJournalView
             stars={stars}
             coins={coins}
             unlockedStages={unlockedStages}
+            unlockedDrinks={unlockedDrinks}
             journalLogs={journalLogs}
+            catStatuses={catStatuses}
+            idleCoinsPending={idleCoinsPending}
+            onCollectIdleCoins={handleCollectIdleCoins}
             currentLevelId={currentLevelId}
             soundEnabled={soundEnabled}
             onToggleSound={() => {
@@ -518,22 +726,26 @@ export default function App() {
               setSoundEnabled(!soundEnabled);
             }}
             onUnlockStage={handleUnlockStage}
-            onAddLog={handleAddLog}
+            onUnlockDrink={handleUnlockDrink}
+            onFeedCat={handleFeedCat}
+            onPetCat={handlePetCat}
             onStartLevel={handleStartLevel}
+            onOpenLevelSelect={() => setIsLevelSelectOpen(true)}
             onOpenExport={() => setIsExportOpen(true)}
-            onPetCatBonus={handlePetCatBonus}
           />
         ) : (
-          /* VIEW 2: DEDICATED MOBILE LIANLIANKAN PUZZLE VIEW (>70% board area) */
+          /* VIEW 2: DEDICATED MOBILE LIANLIANKAN PUZZLE VIEW (>70% board area, 30 Levels + Endless) */
           <PuzzleGameView
             level={currentLevel}
             grid={grid}
+            frozenMap={frozenMap}
             selectedTile={selectedTile}
             hintedPair={hintedPair}
             onTileClick={handleTileClick}
             boardContainerRef={boardContainerRef}
             particleCanvasRef={particleCanvasRef}
             timeLeft={timeLeft}
+            movesLeft={movesLeft}
             isFrozen={isFrozen}
             score={score}
             clearedPairs={clearedPairs}
@@ -568,6 +780,13 @@ export default function App() {
         }}
         progressList={progressList}
         currentLevelId={currentLevelId}
+        endlessTier={endlessTier}
+        onStartEndless={tier => {
+          setIsLevelSelectOpen(false);
+          const endlessLvl = generateEndlessLevel(tier);
+          initLevel(endlessLvl.id, endlessLvl);
+          setCurrentView('PUZZLE');
+        }}
       />
 
       {/* Victory Modal with seamless return to cafe decoration or next level */}
@@ -580,13 +799,19 @@ export default function App() {
         comboBonus={comboBonus}
         starsEarned={starsEarned}
         coinsEarned={coinsEarned}
-        hasNextLevel={currentLevelId < CAFE_LEVELS.length}
+        hasNextLevel={currentLevel.id < 30 || currentLevel.id > 100}
         onNextLevel={() => {
-          initLevel(currentLevelId + 1);
+          if (currentLevel.id > 100) {
+            const nextTier = currentLevel.id - 100 + 1;
+            const nextLvl = generateEndlessLevel(nextTier);
+            initLevel(nextLvl.id, nextLvl);
+          } else {
+            initLevel(currentLevel.id + 1);
+          }
           setCurrentView('PUZZLE');
         }}
         onReplay={() => {
-          initLevel(currentLevelId);
+          initLevel(currentLevel.id);
           setCurrentView('PUZZLE');
         }}
         onGoToCafe={() => {
@@ -600,7 +825,7 @@ export default function App() {
         level={currentLevel}
         score={score}
         remainingPairs={Math.ceil(remainingTilesCount / 2)}
-        onReplay={() => initLevel(currentLevelId)}
+        onReplay={() => initLevel(currentLevel.id)}
         onGoToCafe={() => {
           setGameState('PLAYING');
           setCurrentView('CAFE');
@@ -613,7 +838,7 @@ export default function App() {
         soundEnabled={soundEnabled}
         bgmEnabled={bgmEnabled}
         onResume={() => setGameState('PLAYING')}
-        onReplay={() => initLevel(currentLevelId)}
+        onReplay={() => initLevel(currentLevel.id)}
         onGoToCafe={() => {
           setGameState('PLAYING');
           setCurrentView('CAFE');

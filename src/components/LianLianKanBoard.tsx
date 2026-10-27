@@ -7,6 +7,7 @@ interface LianLianKanBoardProps {
   rows: number;
   cols: number;
   grid: number[][];
+  frozenMap?: boolean[][];
   selectedTile: Point | null;
   hintedPair: [Point, Point] | null;
   onTileClick: (r: number, c: number, rect: { x: number; y: number; width: number; height: number }) => void;
@@ -17,6 +18,7 @@ export const LianLianKanBoard: React.FC<LianLianKanBoardProps> = ({
   rows,
   cols,
   grid,
+  frozenMap,
   selectedTile,
   hintedPair,
   onTileClick,
@@ -57,7 +59,7 @@ export const LianLianKanBoard: React.FC<LianLianKanBoardProps> = ({
   const { cellSize, width, height } = boardDimensions;
 
   const tiles = useMemo(() => {
-    const list: { id: string; r: number; c: number; type: number; isObstacle: boolean; isSelected: boolean; isHinted: boolean }[] = [];
+    const list: { id: string; r: number; c: number; type: number; isObstacle: boolean; isFrozen: boolean; isSelected: boolean; isHinted: boolean }[] = [];
     for (let r = 1; r <= rows; r++) {
       for (let c = 1; c <= cols; c++) {
         const val = grid[r] ? grid[r][c] : 0;
@@ -67,6 +69,7 @@ export const LianLianKanBoard: React.FC<LianLianKanBoardProps> = ({
             (hintedPair[0].r === r && hintedPair[0].c === c) ||
             (hintedPair[1].r === r && hintedPair[1].c === c)
           ) : false;
+          const isFrozen = frozenMap ? Boolean(frozenMap[r]?.[c]) : false;
 
           list.push({
             id: `tile-${r}-${c}`,
@@ -74,6 +77,7 @@ export const LianLianKanBoard: React.FC<LianLianKanBoardProps> = ({
             c,
             type: val,
             isObstacle: val === -1,
+            isFrozen,
             isSelected,
             isHinted,
           });
@@ -81,7 +85,7 @@ export const LianLianKanBoard: React.FC<LianLianKanBoardProps> = ({
       }
     }
     return list;
-  }, [grid, rows, cols, selectedTile, hintedPair]);
+  }, [grid, rows, cols, selectedTile, hintedPair, frozenMap]);
 
   return (
     <div className="relative flex-1 flex items-center justify-center w-full h-full overflow-hidden select-none py-1">
@@ -153,22 +157,31 @@ export const LianLianKanBoard: React.FC<LianLianKanBoardProps> = ({
                   <Box className="w-4 h-4 text-amber-100/70" />
                 </div>
               ) : (
-                // Playable Food Tile Card (Exact Ivory Card with Brown Border from image_1.png)
+                // Playable Food Tile Card
                 <div
                   className={`relative w-full h-full rounded-2xl flex items-center justify-center transition-all duration-150 cursor-pointer overflow-hidden ${
                     tile.isSelected
                       ? 'bg-[#FFFDF5] border-2 border-amber-400 ring-4 ring-amber-300 shadow-[0_0_12px_rgba(251,191,36,0.9)] scale-105 z-20 -translate-y-0.5'
                       : tile.isHinted
                       ? 'bg-[#FFF9EC] border-2 border-rose-400 ring-4 ring-rose-300 shadow-[0_0_12px_rgba(244,63,94,0.8)] animate-tile-pulse z-10'
+                      : tile.isFrozen
+                      ? 'bg-sky-50/90 border-2 border-sky-400 ring-2 ring-sky-300 shadow-[0_0_8px_rgba(56,189,248,0.4)]'
                       : 'bg-[#FFFDF8] hover:bg-[#FAF6EE] border-2 border-[#8C6541] shadow-[0_2px_0_#734F30] hover:-translate-y-0.5'
                   }`}
                 >
                   {/* Subtle glossy sheen */}
                   <div className="absolute inset-x-0 top-0 h-2 bg-gradient-to-b from-white/80 to-transparent rounded-t-2xl pointer-events-none" />
 
+                  {/* Frozen Ice Overlay Badge */}
+                  {tile.isFrozen && (
+                    <div className="absolute inset-0 bg-sky-200/35 backdrop-blur-[0.5px] border border-cyan-300/60 rounded-2xl flex items-start justify-end p-0.5 pointer-events-none z-10">
+                      <span className="text-[10px] leading-none drop-shadow-sm animate-pulse">🧊</span>
+                    </div>
+                  )}
+
                   {/* Hand-drawn SVG Icon */}
                   {IconComp && (
-                    <div className="flex items-center justify-center transition-transform group-hover:scale-105">
+                    <div className={`flex items-center justify-center transition-transform group-hover:scale-105 ${tile.isFrozen ? 'opacity-85 filter contrast-110' : ''}`}>
                       <IconComp size={Math.max(22, cellSize * 0.62)} />
                     </div>
                   )}
