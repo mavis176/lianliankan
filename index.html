@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>暖喵咖啡馆 · 深度经营日志与食材连连看</title>
+  <title>暖喵咖啡馆 · 连锁分店周转与无尽流浪猫收容</title>
   <style>
     /* -------------------------------------------------------------
        ZERO-DEPENDENCY PURE NATIVE CSS STYLESHEET
-       Warm & Healing Japanese Cafe Palette (#FAF7F2, #FAF5EE, #8C603D)
+       Warm & Healing Japanese Cafe Palette
        100% Inline - Works Completely Offline on Any Mobile Browser
        ------------------------------------------------------------- */
     *, *::before, *::after {
@@ -48,8 +48,8 @@
 
     /* Top Status Bar */
     .top-bar {
-      height: 52px;
-      padding: 0 14px;
+      height: 50px;
+      padding: 0 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -61,15 +61,15 @@
     .status-group {
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 5px;
     }
     .status-pill {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       background: #FFFDF9;
       border: 1px solid #D9CDB8;
-      padding: 3px 8px;
+      padding: 3px 6px;
       border-radius: 12px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.03);
     }
@@ -87,15 +87,15 @@
       font-size: 11px;
       font-weight: 700;
       color: #2C2219;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-family: ui-monospace, SFMono-Regular, monospace;
     }
     .top-actions {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
     .btn-icon-subtle {
-      height: 32px;
+      height: 30px;
       padding: 0 8px;
       border-radius: 10px;
       background: #FFFDF9;
@@ -115,12 +115,83 @@
       background: #F4ECE1;
     }
 
+    /* Branch Carousel Switcher */
+    .branch-switcher-bar {
+      height: 44px;
+      padding: 4px 10px;
+      background: linear-gradient(135deg, #FBF6EE, #F4ECE0);
+      border-bottom: 1px solid #E4D7C2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      z-index: 28;
+    }
+    .branch-nav-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 1px solid #D8C8B0;
+      background: #FFFDF9;
+      color: #6B4E36;
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .branch-nav-btn:active {
+      transform: scale(0.95);
+    }
+    .branch-nav-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .branch-info-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 0;
+      padding: 0 6px;
+    }
+    .branch-title-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 100%;
+    }
+    .branch-name-text {
+      font-size: 12px;
+      font-weight: 800;
+      color: #382517;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .branch-tag {
+      font-size: 9px;
+      padding: 1px 5px;
+      border-radius: 6px;
+      background: #EFE6D5;
+      color: #6B4E36;
+      font-weight: 700;
+    }
+    .branch-progress-sub {
+      font-size: 9px;
+      color: #8C623E;
+      font-weight: 600;
+      margin-top: 1px;
+    }
+
     /* 3 Management Navigation Tabs */
     .tab-bar {
-      height: 42px;
-      padding: 4px 12px;
+      height: 38px;
+      padding: 3px 10px;
       display: flex;
-      gap: 6px;
+      gap: 5px;
       background: #F6EFE6;
       border-bottom: 1px solid #E8DEC8;
       flex-shrink: 0;
@@ -129,8 +200,8 @@
     .tab-item {
       flex: 1;
       border: none;
-      border-radius: 10px;
-      font-size: 12px;
+      border-radius: 8px;
+      font-size: 11px;
       font-weight: 500;
       color: #7D6652;
       background: transparent;
@@ -139,6 +210,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 3px;
     }
     .tab-item.active {
       background: #FFFDF9;
@@ -155,10 +227,55 @@
       min-height: 0;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      padding: 12px 14px;
+      padding: 8px 10px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 8px;
+    }
+
+    /* Rescue Banner for Alley Cat Adoption */
+    .rescue-cat-banner {
+      width: 100%;
+      background: linear-gradient(135deg, #FFF9F2, #F8EFE0);
+      border: 1.5px dashed #D4A373;
+      border-radius: 14px;
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .rescue-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rescue-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #5A3515;
+    }
+    .rescue-sub {
+      font-size: 10px;
+      color: #8C6544;
+      margin-top: 1px;
+    }
+    .btn-rescue {
+      border: none;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #FFFFFF;
+      background: linear-gradient(135deg, #EA580C, #C2410C);
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(234, 88, 12, 0.28);
+      white-space: nowrap;
+      transition: all 0.12s;
+    }
+    .btn-rescue:active {
+      transform: scale(0.96);
     }
 
     /* Narrative Text Log Window */
@@ -166,9 +283,9 @@
       width: 100%;
       background: #FFFDF9;
       border: 1px solid #E2D6C2;
-      border-radius: 16px;
-      padding: 12px;
-      box-shadow: 0 2px 6px rgba(107, 72, 42, 0.04);
+      border-radius: 14px;
+      padding: 9px 11px;
+      box-shadow: 0 1px 4px rgba(107, 72, 42, 0.04);
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
@@ -177,17 +294,17 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-bottom: 8px;
+      padding-bottom: 5px;
       border-bottom: 1px solid #EFE7D8;
-      margin-bottom: 8px;
+      margin-bottom: 5px;
     }
     .log-title {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: #3B2C20;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
     }
     .log-badge {
       display: flex;
@@ -195,33 +312,33 @@
       gap: 4px;
       background: #F5EFEB;
       color: #8C6544;
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 10px;
+      padding: 1px 6px;
+      border-radius: 8px;
     }
     .pulse-dot {
-      width: 6px;
-      height: 6px;
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
       background-color: #10B981;
-      box-shadow: 0 0 6px #10B981;
+      box-shadow: 0 0 5px #10B981;
     }
     .log-content-box {
-      height: 100px;
-      max-height: 120px;
+      height: 80px;
+      max-height: 90px;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      padding-right: 4px;
+      gap: 4px;
+      padding-right: 2px;
     }
     .log-entry {
-      font-size: 11px;
-      line-height: 1.45;
-      padding: 6px 8px;
-      border-radius: 10px;
+      font-size: 10px;
+      line-height: 1.4;
+      padding: 4px 6px;
+      border-radius: 8px;
       background: #FAF8F5;
       color: #554332;
       animation: fadeIn 0.25s ease-out;
@@ -230,11 +347,11 @@
       background: #FBF6EE;
       border-left: 2px solid #C49B71;
       color: #332417;
-      font-weight: 500;
+      font-weight: 600;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
+      from { opacity: 0; transform: translateY(3px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -242,7 +359,7 @@
     .module-panel {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 7px;
       width: 100%;
     }
     .panel-header-line {
@@ -252,80 +369,48 @@
       padding: 0 2px;
     }
     .panel-title {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: #5C4434;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
     }
     .panel-sub {
-      font-size: 10px;
+      font-size: 9px;
       font-family: ui-monospace, SFMono-Regular, monospace;
       color: #8C6544;
-    }
-
-    /* Phase Filter Pills */
-    .filter-pills {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .pill-filter-btn {
-      border: none;
-      padding: 3px 8px;
-      border-radius: 8px;
-      font-size: 10px;
-      font-weight: 600;
-      background: #EFE8DA;
-      color: #6B533E;
-      cursor: pointer;
-      transition: all 0.12s;
-    }
-    .pill-filter-btn.active {
-      background: #8C603D;
-      color: #FFFFFF;
     }
 
     /* Cards */
     .card-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
     .content-card {
       width: 100%;
-      padding: 10px 12px;
+      padding: 8px 10px;
       background: #FFFDF9;
       border: 1px solid #E2D6C2;
-      border-radius: 14px;
-      box-shadow: 0 1px 4px rgba(107, 72, 42, 0.04);
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(107, 72, 42, 0.03);
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
       transition: all 0.15s ease;
     }
-    .content-card.locked {
-      background: rgba(245, 242, 235, 0.6);
-      border-color: rgba(232, 222, 200, 0.6);
-      opacity: 0.65;
-    }
-    .content-card.completed {
-      background: #F9F6F0;
-      border-color: #E8DEC8;
-      opacity: 0.95;
-    }
     .card-left {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       flex: 1;
       min-width: 0;
     }
     .card-icon-box {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       border-radius: 10px;
       background: #F5EFEB;
       border: 1px solid #E2D6C2;
@@ -344,19 +429,15 @@
     .card-title-line {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
-    .stage-tag {
-      font-size: 9px;
-      font-family: ui-monospace, monospace;
-      font-weight: 700;
-      background: #EFE8DA;
-      color: #6B533E;
-      padding: 1px 4px;
-      border-radius: 4px;
+    .tier-stars {
+      color: #F59E0B;
+      font-size: 10px;
+      letter-spacing: -1px;
     }
     .card-main-title {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: #2C2219;
       white-space: nowrap;
@@ -364,9 +445,9 @@
       text-overflow: ellipsis;
     }
     .card-desc {
-      font-size: 10px;
+      font-size: 9px;
       color: #78614E;
-      margin-top: 2px;
+      margin-top: 1px;
       line-height: 1.25;
       display: -webkit-box;
       -webkit-line-clamp: 1;
@@ -376,8 +457,8 @@
     .card-cost-line {
       display: flex;
       align-items: center;
-      gap: 6px;
-      margin-top: 4px;
+      gap: 4px;
+      margin-top: 2px;
       font-size: 9px;
       font-family: ui-monospace, monospace;
       font-weight: 700;
@@ -391,20 +472,19 @@
     }
     .btn-upgrade {
       border: none;
-      padding: 6px 12px;
-      border-radius: 10px;
-      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-size: 10px;
       font-weight: 700;
       color: #FFFFFF;
       background: linear-gradient(135deg, #D97706, #B45309);
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(180, 83, 9, 0.2);
+      box-shadow: 0 1px 3px rgba(180, 83, 9, 0.2);
       transition: all 0.12s;
       flex-shrink: 0;
     }
     .btn-upgrade:active {
       transform: translateY(1px);
-      box-shadow: 0 1px 2px rgba(180, 83, 9, 0.2);
     }
     .btn-upgrade:disabled {
       background: #E8DEC8;
@@ -412,117 +492,48 @@
       cursor: not-allowed;
       box-shadow: none;
     }
-    .tag-completed {
-      font-size: 10px;
+    .tag-max {
+      font-size: 9px;
       font-weight: 700;
-      color: #065F46;
-      background: #D1FAE5;
-      border: 1px solid #A7F3D0;
-      padding: 3px 8px;
-      border-radius: 8px;
+      color: #78350F;
+      background: #FEF3C7;
+      border: 1px solid #FCD34D;
+      padding: 2px 6px;
+      border-radius: 6px;
     }
 
-    /* Cash Register Box */
-    .cash-register-card {
+    /* Branch Unlock & Rebirth Banner */
+    .branch-action-banner {
       width: 100%;
-      background: linear-gradient(135deg, #FFFDF9, #FAF3E8);
-      border: 1px solid #D9CDB8;
-      border-radius: 14px;
-      padding: 10px 12px;
+      background: linear-gradient(135deg, #ECFDF5, #D1FAE5);
+      border: 1px solid #6EE7B7;
+      border-radius: 12px;
+      padding: 8px 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      gap: 6px;
     }
-    .register-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .register-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: #3B2C20;
-    }
-    .register-val {
-      font-size: 10px;
-      color: #8C6544;
-      margin-top: 2px;
-    }
-    .coin-hl {
-      font-weight: 700;
-      color: #D97706;
-      font-family: ui-monospace, monospace;
-    }
-
-    /* Cat Status Meters */
-    .cat-meters-card {
-      width: 100%;
-      background: #FFFDF9;
-      border: 1px solid #E2D6C2;
-      border-radius: 14px;
-      padding: 10px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .meter-row {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-    .meter-label-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 10px;
-      font-weight: 600;
-      color: #6B533E;
-    }
-    .progress-track {
-      width: 100%;
-      height: 8px;
-      background: #EFE7D8;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    .progress-fill-gold {
-      height: 100%;
-      background: linear-gradient(90deg, #FBBF24, #F59E0B);
-      border-radius: 4px;
-      transition: width 0.3s ease;
-    }
-    .progress-fill-pink {
-      height: 100%;
-      background: linear-gradient(90deg, #F472B6, #EC4899);
-      border-radius: 4px;
-      transition: width 0.3s ease;
-    }
-    .cat-action-btns {
-      display: flex;
-      gap: 8px;
-      padding-top: 4px;
-    }
-    .cat-btn {
-      flex: 1;
-      padding: 6px;
-      border-radius: 10px;
-      background: #FAF4EB;
-      border: 1px solid #E5DAC8;
-      color: #5C4434;
+    .branch-action-text {
       font-size: 11px;
       font-weight: 700;
-      cursor: pointer;
-      transition: all 0.12s;
+      color: #065F46;
     }
-    .cat-btn:active {
-      transform: scale(0.97);
-      background: #F3EADA;
+    .btn-open-branch {
+      border: none;
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 800;
+      color: #FFF;
+      background: linear-gradient(135deg, #059669, #047857);
+      cursor: pointer;
     }
 
-    /* Bottom Action Bar */
+    /* Bottom Fixed Action Bar */
     .action-footer {
       width: 100%;
-      padding: 10px 14px 16px;
+      padding: 8px 12px 14px;
       background: rgba(250, 247, 242, 0.98);
       border-top: 1px solid #E8DEC8;
       flex-shrink: 0;
@@ -530,7 +541,7 @@
     }
     .btn-big-procure {
       width: 100%;
-      height: 48px;
+      height: 46px;
       border: none;
       border-radius: 14px;
       background: linear-gradient(135deg, #D97706, #B45309);
@@ -560,7 +571,7 @@
     }
 
     /* -------------------------------------------------------------
-       PUZZLE VIEW STYLES
+       PUZZLE VIEW STYLES (Strict Single-Screen Viewport Fit)
        ------------------------------------------------------------- */
     .puzzle-view {
       position: relative;
@@ -570,7 +581,7 @@
       flex-direction: column;
       justify-content: space-between;
       background-color: #FAF5EE;
-      padding: 10px 12px;
+      padding: 8px 10px;
       overflow: hidden;
     }
     .puzzle-header {
@@ -579,12 +590,12 @@
       align-items: center;
       justify-content: space-between;
       gap: 6px;
-      padding-bottom: 6px;
+      padding-bottom: 4px;
       flex-shrink: 0;
       z-index: 20;
     }
     .btn-back {
-      height: 38px;
+      height: 36px;
       padding: 0 10px;
       border-radius: 12px;
       background: #FFFDF8;
@@ -594,14 +605,13 @@
       font-size: 12px;
       font-weight: 800;
       display: flex;
-      align-items: center;
+      align-items: gap;
       gap: 4px;
       cursor: pointer;
       flex-shrink: 0;
     }
     .btn-back:active {
       transform: translateY(1px);
-      box-shadow: 0 1px 0 #6B482A;
     }
     .puzzle-level-info {
       flex: 1;
@@ -650,7 +660,7 @@
     }
     .clock-container {
       min-width: 48px;
-      height: 38px;
+      height: 36px;
       padding: 0 8px;
       background: #FFFDF8;
       border: 2px solid #6B482A;
@@ -672,13 +682,13 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 6px;
-      padding-bottom: 6px;
+      padding-bottom: 4px;
       flex-shrink: 0;
       z-index: 20;
     }
     .powerup-btn {
       position: relative;
-      height: 38px;
+      height: 36px;
       border-radius: 12px;
       background: #FFFDF8;
       border: 2px solid #6B482A;
@@ -688,13 +698,12 @@
       justify-content: center;
       gap: 4px;
       color: #5A381E;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       cursor: pointer;
     }
     .powerup-btn:active {
       transform: translateY(1px);
-      box-shadow: 0 1px 0 #6B482A;
     }
     .powerup-badge {
       position: absolute;
@@ -705,7 +714,7 @@
       font-size: 9px;
       font-family: ui-monospace, monospace;
       font-weight: 700;
-      padding: 1px 5px;
+      padding: 1px 4px;
       border-radius: 8px;
       border: 1px solid #FFFFFF;
     }
@@ -731,10 +740,13 @@
     .board-frame {
       position: relative;
       background: #7D5537;
-      border: 4px solid #8C603C;
-      border-radius: 20px;
-      box-shadow: 0 5px 0 #5C3D26;
-      padding: 2px;
+      border: 3px solid #8C603C;
+      border-radius: 16px;
+      box-shadow: 0 4px 0 #5C3D26;
+      padding: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .tiles-wrapper {
       position: relative;
@@ -745,7 +757,7 @@
       position: absolute;
       border: none;
       background: transparent;
-      padding: 2px;
+      padding: 1px;
       cursor: pointer;
     }
     .tile-inner {
@@ -753,19 +765,18 @@
       width: 100%;
       height: 100%;
       background: #FFFDF8;
-      border: 2px solid #8C6541;
-      border-radius: 12px;
-      box-shadow: 0 2px 0 #734F30;
+      border: 1.5px solid #8C6541;
+      border-radius: 8px;
+      box-shadow: 0 1px 0 #734F30;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 19px;
       transition: transform 0.1s, box-shadow 0.1s;
     }
     .tile-inner.selected {
       background: #FFFDF5;
       border-color: #F59E0B;
-      box-shadow: 0 0 0 3px #FDE68A, 0 3px 6px rgba(245, 158, 11, 0.4);
+      box-shadow: 0 0 0 2px #FDE68A, 0 2px 6px rgba(245, 158, 11, 0.4);
       transform: scale(1.08);
       z-index: 15;
     }
@@ -773,21 +784,21 @@
       width: 100%;
       height: 100%;
       background: #8B5A2B;
-      border: 2px solid #5C3D26;
-      border-radius: 12px;
+      border: 1.5px solid #5C3D26;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 15px;
+      font-size: 14px;
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
       opacity: 0.92;
     }
     .tile-ice-overlay {
       position: absolute;
       inset: 0;
-      border-radius: 10px;
+      border-radius: 7px;
       background: rgba(186, 230, 253, 0.45);
-      border: 2px solid #38BDF8;
+      border: 1.5px solid #38BDF8;
       pointer-events: none;
       display: flex;
       align-items: center;
@@ -796,10 +807,35 @@
       font-weight: 900;
     }
 
+    /* Deadlock Notice Toast */
+    .shuffle-toast {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(44, 34, 25, 0.92);
+      color: #FFFDF9;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 18px;
+      border: 1px solid #F59E0B;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+      z-index: 40;
+      pointer-events: none;
+      animation: toastPop 1.4s ease forwards;
+    }
+    @keyframes toastPop {
+      0% { opacity: 0; transform: translate(-50%, -40%) scale(0.8); }
+      15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -60%) scale(0.9); }
+    }
+
     /* Puzzle Footer Progress Bar */
     .puzzle-footer {
       width: 100%;
-      padding-top: 6px;
+      padding-top: 4px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -809,11 +845,11 @@
     }
     .progress-track-outer {
       flex: 1;
-      height: 36px;
+      height: 32px;
       background: #FFFDF8;
       border: 2px solid #6B482A;
       border-radius: 12px;
-      padding: 3px;
+      padding: 2px;
       box-shadow: 0 2px 0 #6B482A;
       display: flex;
       align-items: center;
@@ -833,8 +869,8 @@
       transition: width 0.3s ease;
     }
     .score-badge {
-      padding: 0 12px;
-      height: 36px;
+      padding: 0 10px;
+      height: 32px;
       border-radius: 12px;
       background: #FFFDF8;
       border: 2px solid #6B482A;
@@ -857,19 +893,19 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 14px;
       z-index: 100;
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
     }
     .modal-box {
       width: 100%;
-      max-width: 340px;
+      max-width: 350px;
       background: #FFFDF8;
       border: 2px solid #6B482A;
       border-radius: 20px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      padding: 20px;
+      padding: 16px;
       text-align: center;
       animation: modalPop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
@@ -877,31 +913,59 @@
       from { transform: scale(0.9); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
     }
+    .level-select-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 6px 0;
+      border-bottom: 1px solid #E8DEC8;
+    }
+    .level-tab-btn {
+      padding: 3px 6px;
+      border-radius: 6px;
+      border: 1px solid #D9CDB8;
+      background: #FAF4EB;
+      font-size: 10px;
+      font-weight: 600;
+      color: #5C4434;
+      cursor: pointer;
+    }
+    .level-tab-btn.active {
+      background: #8C603D;
+      color: #FFF;
+      border-color: #8C603D;
+    }
     .level-select-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 6px;
-      max-height: 280px;
+      gap: 5px;
+      max-height: 220px;
       overflow-y: auto;
-      padding: 10px 0;
+      padding: 8px 0;
     }
     .level-grid-item {
-      padding: 8px 4px;
-      border-radius: 10px;
+      padding: 6px 2px;
+      border-radius: 8px;
       background: #FAF4EB;
       border: 1px solid #D9CDB8;
       color: #5C4434;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       display: flex;
       flex-direction: column;
       align-items: center;
       cursor: pointer;
     }
+    .level-grid-item.cleared {
+      background: #ECFDF5;
+      border-color: #A7F3D0;
+      color: #065F46;
+    }
     .level-grid-item.current {
       background: #FEF3C7;
       border-color: #F59E0B;
       color: #92400E;
+      box-shadow: 0 0 0 1px #F59E0B;
     }
 
     .hidden {
@@ -915,56 +979,91 @@
   <div class="app-viewport">
 
     <!-- ======================================================== -->
-    <!-- VIEW 1: 【主页 · 猫咪咖啡馆日志】(3大深度子系统)            -->
+    <!-- VIEW 1: 【主页 · 连锁猫咪咖啡馆】(无限分店/家具升阶/收容盲盒) -->
     <!-- ======================================================== -->
     <div id="viewJournal" class="app-viewport" style="box-shadow: none;">
-      <!-- Top Status Bar -->
+      <!-- Top Currency Bar -->
       <header class="top-bar">
         <div class="status-group">
           <!-- 星光灵感 -->
           <div class="status-pill">
-            <span style="font-size: 13px;">⭐</span>
+            <span style="font-size: 12px;">⭐</span>
             <div class="status-pill-text">
               <span class="status-pill-label">星光灵感</span>
-              <span id="headerStars" class="status-pill-val">4</span>
+              <span id="headerStars" class="status-pill-val">6</span>
             </div>
           </div>
           <!-- 营业金币 -->
           <div class="status-pill">
-            <span style="font-size: 13px;">🪙</span>
+            <span style="font-size: 12px;">🪙</span>
             <div class="status-pill-text">
               <span class="status-pill-label">营业金币</span>
-              <span id="headerCoins" class="status-pill-val">450</span>
+              <span id="headerCoins" class="status-pill-val">680</span>
             </div>
           </div>
-          <!-- 驻店猫咪数 -->
+          <!-- 旗下猫咪数 -->
           <div class="status-pill">
-            <span style="font-size: 12px;">🐾</span>
-            <span id="headerCats" class="status-pill-val" style="color: #5C4434;">0 只</span>
+            <span style="font-size: 11px;">🐾</span>
+            <span id="headerCats" class="status-pill-val" style="color: #5C4434;">2 只</span>
           </div>
         </div>
 
         <div class="top-actions">
           <button id="btnLevelSelect" class="btn-icon-subtle">选关</button>
-          <button id="btnToggleSoundJournal" class="btn-icon-subtle" style="width: 32px; padding: 0;">🔊</button>
+          <button id="btnToggleSoundJournal" class="btn-icon-subtle" style="width: 30px; padding: 0;">🔊</button>
         </div>
       </header>
 
-      <!-- 3 Navigation Tabs -->
+      <!-- 连锁分店无尽周转切换栏 -->
+      <div class="branch-switcher-bar">
+        <button id="btnPrevBranch" onclick="navigateBranch(-1)" class="branch-nav-btn">◀</button>
+        <div class="branch-info-col">
+          <div class="branch-title-row">
+            <span id="branchIcon" style="font-size: 14px;">🪵</span>
+            <span id="branchTitle" class="branch-name-text">分店 1: 老街·暖阳木质猫咖</span>
+            <span id="branchTag" class="branch-tag">原木温润</span>
+          </div>
+          <div id="branchProgressSub" class="branch-progress-sub">施工竣工度: 40% (2/5)</div>
+        </div>
+        <button id="btnNextBranch" onclick="navigateBranch(1)" class="branch-nav-btn">▶</button>
+      </div>
+
+      <!-- 3 Module Navigation Tabs -->
       <nav class="tab-bar">
-        <button id="tabBtnRenovate" onclick="switchJournalTab('renovate')" class="tab-item active">空间施工 (15)</button>
-        <button id="tabBtnDrinks" onclick="switchJournalTab('drinks')" class="tab-item">饮品研发 (6)</button>
-        <button id="tabBtnCats" onclick="switchJournalTab('cats')" class="tab-item">猫咪与日常</button>
+        <button id="tabBtnRenovate" onclick="switchJournalTab('renovate')" class="tab-item active">
+          <span>🔨</span><span>多阶装修</span>
+        </button>
+        <button id="tabBtnCats" onclick="switchJournalTab('cats')" class="tab-item">
+          <span>🐾</span><span>猫咪家园 (<span id="tabCatCount">2</span>)</span>
+        </button>
+        <button id="tabBtnDrinks" onclick="switchJournalTab('drinks')" class="tab-item">
+          <span>☕</span><span>饮品研发</span>
+        </button>
       </nav>
 
       <!-- Scrollable Main Body Area -->
       <main class="body-scroll">
+
+        <!-- 常驻流浪猫探寻盲盒入口 (无尽星星消耗出口) -->
+        <section class="rescue-cat-banner">
+          <div class="rescue-left">
+            <span style="font-size: 22px;">🚪</span>
+            <div>
+              <div class="rescue-title">后巷探寻 · 收容流浪猫</div>
+              <div class="rescue-sub">偶遇程序化生成的流浪名猫，数量上不封顶！</div>
+            </div>
+          </div>
+          <button onclick="rescueAlleyCat()" class="btn-rescue">
+            🐾 探寻 (3 ⭐)
+          </button>
+        </section>
+
         <!-- Live Narrative Text Window -->
         <section class="log-card">
           <div class="log-card-header">
             <div class="log-title">
               <span>📖</span>
-              <span>猫咪咖啡馆随笔 · 营业手记</span>
+              <span id="journalBranchTitle">咖啡馆随笔 · 营业手记</span>
             </div>
             <div class="log-badge">
               <span class="pulse-dot"></span>
@@ -974,79 +1073,71 @@
           <div id="journalLogsContainer" class="log-content-box"></div>
         </section>
 
-        <!-- SUB-TAB 1: 空间施工 (15 Stages) -->
+        <!-- SUB-TAB 1: 分店家具多阶升星系统 -->
         <div id="panelRenovate" class="module-panel">
+          <!-- Branch Rebirth / Unlock Next Alert (shown when 100% completed) -->
+          <div id="branchUnlockBanner" class="branch-action-banner hidden">
+            <div class="branch-action-text">
+              ✨ 本店所有设施已全部达到典藏级！
+            </div>
+            <button id="btnActionBranch" onclick="unlockNextBranchOrRebirth()" class="btn-open-branch">
+              解锁新分店 🚀
+            </button>
+          </div>
+
           <div class="panel-header-line">
             <div class="panel-title">
-              <span>🔨</span> 空间翻新与施工阶段
+              <span>🪑</span> 本店核心设施多阶升星
             </div>
-            <span id="stagesProgressText" class="panel-sub">已竣工 2 / 15</span>
+            <span id="branchUpgradeSummary" class="panel-sub">总星阶: 6 / 15 ⭐</span>
           </div>
-          <!-- Phase Filter Pills -->
-          <div class="filter-pills">
-            <button onclick="setPhaseFilter('all')" id="filterAll" class="pill-filter-btn active">全部 (15)</button>
-            <button onclick="setPhaseFilter('early')" id="filterEarly" class="pill-filter-btn">初期·毛坯</button>
-            <button onclick="setPhaseFilter('mid')" id="filterMid" class="pill-filter-btn">中期·核心</button>
-            <button onclick="setPhaseFilter('late')" id="filterLate" class="pill-filter-btn">后期·乐园</button>
-          </div>
-          <div id="stagesCardsContainer" class="card-list"></div>
+          <div id="facilityCardsContainer" class="card-list"></div>
         </div>
 
-        <!-- SUB-TAB 2: 饮品研发 (6 Drinks + Cash Register) -->
+        <!-- SUB-TAB 2: 猫咪家园 (无尽收容、羁绊互动) -->
+        <div id="panelCats" class="module-panel hidden">
+          <div class="panel-header-line">
+            <div class="panel-title">
+              <span>🐾</span> 已收容的猫咪名录 (点击互动增加羁绊)
+            </div>
+            <span id="catTotalText" class="panel-sub">共 2 只猫咪</span>
+          </div>
+          <div id="catCardsContainer" class="card-list"></div>
+        </div>
+
+        <!-- SUB-TAB 3: 饮品研发与收银机 -->
         <div id="panelDrinks" class="module-panel hidden">
           <!-- Cash Register Idle Box -->
-          <div class="cash-register-card">
-            <div class="register-info">
-              <span style="font-size: 22px;">💰</span>
-              <div>
-                <div class="register-title">吧台收银机 · 被动营收</div>
-                <div class="register-val">
-                  累积金币: <span id="cashRegisterAmount" class="coin-hl">0</span> 🪙
+          <div class="content-card" style="background: linear-gradient(135deg, #FFFDF9, #FAF3E8); border-color: #D9CDB8;">
+            <div class="card-left">
+              <span style="font-size: 20px;">💰</span>
+              <div class="card-text-col">
+                <div class="card-main-title">全店收银机 · 离线营收</div>
+                <div class="card-desc">
+                  累积金币: <span id="cashRegisterAmount" style="font-weight: 700; color: #D97706; font-family: ui-monospace, monospace;">0</span> 🪙
                   <span id="cashRateText" style="font-size: 9px; color: #A38E7A; margin-left: 4px;">(+0 币/分)</span>
                 </div>
               </div>
             </div>
-            <button onclick="collectCashRegister()" class="btn-upgrade" style="padding: 5px 12px;">提取</button>
+            <button onclick="collectCashRegister()" class="btn-upgrade" style="padding: 4px 10px;">提取</button>
           </div>
 
           <div class="panel-header-line">
             <div class="panel-title">
-              <span>☕</span> 咖啡馆饮品菜单研发
+              <span>☕</span> 全连锁统一饮品研发
             </div>
             <span id="drinksProgressText" class="panel-sub">已研发 1 / 6</span>
           </div>
           <div id="drinksCardsContainer" class="card-list"></div>
         </div>
 
-        <!-- SUB-TAB 3: 猫咪与日常 (Cat Satiety/Mood + 12 Customer Stories) -->
-        <div id="panelCats" class="module-panel hidden">
-          <div class="cat-meters-card">
-            <div class="panel-header-line">
-              <div class="panel-title">
-                <span>🐾</span> 驻店猫咪状态监测
-              </div>
-              <span style="font-size: 9px; color: #A38265;">喂食与逗弄可回复</span>
-            </div>
-            <div id="catsMetersContainer"></div>
-          </div>
-
-          <div class="module-panel">
-            <div class="panel-header-line">
-              <div class="panel-title">
-                <span>📜</span> 顾客与日常突发记录 (12)
-              </div>
-              <span id="eventsCountText" class="panel-sub">解锁 3 / 12</span>
-            </div>
-            <div id="eventsCardsContainer" class="card-list"></div>
-          </div>
-        </div>
       </main>
 
       <!-- Bottom Fixed Action Bar -->
       <footer class="action-footer">
         <button id="btnStartProcure" class="btn-big-procure">
           <span style="font-size: 16px;">🐾</span>
-          <span>开始采购食材</span>
+          <span>前往采购食材 (赚取⭐与🪙)</span>
           <span id="journalLevelBadge" class="level-badge-inner">第 1 关</span>
           <span style="font-size: 11px;">▶</span>
         </button>
@@ -1054,7 +1145,7 @@
     </div>
 
     <!-- ======================================================== -->
-    <!-- VIEW 2: 【关卡页 · 连连看】(30关，步数/限时，冰块与木箱)       -->
+    <!-- VIEW 2: 【关卡页 · 连连看】(100+程序化关卡，自适应棋盘)      -->
     <!-- ======================================================== -->
     <div id="viewPuzzle" class="puzzle-view hidden">
       <!-- Top Puzzle Header -->
@@ -1071,7 +1162,7 @@
           </div>
           <div class="puzzle-progress-text">
             <span>剩余配对:</span>
-            <span id="pairProgress" class="progress-pill">0 / 18</span>
+            <span id="pairProgress" class="progress-pill">0 / 12</span>
           </div>
         </div>
 
@@ -1079,7 +1170,7 @@
           <div id="clockBox" class="clock-container">
             <span id="timerText">01:30</span>
           </div>
-          <button id="btnToggleSoundPuzzle" class="btn-icon-subtle" style="width: 34px; height: 38px; border-radius: 12px; border: 2px solid #6B482A; box-shadow: 0 2px 0 #6B482A; padding: 0;">🔊</button>
+          <button id="btnToggleSoundPuzzle" class="btn-icon-subtle" style="width: 32px; height: 36px; border-radius: 12px; border: 2px solid #6B482A; box-shadow: 0 2px 0 #6B482A; padding: 0;">🔊</button>
         </div>
       </header>
 
@@ -1102,7 +1193,7 @@
         </button>
       </div>
 
-      <!-- Main Board (>70% Screen Area, Exact getBoundingClientRect Center Coordinates) -->
+      <!-- Main Board (>70% Screen Area, Adaptive Center Coordinates) -->
       <main id="boardContainer" class="board-center-area">
         <canvas id="particleCanvas"></canvas>
         <div id="boardInner" class="board-frame">
@@ -1126,12 +1217,12 @@
     <!-- VICTORY MODAL -->
     <div id="modalVictory" class="modal-backdrop hidden">
       <div class="modal-box">
-        <span style="font-size: 36px; display: inline-block;">🎉</span>
-        <h2 style="font-size: 18px; font-weight: 900; color: #5A381E; margin-top: 4px;">食材采购成功！🐾</h2>
-        <div style="font-size: 22px; margin: 8px 0; color: #F59E0B;">⭐⭐⭐</div>
-        <p style="font-size: 11px; color: #8C623E; margin-bottom: 14px;">新鲜香浓原料已送达咖啡馆，获得了新灵感！</p>
+        <span style="font-size: 34px; display: inline-block;">🎉</span>
+        <h2 style="font-size: 17px; font-weight: 900; color: #5A381E; margin-top: 4px;">食材采购大获全胜！🐾</h2>
+        <div style="font-size: 20px; margin: 6px 0; color: #F59E0B;">⭐⭐⭐</div>
+        <p style="font-size: 11px; color: #8C623E; margin-bottom: 12px;">新鲜原料安全入库，为咖啡馆赢得了丰厚灵感与金币！</p>
 
-        <div style="display: flex; justify-content: center; gap: 14px; background: #FAF5EE; border: 1px solid rgba(107,72,42,0.15); border-radius: 12px; padding: 10px; margin-bottom: 16px;">
+        <div style="display: flex; justify-content: center; gap: 14px; background: #FAF5EE; border: 1px solid rgba(107,72,42,0.15); border-radius: 12px; padding: 10px; margin-bottom: 14px;">
           <div style="font-family: ui-monospace, monospace; font-weight: 900; color: #D97706; font-size: 12px;">
             <span>⭐</span> <span id="vicStarsEarned">+3 星光灵感</span>
           </div>
@@ -1141,25 +1232,36 @@
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 8px;">
-          <button id="btnBackToJournalFromVic" class="btn-upgrade" style="width: 100%; height: 42px; font-size: 13px;">
-            返回咖啡馆装扮 📖
+          <button id="btnNextLevel" class="btn-upgrade" style="width: 100%; height: 40px; font-size: 13px;">
+            继续挑战下一关 🐾
           </button>
-          <button id="btnNextLevel" class="btn-back" style="width: 100%; height: 38px; justify-content: center; font-size: 12px;">
-            继续采购下一关 🐾
+          <button id="btnBackToJournalFromVic" class="btn-back" style="width: 100%; height: 36px; justify-content: center; font-size: 11px;">
+            返回咖啡馆建设 📖
           </button>
         </div>
       </div>
     </div>
 
-    <!-- LEVEL SELECT MODAL -->
+    <!-- LEVEL SELECT MODAL (100+ & Endless Support) -->
     <div id="modalLevelSelect" class="modal-backdrop hidden">
-      <div class="modal-box" style="max-height: 80vh; display: flex; flex-direction: column;">
-        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #E8DEC8; padding-bottom: 8px;">
-          <h3 style="font-size: 14px; font-weight: 900; color: #5A381E; display: flex; align-items: center; gap: 5px;">
-            <span>🗺️</span> 关卡选择 (共 30 关)
+      <div class="modal-box" style="max-height: 85vh; display: flex; flex-direction: column;">
+        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #E8DEC8; padding-bottom: 6px;">
+          <h3 style="font-size: 13px; font-weight: 900; color: #5A381E; display: flex; align-items: center; gap: 5px;">
+            <span>🗺️</span> 关卡库 (支持 100+ 无尽关卡)
           </h3>
           <button onclick="document.getElementById('modalLevelSelect').classList.add('hidden')" style="width: 26px; height: 26px; border-radius: 50%; border: 1px solid #D9CDB8; background: #FAF4EB; color: #6B482A; font-size: 11px; cursor: pointer;">✕</button>
         </div>
+
+        <!-- Pagination tabs -->
+        <div class="level-select-tabs" id="levelRangeTabs"></div>
+
+        <!-- Jump to level bar -->
+        <div style="display: flex; align-items: center; gap: 6px; padding: 6px 0;">
+          <input type="number" id="inputCustomLevel" min="1" max="999" placeholder="关卡号 (1-999)" style="flex: 1; height: 28px; padding: 0 8px; border-radius: 6px; border: 1px solid #D9CDB8; font-size: 11px; background: #FFFDF9; outline: none;">
+          <button onclick="jumpToCustomLevel()" class="btn-upgrade" style="padding: 4px 10px; font-size: 10px;">前往</button>
+        </div>
+
+        <!-- Grid -->
         <div id="levelSelectList" class="level-select-grid"></div>
       </div>
     </div>
@@ -1169,8 +1271,10 @@
   <script>
     // ========================================================
     // ZERO-DEPENDENCY PURE JAVASCRIPT ENGINE
-    // Web Audio Synthesizer, Dual-Page Router, 3-Module Cafe System
-    // 30 Levels LianLianKan (Time/Moves, Crates, Ice Layer)
+    // - Endless Chain Branches System (Theme Switching & Rebirth)
+    // - Multi-Tier Facility Upgrades (Lv.1 to Lv.3 Stars)
+    // - Alley Stray Cat Gacha & Infinite Adoption
+    // - Procedural LianLianKan (100+ Levels, Deadlock Reshuffle)
     // ========================================================
 
     // --- 1. Web Audio Synthesizer ---
@@ -1221,6 +1325,18 @@
           o.start(t); o.stop(t + 0.1);
         });
       }
+      playShuffle() {
+        if (!this.enabled) return;
+        const c = this.getCtx(); if (!c) return;
+        const now = c.currentTime;
+        [400, 520, 680, 850].forEach((f, i) => {
+          const t = now + i * 0.04, o = c.createOscillator(), g = c.createGain();
+          o.type = 'sine'; o.frequency.setValueAtTime(f, t);
+          g.gain.setValueAtTime(0.08, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+          o.connect(g); g.connect(c.destination);
+          o.start(t); o.stop(t + 0.09);
+        });
+      }
       playMeow(pitch = 600) {
         if (!this.enabled) return;
         const c = this.getCtx(); if (!c) return;
@@ -1249,98 +1365,388 @@
     }
     const sound = new SoundManager();
 
-    // --- 2. Master Data (15 Stages, 6 Drinks, 12 Events, 30 Levels) ---
-    const JOURNAL_STAGES = [
-      { stage: 1, phase: 'early', id: 'stage_1_cleanup', name: '清扫建筑废料', subtitle: '清除毛坯房旧瓦砾与碎砖，打扫出整洁明亮的地面框架', costStars: 1, costCoins: 60, icon: '🧹', log: '【08:00】清运了三车碎瓦砾，阳光终于毫无阻隔地铺在地板上。' },
-      { stage: 2, phase: 'early', id: 'stage_2_floor', name: '铺设胡桃木地板', subtitle: '选用天然防水耐磨胡桃木，散发幽静森林原木香', costStars: 1, costCoins: 120, icon: '🪵', log: '【09:30】胡桃木地板泛着温润的哑光色泽，踩上去悄无声息。' },
-      { stage: 3, phase: 'early', id: 'stage_3_wall', name: '粉刷暖白珪藻土墙面', subtitle: '吸附异味、调湿透气的暖白质感，构筑温馨呼吸感', costStars: 2, costCoins: 180, icon: '🎨', log: '【11:15】刚粉刷好的暖白墙壁衬托着窗影，屋子里立刻亮堂温和了起来。' },
-      { stage: 4, phase: 'early', id: 'stage_4_window', name: '修复复古拱形采光窗', subtitle: '安装双层隔音玻璃与黄铜把手，锁住午后的温暖阳光', costStars: 2, costCoins: 240, icon: '🪟', log: '【14:00】拱形木窗修复完毕，微风拂动纱帘，光线柔和得刚刚好。' },
-      { stage: 5, phase: 'mid', id: 'stage_5_bar', name: '搭建实木一体工作台', subtitle: '加厚实木台面与内嵌水槽，咖啡师的核心舞台', costStars: 2, costCoins: 320, icon: '☕', log: '【10:00】实木吧台稳固成型，台面边缘打磨出圆润的手感弧度。' },
-      { stage: 6, phase: 'mid', id: 'stage_6_pourover_kit', name: '采购手冲咖啡器具组', subtitle: '细口黄铜手冲壶、三孔陶滤杯与天然原浆滤纸', costStars: 3, costCoins: 420, icon: '🫖', log: '【12:30】试冲了第一壶埃塞俄比亚水洗豆，茉莉与柑橘香气四溢。' },
-      { stage: 7, phase: 'mid', id: 'stage_7_grinder', name: '安装意式商用磨豆机', subtitle: '64mm平刀温控研磨，精准萃取每一颗咖啡豆的风味因子', costStars: 3, costCoins: 520, icon: '⚙️', log: '【14:20】电动磨豆机低沉轰鸣，极细研磨的咖啡粉泛着金棕油脂光泽。' },
-      { stage: 8, phase: 'mid', id: 'stage_8_sofa', name: '摆放窗边双人位软沙发', subtitle: '焦糖色灯芯绒靠垫与高弹海绵，久坐也不会疲惫', costStars: 3, costCoins: 650, icon: '🛋️', log: '【15:45】沙发安放就位，陷进柔软靠背里，看着窗外街道发呆格外治愈。' },
-      { stage: 9, phase: 'mid', id: 'stage_9_carpet', name: '铺设复古编织羊毛地毯', subtitle: '几何纹理手织毯，猫爪肉垫踩在上面最舒服', costStars: 3, costCoins: 780, icon: '🧶', log: '【17:10】羊毛地毯吸音又保暖，整间咖啡馆的脚步声都变得轻柔细语。' },
-      { stage: 10, phase: 'late', id: 'stage_10_cat_custard', name: '领养第一只小橘猫「奶黄包」', subtitle: '圆滚滚胖嘟嘟，性情温和黏人，最喜欢用下巴蹭人', costStars: 4, costCoins: 900, icon: '🐱', catId: 'custard', catName: '奶黄包', log: '【10:30】小橘猫「奶黄包」正式入住！嗅了嗅吧台后在阳光下舒服地伸大懒腰。' },
-      { stage: 11, phase: 'late', id: 'stage_11_cattree', name: '搭建通顶多层猫爬架', subtitle: '剑麻抓柱、太空舱瞭望台与云朵吊床', costStars: 4, costCoins: 1050, icon: '🏰', log: '【13:40】「奶黄包」两步窜到最高的透明太空舱里，居高临下俯瞰领地。' },
-      { stage: 12, phase: 'late', id: 'stage_12_feeder', name: '添置自动喂食器与活水盆', subtitle: '恒温循环活氧流水，保障猫主子的日常健康', costStars: 4, costCoins: 1200, icon: '🥣', log: '【15:10】流水喷泉咕嘟咕嘟冒泡，猫咪们好奇地用爪子蘸水玩得不亦乐乎。' },
-      { stage: 13, phase: 'late', id: 'stage_13_cat_dango', name: '领养漫步三花猫「小碎花」', subtitle: '优雅灵动的玳瑁三花，巡视全场的猫界高冷掌柜', costStars: 5, costCoins: 1400, icon: '🐈', catId: 'dango', catName: '小碎花', log: '【16:20】三花猫「小碎花」迈着猫步踱入店中，优雅巡视每一个角落。' },
-      { stage: 14, phase: 'late', id: 'stage_14_grass_bed', name: '种植鲜嫩猫草与悬空跳板', subtitle: '无土水培多汁小麦草，墙面游乐空中走廊', costStars: 5, costCoins: 1650, icon: '🌿', log: '【17:40】两只猫咪一前一后穿过墙面跳板，惬意地嚼着水嫩的猫草尖。' },
-      { stage: 15, phase: 'late', id: 'stage_15_neon_grand', name: '点亮猫爪霓虹灯与旗舰盛宴', subtitle: '门头复古黄铜手写招牌与常客夜市，成为街角最温馨的明灯', costStars: 6, costCoins: 2000, icon: '✨', log: '【19:30】夜幕降临，门头的猫爪暖黄招牌亮起，整个街角都被咖啡香与呼噜声温暖包围！' }
+    // --- 2. Master Themed Branch Templates & Generative Formulas ---
+    const BASE_THEMES = [
+      {
+        id: 'theme_oldstreet',
+        namePrefix: '老街·暖阳木质猫咖',
+        icon: '🪵',
+        tag: '原木温润',
+        facilities: [
+          {
+            key: 'floor',
+            name: '地板铺设',
+            icon: '🪵',
+            tiers: [
+              { name: '简易松木条', desc: '打扫旧水泥，铺上散发松木香的基础地板', costStars: 1, costCoins: 60 },
+              { name: '胡桃木实木板', desc: '深色哑光涂层，耐磨防滑，脚步声温润柔和', costStars: 3, costCoins: 200 },
+              { name: '鱼骨实木地热拼贴', desc: '手工严丝拼贴，冬日自带地暖，猫咪整天贴地躺', costStars: 6, costCoins: 500 }
+            ]
+          },
+          {
+            key: 'bar',
+            name: '吧台操作台',
+            icon: '☕',
+            tiers: [
+              { name: '简易原木板工作台', desc: '基础实木台面，内置单孔洗槽', costStars: 1, costCoins: 90 },
+              { name: '磨砂胡桃木一体吧台', desc: '边缘手工打磨倒圆角，手感细腻厚实', costStars: 3, costCoins: 260 },
+              { name: '黄铜收边典藏水吧台', desc: '古典黄铜包边与暖黄内嵌灯带，香气袅袅', costStars: 6, costCoins: 650 }
+            ]
+          },
+          {
+            key: 'grinder',
+            name: '咖啡磨豆萃取',
+            icon: '⚙️',
+            tiers: [
+              { name: '复古手摇铸铁磨', desc: '纯手工慢磨细摇，坚果油脂初绽', costStars: 2, costCoins: 140 },
+              { name: '平刀商用电动磨豆机', desc: '64mm平刀温控研磨，风味萃取倍增', costStars: 4, costCoins: 380 },
+              { name: '双头蒸汽意式怪兽机', desc: '双锅炉连续出杯，整条老街都弥漫浓醇香气', costStars: 8, costCoins: 900 }
+            ]
+          },
+          {
+            key: 'sofa',
+            name: '窗边客座沙发',
+            icon: '🛋️',
+            tiers: [
+              { name: '原木亚麻单人位', desc: '简单透气，适合午后独自发呆', costStars: 2, costCoins: 160 },
+              { name: '焦糖灯芯绒双人软座', desc: '高弹海绵承托，陷进去就不想起来', costStars: 4, costCoins: 420 },
+              { name: '鹅绒复古大转角沙发', desc: '尊享宽厚鹅绒包覆，猫咪客人共同依偎', costStars: 8, costCoins: 1000 }
+            ]
+          },
+          {
+            key: 'cattree',
+            name: '通顶活动猫爬架',
+            icon: '🏰',
+            tiers: [
+              { name: '剑麻抓柱与单层平台', desc: '天然原麻抓柱，满足基础磨爪需求', costStars: 2, costCoins: 180 },
+              { name: '多层云朵太空舱爬架', desc: '全透明悬空亚克力碗，从底下看粉嫩肉垫', costStars: 5, costCoins: 480 },
+              { name: '室内森林通顶猫城堡', desc: '跨墙悬空吊桥与云端瞭望塔，猫咪全场巡视', costStars: 8, costCoins: 1200 }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'theme_ocean',
+        namePrefix: '海滨·夏日微风猫咖',
+        icon: '🌊',
+        tag: '白蓝海风',
+        facilities: [
+          {
+            key: 'floor',
+            name: '海风木甲板',
+            icon: '⚓',
+            tiers: [
+              { name: '防潮白漆木甲板', desc: '淡淡海蓝色水洗纹理，清凉怡人', costStars: 2, costCoins: 120 },
+              { name: '海洋渐变耐磨地板', desc: '仿佛踏上海浪波光，赤足触感舒适', costStars: 4, costCoins: 320 },
+              { name: '贝壳晶石漫步栈道', desc: '镶嵌纯天然海贝碎晶，阳光下波光粼粼', costStars: 7, costCoins: 750 }
+            ]
+          },
+          {
+            key: 'bar',
+            name: '浮木贝壳吧台',
+            icon: '🍹',
+            tiers: [
+              { name: '漂流木拼接水吧', desc: '粗粝海洋漂流木手工组装，质朴自然', costStars: 2, costCoins: 150 },
+              { name: '蓝白环形贝壳操作台', desc: '镶嵌海玻璃与白贝壳，清新唯美', costStars: 4, costCoins: 390 },
+              { name: '深海珊瑚夜光水吧', desc: '夜间透出荧光蓝柔光，如梦如幻', costStars: 7, costCoins: 900 }
+            ]
+          },
+          {
+            key: 'grinder',
+            name: '冷萃冰滴水塔',
+            icon: '🧊',
+            tiers: [
+              { name: '海盐冷萃冰滴瓶', desc: '慢速水滴浸润，释放纯粹清亮果酸', costStars: 3, costCoins: 200 },
+              { name: '荷兰立式三层冰滴架', desc: '多重过滤，滴落如同潮起潮落', costStars: 5, costCoins: 480 },
+              { name: '冰晶回流超萃取塔', desc: '低温急速循环萃取，每一滴都散发海洋清新', costStars: 8, costCoins: 1100 }
+            ]
+          },
+          {
+            key: 'sofa',
+            name: '露天遮阳卡座',
+            icon: '⛱️',
+            tiers: [
+              { name: '海边条纹折叠帆布椅', desc: '蓝白相间，听着浪声乘凉', costStars: 2, costCoins: 180 },
+              { name: '编织藤条摇摇椅', desc: '微风轻拂摇摇晃晃，小猫蜷在膝盖上打呼', costStars: 5, costCoins: 450 },
+              { name: '海风全景遮阳大吊床', desc: '超大波西米亚吊床，看夕阳落入大海', costStars: 8, costCoins: 1150 }
+            ]
+          },
+          {
+            key: 'cattree',
+            name: '水手桅杆瞭望台',
+            icon: '⛵',
+            tiers: [
+              { name: '船用粗缆绳抓桩', desc: '紧实结实，猫咪疯狂磨爪', costStars: 3, costCoins: 220 },
+              { name: '帆船吊篮猫咪观景台', desc: '高耸在窗边，宛若航海大冒险', costStars: 5, costCoins: 520 },
+              { name: '海角旋转灯塔城堡', desc: '顶端灯塔缓缓转动，猫咪趴在最高处巡视海面', costStars: 9, costCoins: 1300 }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'theme_forest',
+        namePrefix: '森林·绿意树屋猫咖',
+        icon: '🌲',
+        tag: '幽静森林',
+        facilities: [
+          {
+            key: 'floor',
+            name: '松针雪松地板',
+            icon: '🪵',
+            tiers: [
+              { name: '原木截面年轮拼板', desc: '天然原木切片拼成，散发芬多精香气', costStars: 2, costCoins: 150 },
+              { name: '芳香雪松一体实木', desc: '防虫抑菌，猫咪走在上面悄无声息', costStars: 4, costCoins: 380 },
+              { name: '空中树冠玻璃栈道', desc: '全透光空中廊道，底下是绿意盎然的苔藓', costStars: 7, costCoins: 850 }
+            ]
+          },
+          {
+            key: 'bar',
+            name: '百年古树桩吧台',
+            icon: '🍵',
+            tiers: [
+              { name: '苔藓树桩原始桌面', desc: '保留天然树皮与青翠苔藓边', costStars: 2, costCoins: 180 },
+              { name: '香樟古木整体打磨台', desc: '散发古朴木香，纹理如行云流水', costStars: 5, costCoins: 460 },
+              { name: '垂藤飞瀑活水生态吧', desc: '水流沿着岩壁潺潺流下，小猫追逐小鱼游动', costStars: 8, costCoins: 1050 }
+            ]
+          },
+          {
+            key: 'grinder',
+            name: '炭火慢焙萃取器',
+            icon: '🔥',
+            tiers: [
+              { name: '柴烧铁网慢摇烘焙', desc: '木柴燃烧的烟熏焦糖风味', costStars: 3, costCoins: 240 },
+              { name: '红外炭火恒温烘焙机', desc: '精准锁定每一颗原产地风味豆', costStars: 5, costCoins: 550 },
+              { name: '古法石磨慢速冷萃组', desc: '缓慢研磨不发热，保留纯正野莓果香', costStars: 8, costCoins: 1250 }
+            ]
+          },
+          {
+            key: 'sofa',
+            name: '藤蔓秋千吊椅',
+            icon: '🪑',
+            tiers: [
+              { name: '麻绳实木秋千板', desc: '挂在粗壮树枝上，荡漾午后惬意', costStars: 3, costCoins: 210 },
+              { name: '鸟巢包裹式编织吊椅', desc: '如同沉浸在温暖鸟巢中，安稳静谧', costStars: 5, costCoins: 510 },
+              { name: '悬浮树屋软绵大座舱', desc: '嵌在巨木深处，厚实软垫与阳光相伴', costStars: 9, costCoins: 1280 }
+            ]
+          },
+          {
+            key: 'cattree',
+            name: '参天巨木栖息架',
+            icon: '🌳',
+            tiers: [
+              { name: '原生树丫攀爬架', desc: '顺着天然枝干上下跳跃', costStars: 3, costCoins: 260 },
+              { name: '跨墙悬空树屋通道', desc: '猫咪在树洞与空中管道自如穿梭', costStars: 6, costCoins: 600 },
+              { name: '森林神木全景巨型乐园', desc: '延伸至天花板的森林乐园，枝头挂满猫咪美梦', costStars: 9, costCoins: 1400 }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'theme_jazz',
+        namePrefix: '深夜·复古爵士猫咖',
+        icon: '🎷',
+        tag: '微醺爵士',
+        facilities: [
+          {
+            key: 'floor',
+            name: '黑白爵士地砖',
+            icon: '♟️',
+            tiers: [
+              { name: '黑白哑光石拼砖', desc: '经典黑白拼花，优雅复古', costStars: 2, costCoins: 180 },
+              { name: '菱形大理石金线地板', desc: '微光下折射低调奢华的金线', costStars: 5, costCoins: 420 },
+              { name: '微醺胡桃木拼黑胶纹', desc: '木纹如唱片同心圆，猫爪踩踏轻盈生姿', costStars: 8, costCoins: 950 }
+            ]
+          },
+          {
+            key: 'bar',
+            name: '黑胶唱片吧台',
+            icon: '🍸',
+            tiers: [
+              { name: '复古胶木黄铜吧台', desc: '黄铜脚踏与暖黄酒保灯', costStars: 3, costCoins: 220 },
+              { name: '黑胶唱片手工压制台', desc: '台面封入经典老唱片，极具年代感', costStars: 5, costCoins: 520 },
+              { name: '流光律动波形水吧', desc: '随着爵士旋律轻轻泛起微光的夜市吧台', costStars: 8, costCoins: 1200 }
+            ]
+          },
+          {
+            key: 'grinder',
+            name: '古董留声萃取组',
+            icon: '📻',
+            tiers: [
+              { name: '手摇铜喇叭唱机磨豆', desc: '旋转把手，黑胶沙沙流淌', costStars: 3, costCoins: 260 },
+              { name: '双声道电子管咖啡机', desc: '真空管散发橙红暖光，深烘咖啡回甘悠长', costStars: 6, costCoins: 600 },
+              { name: '传奇爵士母盘原音萃取塔', desc: '醇厚坚果与微醺朗姆香交融无界', costStars: 9, costCoins: 1350 }
+            ]
+          },
+          {
+            key: 'sofa',
+            name: '深红丝绒卡座',
+            icon: '🛋️',
+            tiers: [
+              { name: '墨绿拉扣复古单人椅', desc: '深沉优雅，坐感极佳', costStars: 3, costCoins: 240 },
+              { name: '勃艮第红丝绒双人长椅', desc: '垂顺丝绒，深邃迷离', costStars: 6, costCoins: 560 },
+              { name: '爵士环形沉浸包厢', desc: '弧形围合，小猫窝在丝绒靠垫上打呼噜', costStars: 9, costCoins: 1380 }
+            ]
+          },
+          {
+            key: 'cattree',
+            name: '琴键五线谱猫道',
+            icon: '🎹',
+            tiers: [
+              { name: '黑白琴键墙面跳板', desc: '猫咪每踩一步宛如敲击音符', costStars: 3, costCoins: 280 },
+              { name: '萨克斯螺旋攀爬柱', desc: '金属光泽螺旋上升，造型别致', costStars: 6, costCoins: 650 },
+              { name: '空中五线谱夜光云道', desc: '黑夜中点亮音符，猫咪在五线谱上漫步如舞者', costStars: 9, costCoins: 1500 }
+            ]
+          }
+        ]
+      }
     ];
 
+    // --- 3. Generative Stray Cat Pool (Alley Gacha) ---
+    const CAT_BREEDS = [
+      { breed: '中华田园橘猫', icon: '🐱', colors: ['金黄虎斑', '浅橘白', '纯暖橘'] },
+      { breed: '招财三花猫', icon: '🐈', colors: ['黑白橙三色', '玳瑁浅花', '水墨三花'] },
+      { breed: '绅士奶牛猫', icon: '🐾', colors: ['黑白对称', '白手套黑背', '小八字脸'] },
+      { breed: '神秘玄猫', icon: '🐈‍⬛', colors: ['纯曜石黑', '黑墨泛金', '乌木光泽'] },
+      { breed: '富贵金渐层', icon: '✨', colors: ['亮金底绒', '蜜糖金毛', '浅香槟色'] },
+      { breed: '优雅布偶猫', icon: '👑', colors: ['海双色', '蓝手套', '丁香重点色'] },
+      { breed: '机灵狸花猫', icon: '🐯', colors: ['深褐条纹', '野性虎斑', '黄腹狸花'] },
+      { breed: '慵懒银渐层', icon: '☁️', colors: ['浅银白毛', '黑眼线银背', '雪白渐变'] }
+    ];
+
+    const CAT_NAMES = [
+      '奶黄包', '小碎花', '奥利奥', '玄夜', '发财', '棉花糖', '狮子王', '旺财',
+      '芋泥', '麻团', '汤圆', '抹茶', '豆包', '拿铁', '摩卡', '雪球', '煤球',
+      '元宝', '布丁', '曲奇', '肉桂', '泡芙', '大福', '年糕', '饭团'
+    ];
+
+    const CAT_PERSONALITIES = [
+      '贪吃的', '黏人的', '高冷的', '活泼好动的', '呼噜震天的',
+      '踩奶狂魔', '好奇心爆棚的', '喜欢晒太阳的', '温顺乖巧的', '傲娇霸道的'
+    ];
+
+    const RESCUE_SCENARIOS = [
+      '在便利店后门雨棚下，发现了一只正在躲雨探头的小猫，用一小包冻干顺利将它接回了店里！',
+      '在老街旧书店的窗台上，一只晒着太阳打呼噜的流浪猫主动蹭了蹭你的手腕，跟着你回了家！',
+      '在巷子尽头的花坛旁，听到一声细软的喵呜，拨开叶片发现了一只毛茸茸的小家伙！',
+      '在咖啡烘焙坊门口的咖啡麻袋上，发现了一只蜷成毛球睡得正香的流浪猫，轻轻抱回了分店！',
+      '在小桥流水边的青石板路上，一只优雅漫步的猫咪和你对视了五秒，然后哒哒哒跑向你！'
+    ];
+
+    // --- 4. 20-Emoji Theme Pool for LianLianKan ---
+    const THEME_ICONS_20 = [
+      '☕', '🍰', '🍩', '🥐', '🥛', '🐾', '🧇', '🥞', '🧋', '🧁',
+      '🍪', '🍮', '🍫', '🍓', '🥪', '🍋', '🍒', '🍯', '🍵', '🥨'
+    ];
+
+    // --- 5. Procedural Level Formula (100+ Endless) ---
+    function generateLevelConfig(level) {
+      let rows, cols;
+      if (level <= 3) { rows = 4; cols = 6; }
+      else if (level <= 8) { rows = 6; cols = 6; }
+      else if (level <= 15) { rows = 8; cols = 6; }
+      else if (level <= 25) { rows = 8; cols = 8; }
+      else if (level <= 40) { rows = 10; cols = 8; }
+      else {
+        if (level % 2 === 0) { rows = 12; cols = 8; }
+        else { rows = 10; cols = 10; }
+      }
+      const totalCells = rows * cols;
+      const iconTypes = Math.min(20, Math.max(4, 4 + Math.floor(level / 3)));
+      let obstacleCount = 0;
+      if (level >= 10) {
+        obstacleCount = Math.floor(Math.min(6, Math.floor(level / 8)) / 2) * 2;
+      }
+      const playableCells = totalCells - obstacleCount;
+      const pairs = Math.floor(playableCells / 2);
+      let frozenCount = 0;
+      if (level >= 20) {
+        frozenCount = Math.min(6, 2 + Math.floor((level - 20) / 10) * 2);
+      }
+      const isMovesMode = (level >= 15 && level % 5 === 0);
+      const mode = isMovesMode ? 'moves' : 'time';
+      const timeLimit = Math.max(40, 90 - Math.floor(level * 1.2));
+      const movesLimit = Math.floor(pairs * 1.35) + 6;
+      const starsReward = 2 + Math.min(4, Math.floor(level / 10));
+      const coinsReward = 80 + level * 15;
+
+      let title = '第 ' + level + ' 关';
+      if (level <= 3) title += ' · 基础起步';
+      else if (level <= 8) title += ' · 烘焙初探';
+      else if (level <= 15) title += ' · 工坊进阶';
+      else if (level <= 25) title += ' · 咖啡大师';
+      else if (level <= 40) title += ' · 极智研磨';
+      else title += ' · 无尽传说';
+
+      return {
+        level, title, rows, cols, pairs, iconTypes,
+        obstacleCount, frozenCount, mode, timeLimit, movesLimit,
+        starsReward, coinsReward
+      };
+    }
+
+    // --- 6. Unified Drinks Menu ---
     const DRINK_MENU = [
-      { id: 'drink_pourover', name: '耶加雪菲手冲单品', icon: '☕', level: 1, costCoins: 100, passiveCoinRate: 3, bonusCoinPerLevel: 10, desc: '花香与明亮柑橘调，手冲咖啡入门经典' },
-      { id: 'drink_americano', name: '经典冰美式', icon: '🧊', level: 0, costCoins: 250, passiveCoinRate: 5, bonusCoinPerLevel: 15, desc: '深烘拼配浓缩与纯净冰水，醒脑必备' },
-      { id: 'drink_latte', name: '丝绒浓郁拿铁', icon: '🥛', level: 0, costCoins: 450, passiveCoinRate: 8, bonusCoinPerLevel: 25, desc: '细腻微奶泡与坚果醇香交织，口感顺滑' },
-      { id: 'drink_macchiato', name: '焦糖玛奇朵', icon: '🍯', level: 0, costCoins: 750, passiveCoinRate: 12, bonusCoinPerLevel: 35, desc: '香草风味糖浆覆以手淋海盐焦糖网格' },
-      { id: 'drink_matcha', name: '宇治抹茶鲜奶', icon: '🍵', level: 0, costCoins: 1100, passiveCoinRate: 18, bonusCoinPerLevel: 50, desc: '石臼研磨纯抹茶，茶香清冽回甘悠长' },
-      { id: 'drink_cocoa_paw', name: '猫爪棉花糖热可可', icon: '🍫', level: 0, costCoins: 1600, passiveCoinRate: 25, bonusCoinPerLevel: 75, desc: '法芙娜可可融化，漂浮手作Q弹猫爪棉花糖' }
+      { id: 'drink_pourover', name: '耶加雪菲手冲单品', icon: '☕', level: 1, costCoins: 100, passiveCoinRate: 4, bonusCoinPerLevel: 10, desc: '花香与明亮柑橘调，手冲咖啡入门经典' },
+      { id: 'drink_americano', name: '经典冰美式', icon: '🧊', level: 0, costCoins: 250, passiveCoinRate: 7, bonusCoinPerLevel: 15, desc: '深烘拼配浓缩与纯净冰水，醒脑必备' },
+      { id: 'drink_latte', name: '丝绒浓郁拿铁', icon: '🥛', level: 0, costCoins: 450, passiveCoinRate: 11, bonusCoinPerLevel: 25, desc: '细腻微奶泡与坚果醇香交织，口感顺滑' },
+      { id: 'drink_macchiato', name: '焦糖玛奇朵', icon: '🍯', level: 0, costCoins: 750, passiveCoinRate: 16, bonusCoinPerLevel: 35, desc: '香草风味糖浆覆以手淋海盐焦糖网格' },
+      { id: 'drink_matcha', name: '宇治抹茶鲜奶', icon: '🍵', level: 0, costCoins: 1100, passiveCoinRate: 24, bonusCoinPerLevel: 50, desc: '石臼研磨纯抹茶，茶香清冽回甘悠长' },
+      { id: 'drink_cocoa_paw', name: '猫爪棉花糖热可可', icon: '🍫', level: 0, costCoins: 1600, passiveCoinRate: 35, bonusCoinPerLevel: 75, desc: '法芙娜可可融化，漂浮手作Q弹猫爪棉花糖' }
     ];
 
-    const CUSTOMER_EVENTS = [
-      { id: 'evt_1', title: '雨天避雨的学生', guest: '戴眼镜的高中生', icon: '🌧️', log: '窗外下起暴雨，少年推开店门，点了一杯热可可，安安静静写完了数学作业。', unlockStageReq: 2 },
-      { id: 'evt_2', title: '小橘猫的探头初遇', guest: '流浪橘猫「奶黄包」', icon: '🐾', log: '门缝外传来微弱的喵呜声，一根胡子沾着草籽的小橘猫探头探脑地打量着吧台。', unlockStageReq: 3 },
-      { id: 'evt_3', title: '疲惫的插画师', guest: '抱着画板的短发女孩', icon: '🎨', log: '画师在窗边坐了一下午，铅笔沙沙作响，速写本上满是小猫在阳光下打盹的姿态。', unlockStageReq: 4 },
-      { id: 'evt_4', title: '第一批豆子烘焙香', guest: '老街坊陈爷爷', icon: '🫘', log: '陈爷爷顺着香气走进来赞叹：“这老街十几年没闻到这么地道纯粹的豆子香了！”', unlockStageReq: 6 },
-      { id: 'evt_5', title: '邻居送来的猫罐头', guest: '隔壁花店的店主阿姨', icon: '🥫', log: '阿姨抱着一捧新鲜尤加利叶和两罐金枪鱼泥进门，笑着说要犒劳辛苦当掌柜的小猫。', unlockStageReq: 8 },
-      { id: 'evt_6', title: '午后双猫踩奶协奏曲', guest: '奶黄包 & 小碎花', icon: '💤', log: '两只猫咪挤在羊毛毯上，前爪有节奏地起伏踩奶，呼噜声汇成了治愈的催眠曲。', unlockStageReq: 10 },
-      { id: 'evt_7', title: '手冲咖啡盲品测试', guest: '资深咖啡烘焙师', icon: '☕', log: '专业杯测师品尝后连连点头：“萃取干净、酸质活泼，这杯单品水准相当惊艳！”', unlockStageReq: 11 },
-      { id: 'evt_8', title: '猫咪爬架捉迷藏', guest: '常客小林', icon: '🏰', log: '奶黄包躲在最高层的猫洞里，只露出一截尾巴尖晃来晃去，逗得全场客人忍俊不禁。', unlockStageReq: 12 },
-      { id: 'evt_9', title: '暖阳下的猫草丰收', guest: '小碎花', icon: '🌿', log: '小碎花眯着眼睛咔嚓咔嚓嚼着新收割的嫩麦草，吃饱后心满意足地舔着前爪。', unlockStageReq: 14 },
-      { id: 'evt_10', title: '冬夜街角的那盏明灯', guest: '加班归途的白领', icon: '🏮', log: '“下班路上看到那盏暖黄猫爪灯亮着，心里一下子就踏实了。”客人在留言簿上写道。', unlockStageReq: 15 },
-      { id: 'evt_11', title: '常客赠送手作陶瓷猫碗', guest: '陶艺工作室学徒', icon: '🥣', log: '送来了一只带有手绘猫爪印的烧制陶碗，奶黄包立刻把脑袋埋进去吃得格外香甜。', unlockStageReq: 15 },
-      { id: 'evt_12', title: '咖啡馆一周岁生日派对', guest: '全体爱猫老常客', icon: '🎂', log: '小小的咖啡馆里挤满了常客与笑声，猫咪们戴着小领结，共享特制金枪鱼生日蛋糕！', unlockStageReq: 15 }
+    // --- 7. App State & Persistence Model ---
+    const STORAGE_KEY = 'purr_cafe_chain_infinite_v2';
+    let stars = 6, coins = 680;
+    let currentBranchIndex = 0;
+    let branches = [
+      {
+        id: 'branch_1',
+        themeIndex: 0,
+        name: '老街·暖阳木质猫咖',
+        icon: '🪵',
+        tag: '原木质朴',
+        prestige: 0,
+        facilityTiers: { floor: 2, bar: 1, grinder: 1, sofa: 1, cattree: 1 },
+        unlocked: true,
+        logs: [
+          '铺面刚刚租下，空荡荡的地板散发着木香，微风吹拂窗帘。',
+          '【08:00】清运了三车碎瓦砾，阳光毫无阻隔地铺在地板上。',
+          '【09:30】胡桃木地板泛着温润的哑光色泽，踩上去悄无声息。'
+        ]
+      }
     ];
 
-    // 30 Progressive Levels
-    const CAFE_LEVELS = [
-      { level: 1, name: '初夏清晨', mode: 'time', rows: 6, cols: 6, timeLimit: 90, pairs: 18, obstacleCount: 0, frozenCount: 0, starsReward: 2, coinsReward: 80 },
-      { level: 2, name: '晨曦咖啡豆', mode: 'time', rows: 6, cols: 6, timeLimit: 85, pairs: 18, obstacleCount: 0, frozenCount: 0, starsReward: 2, coinsReward: 90 },
-      { level: 3, name: '松木烘焙坊', mode: 'time', rows: 6, cols: 6, timeLimit: 80, pairs: 18, obstacleCount: 0, frozenCount: 0, starsReward: 2, coinsReward: 100 },
-      { level: 4, name: '步数初试', mode: 'moves', rows: 6, cols: 6, movesLimit: 26, pairs: 18, obstacleCount: 0, frozenCount: 0, starsReward: 2, coinsReward: 110 },
-      { level: 5, name: '起步考核', mode: 'time', rows: 6, cols: 6, timeLimit: 75, pairs: 18, obstacleCount: 0, frozenCount: 0, starsReward: 3, coinsReward: 130 },
-      { level: 6, name: '旧木箱障碍', mode: 'time', rows: 8, cols: 8, timeLimit: 120, pairs: 30, obstacleCount: 4, frozenCount: 0, starsReward: 3, coinsReward: 140 },
-      { level: 7, name: '工坊储物间', mode: 'time', rows: 8, cols: 8, timeLimit: 110, pairs: 30, obstacleCount: 4, frozenCount: 0, starsReward: 3, coinsReward: 150 },
-      { level: 8, name: '货架迷宫', mode: 'moves', rows: 8, cols: 8, movesLimit: 42, pairs: 30, obstacleCount: 4, frozenCount: 0, starsReward: 3, coinsReward: 160 },
-      { level: 9, name: '午后焦糖', mode: 'time', rows: 8, cols: 8, timeLimit: 105, pairs: 29, obstacleCount: 6, frozenCount: 0, starsReward: 3, coinsReward: 170 },
-      { level: 10, name: '猫咪巡逻', mode: 'time', rows: 8, cols: 8, timeLimit: 100, pairs: 29, obstacleCount: 6, frozenCount: 0, starsReward: 3, coinsReward: 180 },
-      { level: 11, name: '箱中捉迷藏', mode: 'moves', rows: 8, cols: 8, movesLimit: 40, pairs: 29, obstacleCount: 6, frozenCount: 0, starsReward: 3, coinsReward: 190 },
-      { level: 12, name: '烘焙研磨', mode: 'time', rows: 8, cols: 8, timeLimit: 95, pairs: 28, obstacleCount: 8, frozenCount: 0, starsReward: 3, coinsReward: 200 },
-      { level: 13, name: '曲奇香气', mode: 'moves', rows: 8, cols: 8, movesLimit: 38, pairs: 28, obstacleCount: 8, frozenCount: 0, starsReward: 3, coinsReward: 210 },
-      { level: 14, name: '窗边暖阳', mode: 'time', rows: 8, cols: 8, timeLimit: 90, pairs: 28, obstacleCount: 8, frozenCount: 0, starsReward: 3, coinsReward: 220 },
-      { level: 15, name: '半程晋级', mode: 'moves', rows: 8, cols: 8, movesLimit: 36, pairs: 28, obstacleCount: 8, frozenCount: 0, starsReward: 4, coinsReward: 250 },
-      { level: 16, name: '初遇薄冰', mode: 'time', rows: 8, cols: 8, timeLimit: 110, pairs: 30, obstacleCount: 4, frozenCount: 4, starsReward: 4, coinsReward: 260 },
-      { level: 17, name: '冰封鲜奶', mode: 'moves', rows: 8, cols: 8, movesLimit: 40, pairs: 30, obstacleCount: 4, frozenCount: 6, starsReward: 4, coinsReward: 270 },
-      { level: 18, name: '冷萃风味', mode: 'time', rows: 8, cols: 8, timeLimit: 100, pairs: 29, obstacleCount: 6, frozenCount: 6, starsReward: 4, coinsReward: 280 },
-      { level: 19, name: '冰霜阻隔', mode: 'moves', rows: 8, cols: 8, movesLimit: 38, pairs: 29, obstacleCount: 6, frozenCount: 8, starsReward: 4, coinsReward: 290 },
-      { level: 20, name: '严冬试炼', mode: 'time', rows: 8, cols: 8, timeLimit: 95, pairs: 28, obstacleCount: 8, frozenCount: 8, starsReward: 4, coinsReward: 300 },
-      { level: 21, name: '大网格开拓', mode: 'time', rows: 8, cols: 10, timeLimit: 135, pairs: 37, obstacleCount: 6, frozenCount: 8, starsReward: 4, coinsReward: 320 },
-      { level: 22, name: '深烘回甘', mode: 'moves', rows: 8, cols: 10, movesLimit: 50, pairs: 37, obstacleCount: 6, frozenCount: 10, starsReward: 4, coinsReward: 340 },
-      { level: 23, name: '冰晶拿铁', mode: 'time', rows: 8, cols: 10, timeLimit: 125, pairs: 36, obstacleCount: 8, frozenCount: 10, starsReward: 4, coinsReward: 360 },
-      { level: 24, name: '步数极限', mode: 'moves', rows: 8, cols: 10, movesLimit: 46, pairs: 36, obstacleCount: 8, frozenCount: 12, starsReward: 4, coinsReward: 380 },
-      { level: 25, name: '迷雾密室', mode: 'time', rows: 8, cols: 10, timeLimit: 115, pairs: 35, obstacleCount: 10, frozenCount: 12, starsReward: 5, coinsReward: 400 },
-      { level: 26, name: '终极大网格', mode: 'time', rows: 10, cols: 10, timeLimit: 160, pairs: 46, obstacleCount: 8, frozenCount: 12, starsReward: 5, coinsReward: 420 },
-      { level: 27, name: '棋盘破冰者', mode: 'moves', rows: 10, cols: 10, movesLimit: 58, pairs: 46, obstacleCount: 8, frozenCount: 14, starsReward: 5, coinsReward: 440 },
-      { level: 28, name: '猫咪大师试炼', mode: 'time', rows: 10, cols: 10, timeLimit: 140, pairs: 45, obstacleCount: 10, frozenCount: 14, starsReward: 5, coinsReward: 460 },
-      { level: 29, name: '巅峰智谋', mode: 'moves', rows: 10, cols: 10, movesLimit: 54, pairs: 44, obstacleCount: 12, frozenCount: 16, starsReward: 5, coinsReward: 480 },
-      { level: 30, name: '传奇旗舰盛典', mode: 'time', rows: 10, cols: 10, timeLimit: 130, pairs: 43, obstacleCount: 14, frozenCount: 16, starsReward: 6, coinsReward: 600 }
+    let adoptedCats = [
+      {
+        id: 'cat_init_1',
+        name: '奶黄包',
+        breed: '中华田园橘猫',
+        color: '金黄虎斑',
+        personality: '黏人的',
+        icon: '🐱',
+        affinity: 3,
+        branchId: 'branch_1',
+        story: '第一家店开张时在店门口纸箱里发现的圆滚滚橘猫，最喜欢蹭人下巴。'
+      },
+      {
+        id: 'cat_init_2',
+        name: '小碎花',
+        breed: '招财三花猫',
+        color: '黑白橙三色',
+        personality: '傲娇霸道的',
+        icon: '🐈',
+        affinity: 2,
+        branchId: 'branch_1',
+        story: '从隔壁花店跑进来的灵动三花，巡视全场如高冷掌柜。'
+      }
     ];
 
-    // --- 3. App State & Persistence ---
-    const STORAGE_KEY = 'purr_cafe_native_zero_dep_v1';
-    let stars = 4, coins = 450;
-    let unlockedStages = new Set(['stage_1_cleanup', 'stage_2_floor']);
     let unlockedDrinks = new Set(['drink_pourover']);
-    let journalLogs = [
-      '铺面刚刚租下，空荡荡的地板上积着一层薄灰。门缝外有一只流浪小橘猫探头探脑。',
-      JOURNAL_STAGES[0].log,
-      JOURNAL_STAGES[1].log
-    ];
+    let maxClearedLevel = 0;
     let currentLevel = 1;
-    let currentPhaseFilter = 'all';
     let currentTab = 'renovate';
     let cashRegister = 0;
-    let catSatiety = 80, catMood = 90;
+    let currentLevelRange = 1;
 
     // Load LocalStorage
     try {
@@ -1349,9 +1755,11 @@
         const p = JSON.parse(saved);
         if (typeof p.stars === 'number') stars = p.stars;
         if (typeof p.coins === 'number') coins = p.coins;
-        if (Array.isArray(p.unlockedStages)) unlockedStages = new Set(p.unlockedStages);
+        if (Array.isArray(p.branches) && p.branches.length > 0) branches = p.branches;
+        if (typeof p.currentBranchIndex === 'number' && p.currentBranchIndex < branches.length) currentBranchIndex = p.currentBranchIndex;
+        if (Array.isArray(p.adoptedCats) && p.adoptedCats.length > 0) adoptedCats = p.adoptedCats;
         if (Array.isArray(p.unlockedDrinks)) unlockedDrinks = new Set(p.unlockedDrinks);
-        if (Array.isArray(p.journalLogs) && p.journalLogs.length > 0) journalLogs = p.journalLogs;
+        if (typeof p.maxClearedLevel === 'number') maxClearedLevel = p.maxClearedLevel;
         if (typeof p.currentLevel === 'number') currentLevel = p.currentLevel;
         if (typeof p.cashRegister === 'number') cashRegister = p.cashRegister;
       }
@@ -1360,31 +1768,52 @@
     function saveState() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify({
-          stars, coins, unlockedStages: Array.from(unlockedStages),
-          unlockedDrinks: Array.from(unlockedDrinks),
-          journalLogs, currentLevel, cashRegister
+          stars, coins, branches, currentBranchIndex,
+          adoptedCats, unlockedDrinks: Array.from(unlockedDrinks),
+          maxClearedLevel, currentLevel, cashRegister
         }));
       } catch(e) {}
     }
 
-    // Passive Coin Generation (every 10s gives 1/6th minute rate)
+    // Helper: Get active branch & theme definition
+    function getActiveBranch() {
+      if (currentBranchIndex >= branches.length) currentBranchIndex = branches.length - 1;
+      return branches[currentBranchIndex];
+    }
+    function getBranchTheme(branch) {
+      const idx = (branch.themeIndex || 0) % BASE_THEMES.length;
+      return BASE_THEMES[idx];
+    }
+
+    // Passive Coin Generation (every 10s)
     setInterval(() => {
-      let rate = 0;
+      let baseRate = 0;
       DRINK_MENU.forEach(d => {
-        if (unlockedDrinks.has(d.id)) rate += d.passiveCoinRate;
+        if (unlockedDrinks.has(d.id)) baseRate += d.passiveCoinRate;
       });
-      if (rate > 0) {
-        cashRegister += Math.ceil(rate / 6);
-        updateCashRegisterDisplay();
+      // Branch prestige multipliers (+25% per prestige star across all branches)
+      let totalPrestige = 0;
+      branches.forEach(b => { totalPrestige += (b.prestige || 0); });
+      const mult = 1 + totalPrestige * 0.25;
+      const effectiveRate = Math.ceil(baseRate * mult);
+
+      if (effectiveRate > 0) {
+        cashRegister += Math.ceil(effectiveRate / 6);
+        updateCashRegisterDisplay(effectiveRate);
       }
     }, 10000);
 
-    function updateCashRegisterDisplay() {
+    function updateCashRegisterDisplay(rate = null) {
       const el = document.getElementById('cashRegisterAmount');
       if (el) el.innerText = cashRegister;
+      if (rate === null) {
+        let baseRate = 0;
+        DRINK_MENU.forEach(d => { if (unlockedDrinks.has(d.id)) baseRate += d.passiveCoinRate; });
+        let totalPrestige = 0;
+        branches.forEach(b => { totalPrestige += (b.prestige || 0); });
+        rate = Math.ceil(baseRate * (1 + totalPrestige * 0.25));
+      }
       const rateEl = document.getElementById('passiveRateBadge');
-      let rate = 0;
-      DRINK_MENU.forEach(d => { if (unlockedDrinks.has(d.id)) rate += d.passiveCoinRate; });
       if (rateEl) rateEl.innerText = '+' + rate + ' 币/分';
       const cRate = document.getElementById('cashRateText');
       if (cRate) cRate.innerText = '(+' + rate + ' 币/分)';
@@ -1397,15 +1826,26 @@
       cashRegister = 0;
       sound.playVictory();
       const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
-      journalLogs.push('【' + timeStr + ' 提取】从吧台收银机提取了 ' + collected + ' 营业金币 🪙');
+      const b = getActiveBranch();
+      b.logs.push('【' + timeStr + ' 提取】从收银机提取了 ' + collected + ' 营业金币 🪙');
       saveState();
       renderJournal();
     }
 
-    // --- 4. Journal Navigation & Rendering ---
+    // --- 8. Navigation & Branch Swapping ---
+    function navigateBranch(delta) {
+      const nextIdx = currentBranchIndex + delta;
+      if (nextIdx >= 0 && nextIdx < branches.length) {
+        currentBranchIndex = nextIdx;
+        sound.playSelect();
+        saveState();
+        renderJournal();
+      }
+    }
+
     function switchJournalTab(tab) {
       currentTab = tab;
-      ['renovate', 'drinks', 'cats'].forEach(t => {
+      ['renovate', 'cats', 'drinks'].forEach(t => {
         const btn = document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1));
         const panel = document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1));
         if (t === tab) {
@@ -1419,36 +1859,179 @@
       renderJournal();
     }
 
-    function setPhaseFilter(phase) {
-      currentPhaseFilter = phase;
-      ['All', 'Early', 'Mid', 'Late'].forEach(p => {
-        const btn = document.getElementById('filter' + p);
-        if (p.toLowerCase() === phase) {
-          btn.className = 'pill-filter-btn active';
-        } else {
-          btn.className = 'pill-filter-btn';
-        }
-      });
-      renderStages();
+    // --- 9. Alley Stray Cat Adoption (Endless Gacha) ---
+    function rescueAlleyCat() {
+      if (stars < 3) {
+        alert('后巷探寻需要 3 颗 ⭐ 星光灵感！先去通关连连看获取吧！');
+        return;
+      }
+      stars -= 3;
+
+      // Generate cat
+      const breedObj = CAT_BREEDS[Math.floor(Math.random() * CAT_BREEDS.length)];
+      const color = breedObj.colors[Math.floor(Math.random() * breedObj.colors.length)];
+      const name = CAT_NAMES[Math.floor(Math.random() * CAT_NAMES.length)];
+      const personality = CAT_PERSONALITIES[Math.floor(Math.random() * CAT_PERSONALITIES.length)];
+      const story = RESCUE_SCENARIOS[Math.floor(Math.random() * RESCUE_SCENARIOS.length)];
+
+      const newCat = {
+        id: 'cat_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+        name,
+        breed: breedObj.breed,
+        color,
+        personality,
+        icon: breedObj.icon,
+        affinity: 1,
+        branchId: getActiveBranch().id,
+        story
+      };
+
+      adoptedCats.unshift(newCat);
+      sound.playMeow(640);
+      setTimeout(() => sound.playVictory(), 200);
+
+      const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+      getActiveBranch().logs.push('【' + timeStr + ' 奇遇】收容了新猫咪「' + personality + name + '」(' + breedObj.breed + ')！' + story);
+
+      saveState();
+      renderJournal();
+      switchJournalTab('cats');
+      alert('🎉 成功收容流浪名猫「' + personality + name + '」！欢迎加入猫咪大家庭！');
     }
 
+    function petAdoptedCat(catId) {
+      const cat = adoptedCats.find(c => c.id === catId);
+      if (!cat) return;
+      cat.affinity = Math.min(10, (cat.affinity || 1) + 1);
+      const bonus = 5 + cat.affinity * 3;
+      coins += bonus;
+      sound.playMeow(680 + Math.random() * 120);
+
+      const quotes = [
+        '「' + cat.name + '」舒服地打着呼噜，用湿漉漉的鼻子蹭了蹭你的手背。',
+        '「' + cat.name + '」在阳光下翻开肚皮，前爪有节奏地起伏踩奶。',
+        '「' + cat.name + '」舔了舔你的指尖，眼神里满是依赖与温柔。'
+      ];
+      const q = quotes[Math.floor(Math.random() * quotes.length)];
+      const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+      getActiveBranch().logs.push('【' + timeStr + ' 互动】' + q + ' (羁绊 Lv.' + cat.affinity + ', +' + bonus + ' 🪙)');
+
+      saveState();
+      renderJournal();
+    }
+
+    // --- 10. Multi-Tier Facility Upgrades & Branch Unlocking ---
+    function upgradeFacility(key) {
+      const branch = getActiveBranch();
+      const theme = getBranchTheme(branch);
+      const fac = theme.facilities.find(f => f.key === key);
+      if (!fac) return;
+
+      const currentTier = branch.facilityTiers[key] || 0;
+      if (currentTier >= fac.tiers.length) return;
+
+      const nextTierData = fac.tiers[currentTier];
+      if (stars < nextTierData.costStars || coins < nextTierData.costCoins) {
+        alert('资源不足！升级需要 ⭐ ' + nextTierData.costStars + ' 与 🪙 ' + nextTierData.costCoins);
+        return;
+      }
+
+      stars -= nextTierData.costStars;
+      coins -= nextTierData.costCoins;
+      branch.facilityTiers[key] = currentTier + 1;
+
+      sound.playVictory();
+      const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+      branch.logs.push('【' + timeStr + ' 升阶】「' + fac.name + '」荣升为「' + nextTierData.name + '」！' + nextTierData.desc);
+
+      saveState();
+      renderJournal();
+    }
+
+    function unlockNextBranchOrRebirth() {
+      const branch = getActiveBranch();
+      const theme = getBranchTheme(branch);
+      // Check if all maxed
+      let allMax = true;
+      theme.facilities.forEach(f => {
+        if ((branch.facilityTiers[f.key] || 0) < f.tiers.length) allMax = false;
+      });
+
+      if (!allMax) return;
+
+      const nextBranchNumber = branches.length + 1;
+      const nextThemeIdx = branches.length % BASE_THEMES.length;
+      const nextThemeDef = BASE_THEMES[nextThemeIdx];
+
+      // Formulate unique branch name
+      const prefix = ['海滨', '森林', '深夜', '老街', '山谷', '云上', '星空', '极光'][branches.length % 8];
+      const newBranch = {
+        id: 'branch_' + nextBranchNumber,
+        themeIndex: nextThemeIdx,
+        name: '分店 ' + nextBranchNumber + ': ' + prefix + '·' + nextThemeDef.namePrefix.split('·')[1],
+        icon: nextThemeDef.icon,
+        tag: nextThemeDef.tag,
+        prestige: 0,
+        facilityTiers: { floor: 1, bar: 0, grinder: 0, sofa: 0, cattree: 0 },
+        unlocked: true,
+        logs: [
+          '【庆贺】旗舰分店正式奠基！街坊老常客与可爱的猫咪们一同前来剪彩祝贺！',
+          '新店刚刚铺上初级地板，空旷明亮，等待着书写全新的治愈篇章。'
+        ]
+      };
+
+      branch.prestige = (branch.prestige || 0) + 1;
+      branches.push(newBranch);
+      currentBranchIndex = branches.length - 1;
+
+      sound.playVictory();
+      saveState();
+      renderJournal();
+      alert('🎊 恭喜！成功创立全新的连锁主题分店「' + newBranch.name + '」！所有分店营收获得 +25% 永久加成！');
+    }
+
+    // --- 11. Render Cafe Journal View ---
     function renderJournal() {
+      const branch = getActiveBranch();
+      const theme = getBranchTheme(branch);
+
+      // Currency
       document.getElementById('headerStars').innerText = stars;
       document.getElementById('headerCoins').innerText = coins.toLocaleString();
+      document.getElementById('headerCats').innerText = adoptedCats.length + ' 只';
+      document.getElementById('tabCatCount').innerText = adoptedCats.length;
       document.getElementById('journalLevelBadge').innerText = '第 ' + currentLevel + ' 关';
-      document.getElementById('stagesProgressText').innerText = '已竣工 ' + unlockedStages.size + ' / ' + JOURNAL_STAGES.length;
-      document.getElementById('drinksProgressText').innerText = '已研发 ' + unlockedDrinks.size + ' / ' + DRINK_MENU.length;
 
-      // Count cats
-      const hasCustard = unlockedStages.has('stage_10_cat_custard');
-      const hasDango = unlockedStages.has('stage_13_cat_dango');
-      const catCount = (hasCustard ? 1 : 0) + (hasDango ? 1 : 0);
-      document.getElementById('headerCats').innerText = catCount + ' 只';
+      // Switcher
+      document.getElementById('branchIcon').innerText = branch.icon || theme.icon;
+      document.getElementById('branchTitle').innerText = branch.name + (branch.prestige ? ' ⭐'.repeat(branch.prestige) : '');
+      document.getElementById('branchTag').innerText = branch.tag || theme.tag;
+      document.getElementById('btnPrevBranch').disabled = currentBranchIndex === 0;
+      document.getElementById('btnNextBranch').disabled = currentBranchIndex === branches.length - 1;
+
+      // Completion Calculation
+      let totalStars = 0, currentStars = 0;
+      theme.facilities.forEach(f => {
+        totalStars += f.tiers.length;
+        currentStars += (branch.facilityTiers[f.key] || 0);
+      });
+      const pct = Math.floor((currentStars / totalStars) * 100);
+      document.getElementById('branchProgressSub').innerText = '施工竣工度: ' + pct + '% (' + currentStars + '/' + totalStars + ' 阶)';
+      document.getElementById('branchUpgradeSummary').innerText = '总星阶: ' + currentStars + ' / ' + totalStars + ' ⭐';
+
+      // Branch 100% action banner
+      const banner = document.getElementById('branchUnlockBanner');
+      if (currentStars >= totalStars) {
+        banner.classList.remove('hidden');
+      } else {
+        banner.classList.add('hidden');
+      }
 
       // Logs
+      document.getElementById('journalBranchTitle').innerText = branch.name.split(':')[0] + ' · 随笔手记';
       const logsBox = document.getElementById('journalLogsContainer');
       logsBox.innerHTML = '';
-      journalLogs.forEach(entry => {
+      (branch.logs || []).forEach(entry => {
         const div = document.createElement('div');
         const isHighlight = entry.startsWith('【');
         div.className = 'log-entry ' + (isHighlight ? 'highlight' : '');
@@ -1458,62 +2041,98 @@
       logsBox.scrollTop = logsBox.scrollHeight;
 
       updateCashRegisterDisplay();
-      renderStages();
+      renderFacilities(branch, theme);
+      renderCats();
       renderDrinks();
-      renderCatsAndEvents();
     }
 
-    function renderStages() {
-      const cardsBox = document.getElementById('stagesCardsContainer');
-      cardsBox.innerHTML = '';
-      const filtered = JOURNAL_STAGES.filter(s => currentPhaseFilter === 'all' || s.phase === currentPhaseFilter);
+    function renderFacilities(branch, theme) {
+      const box = document.getElementById('facilityCardsContainer');
+      box.innerHTML = '';
 
-      filtered.forEach(item => {
-        const isUnlocked = unlockedStages.has(item.id);
-        const idx = JOURNAL_STAGES.findIndex(s => s.id === item.id);
-        const prevUnlocked = idx === 0 || unlockedStages.has(JOURNAL_STAGES[idx - 1].id);
-        const canAfford = stars >= item.costStars && coins >= item.costCoins;
-        const isAvail = prevUnlocked && !isUnlocked;
+      theme.facilities.forEach(fac => {
+        const currentTier = branch.facilityTiers[fac.key] || 0;
+        const isMax = currentTier >= fac.tiers.length;
+        const tierInfo = currentTier > 0 ? fac.tiers[currentTier - 1] : { name: '尚未采购', desc: '点击升级添置该设施' };
+        const nextTier = !isMax ? fac.tiers[currentTier] : null;
 
         const card = document.createElement('div');
-        card.className = 'content-card ' + (isUnlocked ? 'completed' : isAvail ? '' : 'locked');
+        card.className = 'content-card';
+
+        const starDisplay = '★'.repeat(currentTier) + '☆'.repeat(fac.tiers.length - currentTier);
 
         card.innerHTML = `
           <div class="card-left">
-            <div class="card-icon-box">${item.icon}</div>
+            <div class="card-icon-box">${fac.icon}</div>
             <div class="card-text-col">
               <div class="card-title-line">
-                <span class="stage-tag">${item.stage}</span>
-                <span class="card-main-title">${item.name}</span>
+                <span class="card-main-title">${fac.name}</span>
+                <span class="tier-stars">${starDisplay}</span>
               </div>
-              <div class="card-desc">${item.subtitle}</div>
-              ${!isUnlocked ? `<div class="card-cost-line">
-                <span class="cost-badge">⭐ ${item.costStars}</span>
-                <span class="cost-badge">🪙 ${item.costCoins}</span>
+              <div class="card-desc" style="font-weight: 600; color: #4B3322;">
+                ${currentTier > 0 ? 'Lv.' + currentTier + ' ' + tierInfo.name : '未添置'}
+              </div>
+              <div class="card-desc">${tierInfo.desc}</div>
+              ${!isMax && nextTier ? `<div class="card-cost-line">
+                <span>升至 Lv.${currentTier + 1}:</span>
+                <span class="cost-badge">⭐ ${nextTier.costStars}</span>
+                <span class="cost-badge">🪙 ${nextTier.costCoins}</span>
               </div>` : ''}
             </div>
           </div>
           <div>
-            ${isUnlocked
-              ? '<span class="tag-completed">✓ 已竣工</span>'
-              : isAvail
-              ? `<button onclick="unlockStage('${item.id}')" class="btn-upgrade" ${!canAfford ? 'disabled' : ''}>${canAfford ? '施工' : '缺少'}</button>`
-              : '<span style="font-size: 9px; color: #A38E7A; background: #EFEAE0; padding: 2px 6px; border-radius: 6px;">未解锁</span>'
+            ${isMax
+              ? '<span class="tag-max">✓ 典藏满星</span>'
+              : `<button onclick="upgradeFacility('${fac.key}')" class="btn-upgrade" ${stars < nextTier.costStars || coins < nextTier.costCoins ? 'disabled' : ''}>${stars >= nextTier.costStars && coins >= nextTier.costCoins ? '升阶' : '缺少'}</button>`
             }
           </div>
         `;
-        cardsBox.appendChild(card);
+        box.appendChild(card);
+      });
+    }
+
+    function renderCats() {
+      const box = document.getElementById('catCardsContainer');
+      box.innerHTML = '';
+      document.getElementById('catTotalText').innerText = '旗下共 ' + adoptedCats.length + ' 只猫咪';
+
+      adoptedCats.forEach(cat => {
+        const card = document.createElement('div');
+        card.className = 'content-card';
+        const affStars = '❤️'.repeat(Math.min(5, cat.affinity || 1));
+
+        card.innerHTML = `
+          <div class="card-left">
+            <div class="card-icon-box" style="font-size: 20px;">${cat.icon}</div>
+            <div class="card-text-col">
+              <div class="card-title-line">
+                <span class="card-main-title">${cat.personality} ${cat.name}</span>
+                <span style="font-size: 8px; font-weight: 700; color: #E11D48;">${affStars} (Lv.${cat.affinity})</span>
+              </div>
+              <div class="card-desc" style="color: #6B533E; font-weight: 600;">品种: ${cat.breed} · ${cat.color}</div>
+              <div class="card-desc">${cat.story}</div>
+            </div>
+          </div>
+          <div>
+            <button onclick="petAdoptedCat('${cat.id}')" class="btn-upgrade" style="padding: 4px 8px; font-size: 9px; background: linear-gradient(135deg, #F43F5E, #E11D48);">
+              🐾 摸头互动
+            </button>
+          </div>
+        `;
+        box.appendChild(card);
       });
     }
 
     function renderDrinks() {
       const box = document.getElementById('drinksCardsContainer');
       box.innerHTML = '';
+      document.getElementById('drinksProgressText').innerText = '已研发 ' + unlockedDrinks.size + ' / ' + DRINK_MENU.length;
+
       DRINK_MENU.forEach(item => {
         const isUnlocked = unlockedDrinks.has(item.id);
         const canAfford = coins >= item.costCoins;
         const card = document.createElement('div');
-        card.className = 'content-card ' + (isUnlocked ? '' : 'locked');
+        card.className = 'content-card';
 
         card.innerHTML = `
           <div class="card-left">
@@ -1524,12 +2143,12 @@
                 <span style="font-size: 9px; color: #B45309; font-weight: 700; background: #FEF3C7; padding: 1px 4px; border-radius: 4px;">+${item.passiveCoinRate}币/分</span>
               </div>
               <div class="card-desc">${item.desc}</div>
-              <div style="font-size: 9px; color: #047857; font-weight: 600; margin-top: 2px;">通关加成: +${item.bonusCoinPerLevel} 币/关</div>
+              <div style="font-size: 9px; color: #047857; font-weight: 600; margin-top: 1px;">关卡通关额外收益: +${item.bonusCoinPerLevel} 币/关</div>
             </div>
           </div>
           <div>
             ${isUnlocked
-              ? '<span style="font-size: 10px; font-weight: 700; color: #B45309; background: #FEF3C7; border: 1px solid #FDE68A; padding: 2px 6px; border-radius: 6px;">售卖中</span>'
+              ? '<span style="font-size: 9px; font-weight: 700; color: #B45309; background: #FEF3C7; border: 1px solid #FDE68A; padding: 2px 6px; border-radius: 6px;">在售</span>'
               : `<button onclick="unlockDrink('${item.id}')" class="btn-upgrade" ${!canAfford ? 'disabled' : ''}>🪙 ${item.costCoins}</button>`
             }
           </div>
@@ -1538,100 +2157,7 @@
       });
     }
 
-    function renderCatsAndEvents() {
-      // Meters
-      const mBox = document.getElementById('catsMetersContainer');
-      mBox.innerHTML = `
-        <div style="display: flex; flex-direction: column; gap: 6px;">
-          <div class="meter-row">
-            <div class="meter-label-row">
-              <span>🐟 猫咪全员饱腹度</span>
-              <span style="font-weight: 700; color: #B45309; font-family: ui-monospace, monospace;">${catSatiety} %</span>
-            </div>
-            <div class="progress-track">
-              <div class="progress-fill-gold" style="width: ${catSatiety}%;"></div>
-            </div>
-          </div>
-          <div class="meter-row">
-            <div class="meter-label-row">
-              <span>💖 猫咪心满意足度</span>
-              <span style="font-weight: 700; color: #E11D48; font-family: ui-monospace, monospace;">${catMood} %</span>
-            </div>
-            <div class="progress-track">
-              <div class="progress-fill-pink" style="width: ${catMood}%;"></div>
-            </div>
-          </div>
-          <div class="cat-action-btns">
-            <button onclick="feedCat()" class="cat-btn">🥣 喂食冻干 (-20🪙)</button>
-            <button onclick="petCat()" class="cat-btn">🐾 摸头逗猫 (+5🪙)</button>
-          </div>
-        </div>
-      `;
-
-      // Events list
-      const eBox = document.getElementById('eventsCardsContainer');
-      eBox.innerHTML = '';
-      let unlockedEvtCount = 0;
-      CUSTOMER_EVENTS.forEach(evt => {
-        const isUnlocked = unlockedStages.size >= evt.unlockStageReq;
-        if (isUnlocked) unlockedEvtCount++;
-        const card = document.createElement('div');
-        card.className = 'content-card ' + (isUnlocked ? '' : 'locked');
-
-        card.innerHTML = `
-          <div style="display: flex; align-items: flex-start; gap: 8px; width: 100%;">
-            <span style="font-size: 16px; margin-top: 1px;">${evt.icon}</span>
-            <div style="flex: 1; min-width: 0;">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 12px; font-weight: 700; color: #3B2C20;">${evt.title}</span>
-                <span style="font-size: 9px; color: #A38E7A;">${evt.guest}</span>
-              </div>
-              <div style="font-size: 10px; color: #6B533E; margin-top: 2px; line-height: 1.35;">${isUnlocked ? evt.log : '完成施工阶段 ' + evt.unlockStageReq + ' 后解锁见闻'}</div>
-            </div>
-          </div>
-        `;
-        eBox.appendChild(card);
-      });
-      document.getElementById('eventsCountText').innerText = '解锁 ' + unlockedEvtCount + ' / ' + CUSTOMER_EVENTS.length;
-    }
-
-    function feedCat() {
-      if (coins < 20) { alert('金币不足，先去连连看赚点金币吧！'); return; }
-      coins -= 20;
-      catSatiety = Math.min(100, catSatiety + 15);
-      sound.playMeow(620);
-      const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
-      journalLogs.push('【' + timeStr + ' 投喂】递上了一小份金枪鱼冻干，两只小猫吃得津津有味 (饱腹度 ' + catSatiety + '%)');
-      saveState();
-      renderJournal();
-    }
-
-    function petCat() {
-      coins += 5;
-      catMood = Math.min(100, catMood + 10);
-      sound.playMeow(780);
-      const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
-      journalLogs.push('【' + timeStr + ' 逗猫】轻轻抚摸了小猫的下巴，发出了清脆的呼噜呼噜声 (+5 🪙)');
-      saveState();
-      renderJournal();
-    }
-
-    window.unlockStage = function(id) {
-      const stage = JOURNAL_STAGES.find(s => s.id === id);
-      if (!stage) return;
-      if (stars >= stage.costStars && coins >= stage.costCoins) {
-        stars -= stage.costStars;
-        coins -= stage.costCoins;
-        unlockedStages.add(stage.id);
-        journalLogs.push(stage.log);
-        sound.playVictory();
-        if (stage.catId) setTimeout(() => sound.playMeow(650), 300);
-        saveState();
-        renderJournal();
-      }
-    };
-
-    window.unlockDrink = function(id) {
+    function unlockDrink(id) {
       const d = DRINK_MENU.find(m => m.id === id);
       if (!d) return;
       if (coins >= d.costCoins) {
@@ -1639,20 +2165,19 @@
         unlockedDrinks.add(d.id);
         sound.playVictory();
         const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
-        journalLogs.push('【' + timeStr + ' 研发】成功推出新饮品「' + d.name + '」！被动营收 +' + d.passiveCoinRate + ' 币/分');
+        getActiveBranch().logs.push('【' + timeStr + ' 研发】全连锁成功推出新饮品「' + d.name + '」！被动营收 +' + d.passiveCoinRate + ' 币/分');
         saveState();
         renderJournal();
       }
-    };
+    }
 
-    // --- 5. Hardcore LianLianKan Engine ---
-    const ICONS = ['☕', '🍰', '🥐', '🍩', '🐾', '🥛', '🍓', '🍵', '🍪', '🥪', '🧁', '🍯'];
-    let rows = 6, cols = 6;
+    // --- 12. LianLianKan Core Algorithm (Pathfinding & Adaptive Board) ---
+    let rows = 4, cols = 6;
     let grid = [], frozenMap = [];
     let selectedTile = null;
-    let clearedCount = 0, totalPairs = 18;
+    let clearedCount = 0, totalPairs = 12;
     let timeLeft = 90, movesLeft = 25;
-    let currentLevelConfig = CAFE_LEVELS[0];
+    let currentLevelConfig = null;
     let isFrozen = false;
     let timerInterval = null;
     let score = 0, combo = 0;
@@ -1708,10 +2233,78 @@
       return check2Turn(g, p1, p2);
     }
 
+    function hasAnyMatch(g) {
+      for (let r1 = 1; r1 <= rows; r1++) {
+        for (let c1 = 1; c1 <= cols; c1++) {
+          if (g[r1][c1] <= 0) continue;
+          for (let r2 = 1; r2 <= rows; r2++) {
+            for (let c2 = 1; c2 <= cols; c2++) {
+              if (r1 === r2 && c1 === c2) continue;
+              if (g[r1][c1] === g[r2][c2]) {
+                if (findPath(g, { r: r1, c: c1 }, { r: r2, c: c2 })) return true;
+              }
+            }
+          }
+        }
+      }
+      return false;
+    }
+
+    function showShuffleToast(text = '无解，自动洗牌 🔄') {
+      const toast = document.createElement('div');
+      toast.className = 'shuffle-toast';
+      toast.innerText = text;
+      document.getElementById('boardContainer').appendChild(toast);
+      setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 1500);
+    }
+
+    function autoReshuffleIfDeadlocked() {
+      if (clearedCount >= totalPairs) return;
+      if (!hasAnyMatch(grid)) {
+        showShuffleToast('当前无解，自动洗牌 🔄');
+        sound.playShuffle();
+        performReshuffle();
+      }
+    }
+
+    function performReshuffle() {
+      const remainingVals = [];
+      const remainingFrozen = [];
+      const positions = [];
+
+      for (let r = 1; r <= rows; r++) {
+        for (let c = 1; c <= cols; c++) {
+          if (grid[r][c] > 0) {
+            remainingVals.push(grid[r][c]);
+            remainingFrozen.push(frozenMap[r][c]);
+            positions.push({ r, c });
+          }
+        }
+      }
+
+      if (positions.length <= 2) return;
+
+      for (let attempt = 0; attempt < 15; attempt++) {
+        for (let i = remainingVals.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [remainingVals[i], remainingVals[j]] = [remainingVals[j], remainingVals[i]];
+          [remainingFrozen[i], remainingFrozen[j]] = [remainingFrozen[j], remainingFrozen[i]];
+        }
+        for (let k = 0; k < positions.length; k++) {
+          const pos = positions[k];
+          grid[pos.r][pos.c] = remainingVals[k];
+          frozenMap[pos.r][pos.c] = remainingFrozen[k];
+        }
+        if (hasAnyMatch(grid)) break;
+      }
+
+      renderTiles();
+    }
+
     // Canvas laser
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
-    let particles = [], activeLine = null, cellSize = 42;
+    let particles = [], activeLine = null, cellSize = 38;
 
     function renderCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1721,12 +2314,13 @@
         else {
           ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
           ctx.globalAlpha = activeLine.opacity;
-          ctx.strokeStyle = '#FBBF24'; ctx.lineWidth = 6;
-          ctx.shadowColor = '#F59E0B'; ctx.shadowBlur = 16;
+          ctx.strokeStyle = '#FBBF24'; ctx.lineWidth = Math.max(3, Math.floor(cellSize * 0.12));
+          ctx.shadowColor = '#F59E0B'; ctx.shadowBlur = 14;
           ctx.beginPath();
           activeLine.pts.forEach((pt, i) => { if (i === 0) ctx.moveTo(pt.x, pt.y); else ctx.lineTo(pt.x, pt.y); });
           ctx.stroke();
-          ctx.lineWidth = 3; ctx.strokeStyle = '#FFFDF5'; ctx.stroke();
+          ctx.lineWidth = Math.max(1.5, Math.floor(cellSize * 0.06));
+          ctx.strokeStyle = '#FFFDF5'; ctx.stroke();
           ctx.restore();
         }
       }
@@ -1736,7 +2330,7 @@
         if (p.life >= p.maxLife) particles.splice(i, 1);
         else {
           ctx.save(); ctx.globalAlpha = p.alpha;
-          if (p.isPaw) { ctx.font = '12px sans-serif'; ctx.fillText('🐾', p.x, p.y); }
+          if (p.isPaw) { ctx.font = Math.max(10, Math.floor(cellSize * 0.35)) + 'px sans-serif'; ctx.fillText('🐾', p.x, p.y); }
           else { ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill(); }
           ctx.restore();
         }
@@ -1746,20 +2340,21 @@
     requestAnimationFrame(renderCanvas);
 
     function triggerSparks(center) {
-      for (let i = 0; i < 16; i++) {
-        const angle = Math.random() * Math.PI * 2, spd = 2 + Math.random() * 4;
+      for (let i = 0; i < 14; i++) {
+        const angle = Math.random() * Math.PI * 2, spd = 2 + Math.random() * 3.5;
         particles.push({
           x: center.x, y: center.y, vx: Math.cos(angle) * spd, vy: Math.sin(angle) * spd,
           color: ['#F59E0B', '#FBBF24', '#38BDF8', '#FFFDF8'][Math.floor(Math.random() * 4)],
-          size: 2.5 + Math.random() * 2.5, life: 0, maxLife: 20 + Math.random() * 10, alpha: 1,
+          size: Math.max(2, cellSize * 0.06) + Math.random() * 2, life: 0, maxLife: 18 + Math.random() * 10, alpha: 1,
           isPaw: i % 4 === 0
         });
       }
     }
 
+    // Puzzle level initialization
     function initPuzzle(lvlNum = currentLevel) {
       currentLevel = lvlNum;
-      currentLevelConfig = CAFE_LEVELS.find(l => l.level === currentLevel) || CAFE_LEVELS[0];
+      currentLevelConfig = generateLevelConfig(currentLevel);
       rows = currentLevelConfig.rows;
       cols = currentLevelConfig.cols;
       clearedCount = 0;
@@ -1768,33 +2363,32 @@
       hintsLeft = 3; shufflesLeft = 2; freezesLeft = 1;
       selectedTile = null;
 
-      document.getElementById('puzzleLevelTitle').innerText = '第 ' + currentLevel + ' 关 · ' + currentLevelConfig.name;
+      document.getElementById('puzzleLevelTitle').innerText = currentLevelConfig.title;
       document.getElementById('modeBadge').innerText = currentLevelConfig.mode === 'moves' ? '步数模式' : '限时模式';
 
       if (currentLevelConfig.mode === 'moves') {
-        movesLeft = currentLevelConfig.movesLimit || 30;
+        movesLeft = currentLevelConfig.movesLimit;
         document.getElementById('timerText').innerText = movesLeft + ' 步';
       } else {
-        timeLeft = currentLevelConfig.timeLimit || 90;
+        timeLeft = currentLevelConfig.timeLimit;
         isFrozen = false;
         const m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
         const s = String(timeLeft % 60).padStart(2, '0');
         document.getElementById('timerText').innerText = m + ':' + s;
       }
 
-      // Generate board
       grid = Array.from({ length: rows + 2 }, () => Array(cols + 2).fill(0));
       frozenMap = Array.from({ length: rows + 2 }, () => Array(cols + 2).fill(false));
 
       const totalInnerCells = rows * cols;
-      const obstacles = currentLevelConfig.obstacleCount || 0;
+      const obstacles = currentLevelConfig.obstacleCount;
       const playable = totalInnerCells - obstacles;
       const actualPairs = Math.floor(playable / 2);
 
+      const activeIconTypes = currentLevelConfig.iconTypes;
       const pool = [];
-      const distinctTypes = Math.min(ICONS.length, Math.max(6, Math.floor(actualPairs / 3)));
       for (let i = 0; i < actualPairs; i++) {
-        const t = (i % distinctTypes) + 1;
+        const t = (i % activeIconTypes) + 1;
         pool.push(t, t);
       }
       for (let i = pool.length - 1; i > 0; i--) {
@@ -1802,20 +2396,30 @@
         [pool[i], pool[j]] = [pool[j], pool[i]];
       }
 
-      let pIdx = 0;
+      const cellPositions = [];
+      for (let r = 1; r <= rows; r++) for (let c = 1; c <= cols; c++) cellPositions.push({ r, c });
+      for (let i = cellPositions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cellPositions[i], cellPositions[j]] = [cellPositions[j], cellPositions[i]];
+      }
+
+      let obsPlaced = 0;
+      for (let i = 0; i < cellPositions.length && obsPlaced < obstacles; i++) {
+        grid[cellPositions[i].r][cellPositions[i].c] = -1;
+        obsPlaced++;
+      }
+
+      let poolIdx = 0;
       for (let r = 1; r <= rows; r++) {
         for (let c = 1; c <= cols; c++) {
-          if (obstacles > 0 && Math.random() < (obstacles / totalInnerCells) && pIdx < pool.length) {
-            grid[r][c] = -1; // -1 represents crate obstacle
-          } else if (pIdx < pool.length) {
-            grid[r][c] = pool[pIdx++];
-          }
+          if (grid[r][c] === 0 && poolIdx < pool.length) grid[r][c] = pool[poolIdx++];
         }
       }
 
-      // Distribute frozen tiles
-      let fCount = currentLevelConfig.frozenCount || 0;
-      while (fCount > 0) {
+      let fCount = currentLevelConfig.frozenCount;
+      let fAttempts = 0;
+      while (fCount > 0 && fAttempts < 100) {
+        fAttempts++;
         const rr = Math.floor(Math.random() * rows) + 1;
         const cc = Math.floor(Math.random() * cols) + 1;
         if (grid[rr][cc] > 0 && !frozenMap[rr][cc]) {
@@ -1823,6 +2427,8 @@
           fCount--;
         }
       }
+
+      if (!hasAnyMatch(grid)) performReshuffle();
 
       updateBadges();
       resizeBoard();
@@ -1858,18 +2464,28 @@
 
     function resizeBoard() {
       const cont = document.getElementById('boardContainer');
-      const maxW = cont.clientWidth - 12;
-      const maxH = cont.clientHeight - 12;
-      cellSize = Math.min(46, Math.floor(Math.min(maxW / (cols + 2), maxH / (rows + 2))));
-      const bW = cellSize * (cols + 2), bH = cellSize * (rows + 2);
+      if (!cont) return;
+      const maxW = cont.clientWidth - 8;
+      const maxH = cont.clientHeight - 8;
+
+      const cellW = Math.floor(maxW / (cols + 2));
+      const cellH = Math.floor(maxH / (rows + 2));
+      cellSize = Math.max(18, Math.min(48, Math.min(cellW, cellH)));
+
+      const bW = cellSize * (cols + 2);
+      const bH = cellSize * (rows + 2);
       const bInner = document.getElementById('boardInner');
-      bInner.style.width = bW + 'px'; bInner.style.height = bH + 'px';
-      canvas.width = cont.clientWidth; canvas.height = cont.clientHeight;
+      bInner.style.width = bW + 'px';
+      bInner.style.height = bH + 'px';
+      canvas.width = cont.clientWidth;
+      canvas.height = cont.clientHeight;
     }
 
     function renderTiles() {
       const wrapper = document.getElementById('tilesWrapper');
       wrapper.innerHTML = '';
+      const fontSize = Math.max(11, Math.floor(cellSize * 0.65));
+
       for (let r = 1; r <= rows; r++) {
         for (let c = 1; c <= cols; c++) {
           const v = grid[r][c];
@@ -1886,13 +2502,13 @@
           btn.className = 'tile-btn';
 
           if (isObstacle) {
-            btn.innerHTML = '<div class="tile-obstacle">📦</div>';
+            btn.innerHTML = `<div class="tile-obstacle" style="font-size: ${Math.max(10, Math.floor(cellSize * 0.55))}px;">📦</div>`;
           } else {
             const isSel = selectedTile && selectedTile.r === r && selectedTile.c === c;
             btn.innerHTML = `
-              <div class="tile-inner ${isSel ? 'selected' : ''}">
-                ${ICONS[(v - 1) % ICONS.length]}
-                ${isIce ? '<div class="tile-ice-overlay">🧊</div>' : ''}
+              <div class="tile-inner ${isSel ? 'selected' : ''}" style="font-size: ${fontSize}px;">
+                ${THEME_ICONS_20[(v - 1) % THEME_ICONS_20.length]}
+                ${isIce ? `<div class="tile-ice-overlay" style="font-size: ${Math.max(9, Math.floor(cellSize * 0.35))}px;">🧊</div>` : ''}
               </div>
             `;
             btn.onclick = () => onTileClick(r, c);
@@ -1936,7 +2552,6 @@
         selectedTile = null; renderTiles(); return;
       }
 
-      // Decrement moves if move limit mode
       if (currentLevelConfig.mode === 'moves') {
         movesLeft--;
         document.getElementById('timerText').innerText = movesLeft + ' 步';
@@ -1964,6 +2579,20 @@
           sound.playMatch(combo);
         }
 
+        // Adjacent thaw
+        const checkAdjacentThaw = (pt) => {
+          const adj = [{r: pt.r - 1, c: pt.c}, {r: pt.r + 1, c: pt.c}, {r: pt.r, c: pt.c - 1}, {r: pt.r, c: pt.c + 1}];
+          adj.forEach(a => {
+            if (a.r >= 1 && a.r <= rows && a.c >= 1 && a.c <= cols && frozenMap[a.r][a.c]) {
+              frozenMap[a.r][a.c] = false;
+              sound.playIceCrack();
+              score += 40;
+            }
+          });
+        };
+        checkAdjacentThaw(p1);
+        checkAdjacentThaw(p2);
+
         selectedTile = null;
         renderTiles();
         updateBadges();
@@ -1971,8 +2600,13 @@
         if (clearedCount >= totalPairs) {
           if (timerInterval) clearInterval(timerInterval);
           sound.playVictory();
-          const earnedStars = currentLevelConfig.starsReward || 3;
-          let earnedCoins = currentLevelConfig.coinsReward || 120;
+
+          if (currentLevel > maxClearedLevel) {
+            maxClearedLevel = currentLevel;
+          }
+
+          const earnedStars = currentLevelConfig.starsReward;
+          let earnedCoins = currentLevelConfig.coinsReward;
           DRINK_MENU.forEach(d => { if (unlockedDrinks.has(d.id)) earnedCoins += d.bonusCoinPerLevel; });
 
           stars += earnedStars;
@@ -1981,12 +2615,15 @@
           document.getElementById('vicCoinsEarned').innerText = '+' + earnedCoins + ' 营业金币';
 
           const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
-          journalLogs.push('【' + timeStr + ' 采购】第 ' + currentLevel + ' 关食材采购大获全胜！(+' + earnedStars + ' ⭐, +' + earnedCoins + ' 🪙)');
+          getActiveBranch().logs.push('【' + timeStr + ' 采购】' + currentLevelConfig.title + ' 食材采购大获全胜！(+' + earnedStars + ' ⭐, +' + earnedCoins + ' 🪙)');
           saveState();
           document.getElementById('modalVictory').classList.remove('hidden');
-        } else if (currentLevelConfig.mode === 'moves' && movesLeft <= 0) {
-          alert('步数耗尽！再接再厉喵！');
-          showJournalView();
+        } else {
+          autoReshuffleIfDeadlocked();
+          if (currentLevelConfig.mode === 'moves' && movesLeft <= 0) {
+            alert('步数耗尽！再接再厉喵！');
+            showJournalView();
+          }
         }
       } else {
         selectedTile = { r, c }; renderTiles();
@@ -2018,29 +2655,26 @@
           }
         }
       }
+      showShuffleToast('当前无可连方块，请重排！');
     };
 
     document.getElementById('btnShuffle').onclick = () => {
       if (shufflesLeft <= 0) return;
       shufflesLeft--;
-      const remaining = [];
-      for (let r = 1; r <= rows; r++) for (let c = 1; c <= cols; c++) if (grid[r][c] > 0) remaining.push(grid[r][c]);
-      for (let i = remaining.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1)); [remaining[i], remaining[j]] = [remaining[j], remaining[i]];
-      }
-      let idx = 0;
-      for (let r = 1; r <= rows; r++) for (let c = 1; c <= cols; c++) if (grid[r][c] > 0) grid[r][c] = remaining[idx++];
-      updateBadges(); renderTiles();
+      sound.playShuffle();
+      performReshuffle();
+      updateBadges();
+      showShuffleToast('重排完成 🔄');
     };
 
     document.getElementById('btnFreeze').onclick = () => {
       if (freezesLeft <= 0) return;
       freezesLeft--;
       if (currentLevelConfig.mode === 'moves') {
-        movesLeft += 6;
+        movesLeft += 8;
         document.getElementById('timerText').innerText = movesLeft + ' 步';
       } else {
-        isFrozen = true; timeLeft += 15;
+        isFrozen = true; timeLeft += 20;
         document.getElementById('freezeText').innerText = '冰冻中';
         setTimeout(() => { isFrozen = false; document.getElementById('freezeText').innerText = '加时/步'; }, 10000);
       }
@@ -2061,20 +2695,60 @@
     }
 
     // Modal Level Select
-    document.getElementById('btnLevelSelect').onclick = () => {
+    function renderLevelSelectModal(startRange = 1) {
+      currentLevelRange = startRange;
+      const tabs = document.getElementById('levelRangeTabs');
+      tabs.innerHTML = '';
+
+      const maxTabStart = Math.max(100, Math.floor((maxClearedLevel + 20) / 20) * 20);
+      for (let s = 1; s <= maxTabStart; s += 20) {
+        const e = s + 19;
+        const btn = document.createElement('button');
+        btn.className = 'level-tab-btn ' + (currentLevelRange === s ? 'active' : '');
+        btn.innerText = s + '~' + e;
+        btn.onclick = () => renderLevelSelectModal(s);
+        tabs.appendChild(btn);
+      }
+
       const list = document.getElementById('levelSelectList');
       list.innerHTML = '';
-      CAFE_LEVELS.forEach(lvl => {
+      for (let lvl = startRange; lvl <= startRange + 19; lvl++) {
         const btn = document.createElement('button');
-        const isCurrent = lvl.level === currentLevel;
-        btn.className = 'level-grid-item ' + (isCurrent ? 'current' : '');
-        btn.innerHTML = `<span style="font-family: ui-monospace, monospace; font-size: 11px;">${lvl.level}</span><span style="font-size: 8px;">${lvl.mode === 'moves' ? '步数' : '限时'}</span>`;
-        btn.onclick = () => {
-          document.getElementById('modalLevelSelect').classList.add('hidden');
-          showPuzzleView(lvl.level);
-        };
+        const isCurrent = lvl === currentLevel;
+        const isCleared = lvl <= maxClearedLevel;
+        const isUnlocked = lvl <= maxClearedLevel + 1;
+        const isMoves = (lvl >= 15 && lvl % 5 === 0);
+
+        btn.className = 'level-grid-item ' + (isCurrent ? 'current' : isCleared ? 'cleared' : '');
+        btn.innerHTML = `
+          <span style="font-family: ui-monospace, monospace; font-size: 11px;">${lvl}</span>
+          <span style="font-size: 8px;">${isMoves ? '步数' : '限时'}</span>
+          ${isCleared ? '<span style="font-size: 8px; color: #059669;">✓</span>' : ''}
+        `;
+        if (isUnlocked) {
+          btn.onclick = () => {
+            document.getElementById('modalLevelSelect').classList.add('hidden');
+            showPuzzleView(lvl);
+          };
+        } else {
+          btn.style.opacity = '0.5';
+          btn.onclick = () => alert('请先通关第 ' + (lvl - 1) + ' 关！');
+        }
         list.appendChild(btn);
-      });
+      }
+    }
+
+    function jumpToCustomLevel() {
+      const val = parseInt(document.getElementById('inputCustomLevel').value, 10);
+      if (val && val >= 1) {
+        document.getElementById('modalLevelSelect').classList.add('hidden');
+        showPuzzleView(val);
+      }
+    }
+
+    document.getElementById('btnLevelSelect').onclick = () => {
+      const range = Math.max(1, Math.floor((currentLevel - 1) / 20) * 20 + 1);
+      renderLevelSelectModal(range);
       document.getElementById('modalLevelSelect').classList.remove('hidden');
     };
 
@@ -2087,7 +2761,7 @@
     };
     document.getElementById('btnNextLevel').onclick = () => {
       document.getElementById('modalVictory').classList.add('hidden');
-      currentLevel = Math.min(30, currentLevel + 1);
+      currentLevel++;
       showPuzzleView(currentLevel);
     };
 
