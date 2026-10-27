@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>暖喵咖啡馆 · 连锁分店周转与无尽流浪猫收容</title>
+  <title>暖喵咖啡馆 · 连连看与治愈经营</title>
   <style>
     /* -------------------------------------------------------------
        ZERO-DEPENDENCY PURE NATIVE CSS STYLESHEET
@@ -46,6 +46,227 @@
       box-shadow: 0 0 35px rgba(60, 40, 20, 0.12);
     }
 
+    /* ========================================================
+       TITLE / SPLASH SCREEN STYLES
+       ======================================================== */
+    .title-view {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100dvh;
+      background: radial-gradient(circle at 50% 25%, #FFFDF8 0%, #FAF3E6 55%, #F4E7CF 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 36px 20px 24px;
+      z-index: 50;
+      overflow: hidden;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .title-view.fade-out {
+      opacity: 0;
+      transform: scale(0.96);
+      pointer-events: none;
+    }
+
+    .title-header-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .title-header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 14px;
+      background: rgba(140, 96, 61, 0.08);
+      border: 1px solid rgba(140, 96, 61, 0.2);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #7D512E;
+      margin-bottom: 10px;
+    }
+
+    .title-main-heading {
+      font-size: 34px;
+      font-weight: 900;
+      color: #4A2E18;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 0 rgba(255, 255, 255, 0.8), 0 4px 14px rgba(107, 72, 42, 0.12);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .title-sub-heading {
+      font-size: 13px;
+      font-weight: 700;
+      color: #8C623E;
+      letter-spacing: 1.5px;
+    }
+
+    /* Illustration Container */
+    .title-art-wrap {
+      position: relative;
+      width: 170px;
+      height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto 0;
+      animation: cupFloat 3.2s ease-in-out infinite;
+    }
+
+    @keyframes cupFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-9px); }
+    }
+
+    /* Floating steam and hearts */
+    .steam-cloud {
+      position: absolute;
+      top: 12px;
+      font-size: 15px;
+      animation: steamRise 2.4s ease-in-out infinite;
+      opacity: 0;
+      pointer-events: none;
+      filter: drop-shadow(0 2px 4px rgba(107,72,42,0.15));
+    }
+    .steam-cloud.s1 { left: 50px; animation-delay: 0s; }
+    .steam-cloud.s2 { left: 78px; animation-delay: 0.8s; font-size: 18px; }
+    .steam-cloud.s3 { left: 108px; animation-delay: 1.6s; }
+
+    @keyframes steamRise {
+      0% { transform: translateY(8px) scale(0.7); opacity: 0; }
+      35% { opacity: 0.8; transform: translateY(-8px) scale(1); }
+      100% { transform: translateY(-38px) scale(1.35); opacity: 0; }
+    }
+
+    .heart-float {
+      position: absolute;
+      font-size: 14px;
+      animation: heartDrift 3.2s ease-in-out infinite;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .heart-float.h1 { top: 32px; right: 16px; animation-delay: 0.4s; }
+    .heart-float.h2 { top: 46px; left: 14px; animation-delay: 1.9s; }
+
+    @keyframes heartDrift {
+      0% { transform: translateY(0) scale(0.6) rotate(-12deg); opacity: 0; }
+      40% { opacity: 0.85; }
+      100% { transform: translateY(-32px) scale(1.15) rotate(16deg); opacity: 0; }
+    }
+
+    /* Title Buttons Group */
+    .title-buttons {
+      width: 100%;
+      max-width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 2;
+    }
+
+    .btn-title-main {
+      width: 100%;
+      padding: 13px 16px;
+      background: linear-gradient(180deg, #FAD77A 0%, #F59E0B 100%);
+      border: 2px solid #6B482A;
+      border-radius: 18px;
+      box-shadow: 0 4px 0 #6B482A, 0 8px 18px rgba(245, 158, 11, 0.28);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+    .btn-title-main:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #6B482A;
+    }
+    .btn-title-main-label {
+      font-size: 17px;
+      font-weight: 900;
+      color: #4A2800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-title-main-sub {
+      font-size: 11px;
+      font-weight: 700;
+      color: #6B482A;
+      margin-top: 3px;
+    }
+
+    .btn-title-secondary {
+      width: 100%;
+      padding: 10px 14px;
+      background: #FFFDF9;
+      border: 2px solid #8C623E;
+      border-radius: 15px;
+      box-shadow: 0 3px 0 #8C623E;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+    .btn-title-secondary:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #8C623E;
+    }
+    .btn-title-sec-label {
+      font-size: 13px;
+      font-weight: 800;
+      color: #5C3E28;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-title-sec-sub {
+      font-size: 10px;
+      color: #9C7856;
+      margin-top: 1px;
+    }
+
+    .btn-title-subtle {
+      width: 100%;
+      padding: 8px 12px;
+      background: rgba(140, 96, 61, 0.08);
+      border: 1px solid rgba(140, 96, 61, 0.22);
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #7D512E;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-title-subtle:active {
+      background: rgba(140, 96, 61, 0.16);
+    }
+
+    .title-footer-note {
+      font-size: 10px;
+      color: #A3856C;
+      text-align: center;
+      margin-top: 6px;
+    }
+
     /* Top Status Bar */
     .top-bar {
       height: 50px;
@@ -58,349 +279,355 @@
       flex-shrink: 0;
       z-index: 30;
     }
+
     .status-group {
       display: flex;
       align-items: center;
       gap: 5px;
     }
+
     .status-pill {
       display: flex;
       align-items: center;
       gap: 4px;
-      background: #FFFDF9;
-      border: 1px solid #D9CDB8;
-      padding: 3px 6px;
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      background: #FFFDF8;
+      border: 1.5px solid #D9CDB8;
+      border-radius: 16px;
+      padding: 2px 7px;
+      height: 28px;
+      box-shadow: 0 1px 2px rgba(60, 40, 20, 0.04);
     }
+
     .status-pill-text {
       display: flex;
       flex-direction: column;
-      line-height: 1.1;
+      line-height: 1.05;
     }
+
     .status-pill-label {
       font-size: 8px;
-      color: #8C6544;
-      font-weight: 500;
+      color: #8C7561;
+      font-weight: 600;
     }
+
     .status-pill-val {
-      font-size: 11px;
-      font-weight: 700;
-      color: #2C2219;
-      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 12px;
+      font-weight: 800;
+      color: #D97706;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
+
     .top-actions {
       display: flex;
       align-items: center;
       gap: 5px;
     }
+
     .btn-icon-subtle {
-      height: 30px;
+      height: 28px;
       padding: 0 8px;
-      border-radius: 10px;
-      background: #FFFDF9;
-      border: 1px solid #D9CDB8;
+      border-radius: 14px;
+      border: 1.5px solid #D9CDB8;
+      background: #FFFDF8;
       color: #5C4434;
       font-size: 11px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-      transition: all 0.12s ease;
-    }
-    .btn-icon-subtle:active {
-      transform: translateY(1px);
-      background: #F4ECE1;
-    }
-
-    /* Branch Carousel Switcher */
-    .branch-switcher-bar {
-      height: 44px;
-      padding: 4px 10px;
-      background: linear-gradient(135deg, #FBF6EE, #F4ECE0);
-      border-bottom: 1px solid #E4D7C2;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-      z-index: 28;
-    }
-    .branch-nav-btn {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      border: 1px solid #D8C8B0;
-      background: #FFFDF9;
-      color: #6B4E36;
-      font-size: 12px;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-    }
-    .branch-nav-btn:active {
-      transform: scale(0.95);
-    }
-    .branch-nav-btn:disabled {
-      opacity: 0.35;
-      cursor: not-allowed;
-    }
-    .branch-info-col {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 0;
-      padding: 0 6px;
-    }
-    .branch-title-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      max-width: 100%;
-    }
-    .branch-name-text {
-      font-size: 12px;
-      font-weight: 800;
-      color: #382517;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .branch-tag {
-      font-size: 9px;
-      padding: 1px 5px;
-      border-radius: 6px;
-      background: #EFE6D5;
-      color: #6B4E36;
       font-weight: 700;
-    }
-    .branch-progress-sub {
-      font-size: 9px;
-      color: #8C623E;
-      font-weight: 600;
-      margin-top: 1px;
-    }
-
-    /* 3 Management Navigation Tabs */
-    .tab-bar {
-      height: 38px;
-      padding: 3px 10px;
-      display: flex;
-      gap: 5px;
-      background: #F6EFE6;
-      border-bottom: 1px solid #E8DEC8;
-      flex-shrink: 0;
-      z-index: 25;
-    }
-    .tab-item {
-      flex: 1;
-      border: none;
-      border-radius: 8px;
-      font-size: 11px;
-      font-weight: 500;
-      color: #7D6652;
-      background: transparent;
       cursor: pointer;
-      transition: all 0.15s ease;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 3px;
     }
-    .tab-item.active {
-      background: #FFFDF9;
-      color: #2C2219;
-      font-weight: 700;
-      border: 1px solid #D8C9B4;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    .btn-icon-subtle:active {
+      background: #EFE8DC;
     }
 
-    /* Main Scrollable Body */
-    .body-scroll {
-      flex: 1;
-      width: 100%;
-      min-height: 0;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding: 8px 10px;
+    /* 连锁分店无尽周转横栏 */
+    .branch-switcher-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 10px;
+      background: linear-gradient(180deg, #F5EEE1 0%, #EDE2CE 100%);
+      border-bottom: 1.5px solid #D9CDB8;
+      flex-shrink: 0;
+    }
+
+    .branch-nav-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 1.5px solid #6B482A;
+      background: #FFFDF8;
+      box-shadow: 0 2px 0 #6B482A;
+      color: #6B482A;
+      font-size: 11px;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .branch-nav-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 0 #6B482A;
+    }
+
+    .branch-info-col {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      align-items: center;
+      text-align: center;
+      flex: 1;
+      padding: 0 6px;
     }
 
-    /* Rescue Banner for Alley Cat Adoption */
+    .branch-title-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .branch-name-text {
+      font-size: 13px;
+      font-weight: 800;
+      color: #4A3323;
+    }
+
+    .branch-tag {
+      font-size: 9px;
+      padding: 1px 5px;
+      border-radius: 6px;
+      background: #8C603D;
+      color: #FFF;
+      font-weight: 700;
+    }
+
+    .branch-progress-sub {
+      font-size: 10px;
+      color: #7D634E;
+      margin-top: 1px;
+    }
+
+    /* 3-Tab Bar */
+    .tab-bar {
+      display: flex;
+      background: #FAF7F2;
+      border-bottom: 1px solid #E8DEC8;
+      padding: 4px 8px 0;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .tab-item {
+      flex: 1;
+      height: 34px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      border: 1.5px solid transparent;
+      border-bottom: none;
+      background: transparent;
+      color: #8C7561;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .tab-item.active {
+      background: #FFFDF8;
+      border-color: #D9CDB8;
+      color: #4B3322;
+      font-weight: 900;
+      box-shadow: 0 -2px 6px rgba(60, 40, 20, 0.04);
+    }
+
+    /* Scrollable Body Area */
+    .body-scroll {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 8px 10px 75px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* 常驻流浪猫探寻入口 Banner */
     .rescue-cat-banner {
-      width: 100%;
-      background: linear-gradient(135deg, #FFF9F2, #F8EFE0);
-      border: 1.5px dashed #D4A373;
+      background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+      border: 2px solid #D97706;
       border-radius: 14px;
-      padding: 9px 12px;
+      padding: 8px 10px;
+      box-shadow: 0 3px 0 #B45309;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
     }
+
     .rescue-left {
       display: flex;
       align-items: center;
       gap: 8px;
     }
+
     .rescue-title {
       font-size: 12px;
       font-weight: 800;
-      color: #5A3515;
-    }
-    .rescue-sub {
-      font-size: 10px;
-      color: #8C6544;
-      margin-top: 1px;
-    }
-    .btn-rescue {
-      border: none;
-      padding: 6px 12px;
-      border-radius: 10px;
-      font-size: 11px;
-      font-weight: 800;
-      color: #FFFFFF;
-      background: linear-gradient(135deg, #EA580C, #C2410C);
-      cursor: pointer;
-      box-shadow: 0 2px 5px rgba(234, 88, 12, 0.28);
-      white-space: nowrap;
-      transition: all 0.12s;
-    }
-    .btn-rescue:active {
-      transform: scale(0.96);
+      color: #78350F;
     }
 
-    /* Narrative Text Log Window */
-    .log-card {
-      width: 100%;
-      background: #FFFDF9;
-      border: 1px solid #E2D6C2;
-      border-radius: 14px;
-      padding: 9px 11px;
-      box-shadow: 0 1px 4px rgba(107, 72, 42, 0.04);
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
+    .rescue-sub {
+      font-size: 9.5px;
+      color: #92400E;
     }
+
+    .btn-rescue {
+      padding: 6px 10px;
+      background: #D97706;
+      color: #FFF;
+      border: 1.5px solid #78350F;
+      border-radius: 10px;
+      box-shadow: 0 2px 0 #78350F;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-rescue:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 0 #78350F;
+    }
+
+    /* Text Log Window */
+    .log-card {
+      background: #FFFDF8;
+      border: 1.5px solid #D9CDB8;
+      border-radius: 14px;
+      padding: 8px 10px;
+      box-shadow: 0 2px 6px rgba(60, 40, 20, 0.03);
+    }
+
     .log-card-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      border-bottom: 1px solid #F0E8D8;
       padding-bottom: 5px;
-      border-bottom: 1px solid #EFE7D8;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
+
     .log-title {
       font-size: 11px;
-      font-weight: 700;
-      color: #3B2C20;
+      font-weight: 800;
+      color: #5C4434;
       display: flex;
       align-items: center;
       gap: 4px;
     }
+
     .log-badge {
       display: flex;
       align-items: center;
       gap: 4px;
-      background: #F5EFEB;
-      color: #8C6544;
       font-size: 9px;
-      font-weight: 600;
-      padding: 1px 6px;
-      border-radius: 8px;
+      color: #059669;
+      background: #ECFDF5;
+      padding: 2px 6px;
+      border-radius: 10px;
+      border: 1px solid #A7F3D0;
     }
+
     .pulse-dot {
-      width: 5px;
-      height: 5px;
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
-      background-color: #10B981;
-      box-shadow: 0 0 5px #10B981;
+      background: #10B981;
+      box-shadow: 0 0 0 rgba(16, 185, 129, 0.4);
+      animation: pulse 1.6s infinite;
     }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
     .log-content-box {
-      height: 80px;
-      max-height: 90px;
+      max-height: 85px;
       overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
+      font-size: 10.5px;
+      line-height: 1.5;
+      color: #6B5544;
       display: flex;
       flex-direction: column;
       gap: 4px;
-      padding-right: 2px;
     }
+
     .log-entry {
-      font-size: 10px;
-      line-height: 1.4;
-      padding: 4px 6px;
-      border-radius: 8px;
-      background: #FAF8F5;
-      color: #554332;
-      animation: fadeIn 0.25s ease-out;
+      padding: 3px 6px;
+      border-radius: 6px;
+      background: #FAF7F2;
+      border-left: 3px solid #D9CDB8;
     }
+
     .log-entry.highlight {
-      background: #FBF6EE;
-      border-left: 2px solid #C49B71;
-      color: #332417;
-      font-weight: 600;
+      border-left-color: #D97706;
+      background: #FFFBEB;
+      color: #92400E;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(3px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Sub-Panels */
+    /* Module Panels */
     .module-panel {
       display: flex;
       flex-direction: column;
-      gap: 7px;
-      width: 100%;
+      gap: 8px;
     }
+
     .panel-header-line {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 2px;
     }
+
     .panel-title {
-      font-size: 11px;
-      font-weight: 700;
-      color: #5C4434;
+      font-size: 12px;
+      font-weight: 800;
+      color: #4B3322;
       display: flex;
       align-items: center;
       gap: 4px;
     }
+
     .panel-sub {
-      font-size: 9px;
-      font-family: ui-monospace, SFMono-Regular, monospace;
-      color: #8C6544;
+      font-size: 10px;
+      color: #8C7561;
     }
 
-    /* Cards */
     .card-list {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 7px;
     }
+
     .content-card {
-      width: 100%;
-      padding: 8px 10px;
-      background: #FFFDF9;
-      border: 1px solid #E2D6C2;
+      background: #FFFDF8;
+      border: 1.5px solid #D9CDB8;
       border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(107, 72, 42, 0.03);
+      padding: 8px 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      transition: all 0.15s ease;
+      box-shadow: 0 1px 3px rgba(60, 40, 20, 0.03);
     }
+
     .card-left {
       display: flex;
       align-items: center;
@@ -408,444 +635,463 @@
       flex: 1;
       min-width: 0;
     }
+
     .card-icon-box {
-      width: 34px;
-      height: 34px;
+      width: 38px;
+      height: 38px;
       border-radius: 10px;
-      background: #F5EFEB;
-      border: 1px solid #E2D6C2;
+      background: #F5EFE6;
+      border: 1px solid #E2D6C3;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 20px;
       flex-shrink: 0;
     }
+
     .card-text-col {
       display: flex;
       flex-direction: column;
+      gap: 1px;
       min-width: 0;
-      flex: 1;
     }
+
     .card-title-line {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
     }
-    .tier-stars {
-      color: #F59E0B;
-      font-size: 10px;
-      letter-spacing: -1px;
-    }
+
     .card-main-title {
-      font-size: 11px;
-      font-weight: 700;
-      color: #2C2219;
+      font-size: 12px;
+      font-weight: 800;
+      color: #3C2A1E;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .card-desc {
+
+    .tier-stars {
+      color: #F59E0B;
       font-size: 9px;
-      color: #78614E;
-      margin-top: 1px;
-      line-height: 1.25;
-      display: -webkit-box;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      letter-spacing: 1px;
     }
+
+    .card-desc {
+      font-size: 10px;
+      color: #7A6553;
+      line-height: 1.3;
+    }
+
     .card-cost-line {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
+      font-size: 9.5px;
+      color: #8C623E;
       margin-top: 2px;
-      font-size: 9px;
-      font-family: ui-monospace, monospace;
-      font-weight: 700;
-      color: #8C6544;
     }
+
     .cost-badge {
-      background: #FAF4EB;
-      border: 1px solid #E8DEC8;
-      padding: 1px 4px;
-      border-radius: 4px;
-    }
-    .btn-upgrade {
-      border: none;
-      padding: 5px 10px;
-      border-radius: 8px;
-      font-size: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      padding: 1px 5px;
+      border-radius: 6px;
+      background: #FDF4E7;
+      border: 1px solid #F5DEB3;
       font-weight: 700;
-      color: #FFFFFF;
-      background: linear-gradient(135deg, #D97706, #B45309);
+      color: #B45309;
+    }
+
+    .btn-upgrade {
+      padding: 5px 11px;
+      background: linear-gradient(180deg, #FAD77A 0%, #F59E0B 100%);
+      border: 1.5px solid #6B482A;
+      border-radius: 10px;
+      box-shadow: 0 2px 0 #6B482A;
+      color: #4A2800;
+      font-size: 11px;
+      font-weight: 900;
       cursor: pointer;
-      box-shadow: 0 1px 3px rgba(180, 83, 9, 0.2);
-      transition: all 0.12s;
-      flex-shrink: 0;
+      white-space: nowrap;
     }
     .btn-upgrade:active {
       transform: translateY(1px);
+      box-shadow: 0 1px 0 #6B482A;
     }
     .btn-upgrade:disabled {
-      background: #E8DEC8;
-      color: #8C7560;
+      opacity: 0.5;
+      filter: grayscale(0.5);
       cursor: not-allowed;
-      box-shadow: none;
-    }
-    .tag-max {
-      font-size: 9px;
-      font-weight: 700;
-      color: #78350F;
-      background: #FEF3C7;
-      border: 1px solid #FCD34D;
-      padding: 2px 6px;
-      border-radius: 6px;
+      transform: none;
     }
 
-    /* Branch Unlock & Rebirth Banner */
+    .tag-max {
+      font-size: 10px;
+      color: #059669;
+      background: #ECFDF5;
+      padding: 3px 8px;
+      border-radius: 8px;
+      border: 1px solid #A7F3D0;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    /* 分店竣工解锁/转生 Banner */
     .branch-action-banner {
-      width: 100%;
-      background: linear-gradient(135deg, #ECFDF5, #D1FAE5);
-      border: 1px solid #6EE7B7;
-      border-radius: 12px;
-      padding: 8px 10px;
+      background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+      border: 2px solid #059669;
+      border-radius: 14px;
+      padding: 8px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 6px;
+      margin-bottom: 6px;
     }
     .branch-action-text {
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       color: #065F46;
     }
     .btn-open-branch {
-      border: none;
-      padding: 5px 10px;
-      border-radius: 8px;
-      font-size: 10px;
-      font-weight: 800;
+      padding: 6px 12px;
+      background: #059669;
       color: #FFF;
-      background: linear-gradient(135deg, #059669, #047857);
+      border: 1.5px solid #064E3B;
+      border-radius: 10px;
+      box-shadow: 0 2px 0 #064E3B;
+      font-size: 11px;
+      font-weight: 900;
       cursor: pointer;
     }
 
-    /* Bottom Fixed Action Bar */
+    /* Fixed Bottom Action Bar */
     .action-footer {
-      width: 100%;
-      padding: 8px 12px 14px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
       background: rgba(250, 247, 242, 0.98);
-      border-top: 1px solid #E8DEC8;
-      flex-shrink: 0;
+      border-top: 1.5px solid #E8DEC8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
       z-index: 30;
+      box-shadow: 0 -4px 12px rgba(60, 40, 20, 0.05);
     }
+
     .btn-big-procure {
       width: 100%;
-      height: 46px;
-      border: none;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #D97706, #B45309);
-      color: #FFFFFF;
+      height: 48px;
+      background: linear-gradient(180deg, #FAD77A 0%, #F59E0B 100%);
+      border: 2px solid #6B482A;
+      border-radius: 16px;
+      box-shadow: 0 3px 0 #6B482A, 0 6px 12px rgba(245, 158, 11, 0.2);
+      color: #4A2800;
       font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
+      font-weight: 900;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0 4px 12px rgba(180, 83, 9, 0.28);
-      transition: all 0.12s;
+      cursor: pointer;
+      transition: transform 0.1s ease;
     }
     .btn-big-procure:active {
       transform: translateY(2px);
-      box-shadow: 0 2px 6px rgba(180, 83, 9, 0.25);
-    }
-    .level-badge-inner {
-      background: rgba(0,0,0,0.22);
-      color: #FEF3C7;
-      font-size: 11px;
-      font-family: ui-monospace, monospace;
-      padding: 2px 7px;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 1px 0 #6B482A;
     }
 
-    /* -------------------------------------------------------------
-       PUZZLE VIEW STYLES (Strict Single-Screen Viewport Fit)
-       ------------------------------------------------------------- */
+    .level-badge-inner {
+      background: #FFFDF8;
+      border: 1.5px solid #6B482A;
+      border-radius: 10px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #6B482A;
+      margin-left: 4px;
+    }
+
+    /* ========================================================
+       PUZZLE VIEW STYLES
+       ======================================================== */
     .puzzle-view {
-      position: relative;
+      position: absolute;
+      inset: 0;
       width: 100%;
-      height: 100%;
+      height: 100dvh;
+      background-color: #FAF7F2;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      background-color: #FAF5EE;
-      padding: 8px 10px;
+      z-index: 40;
       overflow: hidden;
     }
+
     .puzzle-header {
-      width: 100%;
+      height: 48px;
+      padding: 0 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 6px;
-      padding-bottom: 4px;
+      background: rgba(250, 247, 242, 0.96);
+      border-bottom: 1px solid #E8DEC8;
       flex-shrink: 0;
-      z-index: 20;
     }
+
     .btn-back {
-      height: 36px;
+      height: 32px;
       padding: 0 10px;
       border-radius: 12px;
-      background: #FFFDF8;
       border: 2px solid #6B482A;
+      background: #FFFDF8;
       box-shadow: 0 2px 0 #6B482A;
-      color: #5A381E;
-      font-size: 12px;
-      font-weight: 800;
+      color: #6B482A;
+      font-size: 11px;
+      font-weight: 900;
       display: flex;
-      align-items: gap;
+      align-items: center;
       gap: 4px;
       cursor: pointer;
-      flex-shrink: 0;
     }
     .btn-back:active {
       transform: translateY(1px);
+      box-shadow: 0 1px 0 #6B482A;
     }
+
     .puzzle-level-info {
-      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-width: 0;
     }
+
     .level-title-row {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
     }
+
     .puzzle-title-text {
       font-size: 13px;
       font-weight: 900;
-      color: #5A381E;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      color: #4A3323;
     }
+
     .puzzle-mode-tag {
-      font-size: 9px;
-      font-weight: 700;
+      font-size: 8.5px;
       padding: 1px 4px;
       border-radius: 4px;
-      background: #FEF3C7;
-      color: #92400E;
-      border: 1px solid #FCD34D;
+      background: #F59E0B;
+      color: #FFF;
+      font-weight: 800;
     }
+
     .puzzle-progress-text {
-      font-size: 10px;
-      font-weight: 700;
-      color: #8C623E;
+      font-size: 9.5px;
+      color: #8C7561;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .progress-pill {
+      font-family: ui-monospace, monospace;
+      font-weight: 800;
+      color: #D97706;
+    }
+
+    .clock-container {
       display: flex;
       align-items: center;
       gap: 4px;
-    }
-    .progress-pill {
-      background: #8C603D;
-      color: #FFFFFF;
-      font-family: ui-monospace, monospace;
-      font-size: 9px;
-      padding: 1px 6px;
-      border-radius: 8px;
-    }
-    .clock-container {
-      min-width: 48px;
-      height: 36px;
-      padding: 0 8px;
       background: #FFFDF8;
       border: 2px solid #6B482A;
       border-radius: 12px;
+      padding: 0 8px;
+      height: 32px;
       box-shadow: 0 2px 0 #6B482A;
+      font-family: ui-monospace, monospace;
+      font-size: 13px;
+      font-weight: 900;
+      color: #D97706;
+    }
+
+    .clock-container.warning {
+      color: #DC2626;
+      border-color: #DC2626;
+      box-shadow: 0 2px 0 #DC2626;
+      animation: clockShake 0.5s ease-in-out infinite;
+    }
+
+    @keyframes clockShake {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+
+    /* Power-ups Bar */
+    .powerups-bar {
+      height: 44px;
+      padding: 0 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
-      font-weight: 900;
-      font-family: ui-monospace, monospace;
-      color: #6B482A;
+      gap: 12px;
+      background: #FAF7F2;
+      border-bottom: 1px solid #E8DEC8;
       flex-shrink: 0;
     }
 
-    /* Power-ups Row */
-    .powerups-bar {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      padding-bottom: 4px;
-      flex-shrink: 0;
-      z-index: 20;
-    }
     .powerup-btn {
-      position: relative;
-      height: 36px;
+      flex: 1;
+      max-width: 105px;
+      height: 32px;
       border-radius: 12px;
-      background: #FFFDF8;
       border: 2px solid #6B482A;
+      background: #FFFDF8;
       box-shadow: 0 2px 0 #6B482A;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 4px;
-      color: #5A381E;
-      font-size: 11px;
+      gap: 5px;
+      font-size: 10.5px;
       font-weight: 800;
+      color: #5A381E;
       cursor: pointer;
+      position: relative;
     }
     .powerup-btn:active {
       transform: translateY(1px);
-    }
-    .powerup-badge {
-      position: absolute;
-      bottom: -4px;
-      right: -4px;
-      background: #6B482A;
-      color: #FFFFFF;
-      font-size: 9px;
-      font-family: ui-monospace, monospace;
-      font-weight: 700;
-      padding: 1px 4px;
-      border-radius: 8px;
-      border: 1px solid #FFFFFF;
+      box-shadow: 0 1px 0 #6B482A;
     }
 
-    /* LianLianKan Board Canvas & Frame */
-    .board-center-area {
-      position: relative;
-      flex: 1;
-      width: 100%;
-      min-height: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      z-index: 10;
-    }
-    #particleCanvas {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 30;
-    }
-    .board-frame {
-      position: relative;
-      background: #7D5537;
-      border: 3px solid #8C603C;
-      border-radius: 16px;
-      box-shadow: 0 4px 0 #5C3D26;
-      padding: 1px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .tiles-wrapper {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-    .tile-btn {
-      position: absolute;
-      border: none;
-      background: transparent;
-      padding: 1px;
-      cursor: pointer;
-    }
-    .tile-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      background: #FFFDF8;
-      border: 1.5px solid #8C6541;
-      border-radius: 8px;
-      box-shadow: 0 1px 0 #734F30;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.1s, box-shadow 0.1s;
-    }
-    .tile-inner.selected {
-      background: #FFFDF5;
-      border-color: #F59E0B;
-      box-shadow: 0 0 0 2px #FDE68A, 0 2px 6px rgba(245, 158, 11, 0.4);
-      transform: scale(1.08);
-      z-index: 15;
-    }
-    .tile-obstacle {
-      width: 100%;
-      height: 100%;
-      background: #8B5A2B;
-      border: 1.5px solid #5C3D26;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
-      opacity: 0.92;
-    }
-    .tile-ice-overlay {
-      position: absolute;
-      inset: 0;
-      border-radius: 7px;
-      background: rgba(186, 230, 253, 0.45);
-      border: 1.5px solid #38BDF8;
-      pointer-events: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
+    .powerup-badge {
+      font-size: 9px;
+      background: #F59E0B;
+      color: #FFF;
+      border-radius: 6px;
+      padding: 0 3px;
       font-weight: 900;
     }
 
-    /* Deadlock Notice Toast */
-    .shuffle-toast {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(44, 34, 25, 0.92);
-      color: #FFFDF9;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 7px 14px;
-      border-radius: 18px;
-      border: 1px solid #F59E0B;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.35);
-      z-index: 40;
-      pointer-events: none;
-      animation: toastPop 1.4s ease forwards;
-    }
-    @keyframes toastPop {
-      0% { opacity: 0; transform: translate(-50%, -40%) scale(0.8); }
-      15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-      80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-      100% { opacity: 0; transform: translate(-50%, -60%) scale(0.9); }
-    }
-
-    /* Puzzle Footer Progress Bar */
-    .puzzle-footer {
-      width: 100%;
-      padding-top: 4px;
+    /* Main Board (>70% screen) */
+    .board-center-area {
+      flex: 1;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      flex-shrink: 0;
+      justify-content: center;
+      padding: 8px 6px;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(circle at center, #FFFDF8 0%, #FAF7F2 80%);
+    }
+
+    #particleCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
       z-index: 20;
     }
+
+    .board-frame {
+      position: relative;
+      background: #EDE2CD;
+      border: 2px solid #6B482A;
+      border-radius: 14px;
+      box-shadow: 0 4px 0 #6B482A, inset 0 2px 6px rgba(0,0,0,0.06);
+      padding: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tiles-wrapper {
+      position: relative;
+      background: #F7F0E1;
+      border-radius: 10px;
+    }
+
+    .tile-cell {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      border: 1.5px solid #6B482A;
+      background: #FFFDF8;
+      box-shadow: 0 2px 0 #6B482A;
+      cursor: pointer;
+      font-size: 20px;
+      transition: transform 0.08s ease, background 0.08s ease;
+      touch-action: manipulation;
+    }
+
+    .tile-cell:active {
+      transform: scale(0.92);
+    }
+
+    .tile-cell.selected {
+      background: #FEF3C7;
+      border-color: #D97706;
+      box-shadow: 0 2px 0 #B45309, 0 0 0 2px #F59E0B;
+      animation: selectWiggle 0.25s ease-in-out;
+    }
+
+    @keyframes selectWiggle {
+      0%, 100% { transform: rotate(0deg) scale(1.05); }
+      30% { transform: rotate(-5deg) scale(1.08); }
+      70% { transform: rotate(5deg) scale(1.08); }
+    }
+
+    .tile-cell.hinted {
+      animation: hintPulse 0.8s ease-in-out infinite alternate;
+      border-color: #10B981;
+      box-shadow: 0 0 0 2.5px #10B981, 0 2px 0 #059669;
+    }
+
+    @keyframes hintPulse {
+      0% { transform: scale(1); background: #FFFDF8; }
+      100% { transform: scale(1.08); background: #D1FAE5; }
+    }
+
+    .tile-cell.frozen {
+      background: #E0F2FE;
+      border-color: #0284C7;
+    }
+    .tile-cell.frozen::after {
+      content: '❄️';
+      position: absolute;
+      font-size: 9px;
+      top: 1px;
+      right: 1px;
+    }
+
+    .tile-cell.obstacle {
+      background: #D9CDB8;
+      border-color: #6B482A;
+      cursor: not-allowed;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    /* Bottom Puzzle Footer */
+    .puzzle-footer {
+      height: 48px;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(250, 247, 242, 0.96);
+      border-top: 1px solid #E8DEC8;
+      flex-shrink: 0;
+    }
+
     .progress-track-outer {
       flex: 1;
-      height: 32px;
+      height: 24px;
       background: #FFFDF8;
       border: 2px solid #6B482A;
       border-radius: 12px;
@@ -870,7 +1116,7 @@
     }
     .score-badge {
       padding: 0 10px;
-      height: 32px;
+      height: 30px;
       border-radius: 12px;
       background: #FFFDF8;
       border: 2px solid #6B482A;
@@ -905,7 +1151,7 @@
       border: 2px solid #6B482A;
       border-radius: 20px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      padding: 16px;
+      padding: 18px 16px;
       text-align: center;
       animation: modalPop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
@@ -913,6 +1159,7 @@
       from { transform: scale(0.9); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
     }
+
     .level-select-tabs {
       display: flex;
       flex-wrap: wrap;
@@ -979,9 +1226,111 @@
   <div class="app-viewport">
 
     <!-- ======================================================== -->
+    <!-- VIEW 0: 【开始游戏封面页】(Title / Splash Screen)        -->
+    <!-- ======================================================== -->
+    <div id="viewTitle" class="title-view">
+      <!-- Top header branding -->
+      <div class="title-header-col">
+        <div class="title-header-badge">
+          <span>☕</span> 治愈系模拟经营与益智消除
+        </div>
+        <h1 class="title-main-heading">
+          <span>🐾</span> 暖喵咖啡馆 <span>☕</span>
+        </h1>
+        <p class="title-sub-heading">连连看与治愈经营 · 治愈手作日志</p>
+      </div>
+
+      <!-- Center Art Illustration: Pure SVG Cat-Ear Coffee Cup with rising steam -->
+      <div class="title-art-wrap">
+        <div class="steam-cloud s1">☁️</div>
+        <div class="steam-cloud s2">💨</div>
+        <div class="steam-cloud s3">☁️</div>
+        <div class="heart-float h1">💖</div>
+        <div class="heart-float h2">✨</div>
+
+        <svg width="150" height="150" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Wooden Saucer -->
+          <ellipse cx="75" cy="126" rx="60" ry="14" fill="#6B482A" />
+          <ellipse cx="75" cy="123" rx="58" ry="12" fill="#C49B71" />
+          <ellipse cx="75" cy="122" rx="46" ry="8" fill="#AF875E" />
+          <circle cx="50" cy="122" r="2" fill="#8C603D" opacity="0.6"/>
+          <circle cx="54" cy="120" r="1.5" fill="#8C603D" opacity="0.6"/>
+          <circle cx="100" cy="122" r="2" fill="#8C603D" opacity="0.6"/>
+          <circle cx="96" cy="120" r="1.5" fill="#8C603D" opacity="0.6"/>
+
+          <!-- Shadow under cup -->
+          <ellipse cx="75" cy="116" rx="36" ry="8" fill="#5A3A1E" opacity="0.4" />
+
+          <!-- Cup Handle -->
+          <path d="M102 68 C 124 68, 126 102, 100 104" stroke="#6B482A" stroke-width="12" stroke-linecap="round" fill="none"/>
+          <path d="M102 68 C 124 68, 126 102, 100 104" stroke="#FFF7ED" stroke-width="6" stroke-linecap="round" fill="none"/>
+
+          <!-- Left Cat Ear -->
+          <path d="M42 56 L34 24 L60 44 Z" fill="#FFF7ED" stroke="#6B482A" stroke-width="4" stroke-linejoin="round"/>
+          <path d="M43 50 L38 31 L54 44 Z" fill="#FCA5A5"/>
+
+          <!-- Right Cat Ear -->
+          <path d="M108 56 L116 24 L90 44 Z" fill="#FFF7ED" stroke="#6B482A" stroke-width="4" stroke-linejoin="round"/>
+          <path d="M107 50 L112 31 L96 44 Z" fill="#FCA5A5"/>
+
+          <!-- Cup Body -->
+          <path d="M38 52 C38 52, 40 114, 75 114 C110 114, 112 52, 112 52 Z" fill="#FFFDF8" stroke="#6B482A" stroke-width="5" stroke-linejoin="round"/>
+
+          <!-- Cup Rim Oval -->
+          <ellipse cx="75" cy="52" rx="37" ry="12" fill="#FFF7ED" stroke="#6B482A" stroke-width="4"/>
+          <!-- Coffee Liquid -->
+          <ellipse cx="75" cy="53" rx="33" ry="9" fill="#78421A"/>
+          <!-- Latte Foam Heart Art -->
+          <path d="M75 54 C72 50, 68 51, 68 54 C68 57, 75 60, 75 60 C75 60, 82 57, 82 54 C82 51, 78 50, 75 54 Z" fill="#FFFBEB" opacity="0.9"/>
+
+          <!-- Smiling Cat Face on Cup -->
+          <path d="M60 82 Q 65 77 70 82" stroke="#6B482A" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M80 82 Q 85 77 90 82" stroke="#6B482A" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <circle cx="56" cy="87" r="4" fill="#FCA5A5" opacity="0.7"/>
+          <circle cx="94" cy="87" r="4" fill="#FCA5A5" opacity="0.7"/>
+          <polygon points="75,84 73,82 77,82" fill="#E11D48"/>
+          <path d="M72 87 Q 75 89 75 86 Q 75 89 78 87" stroke="#6B482A" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <!-- Whiskers -->
+          <line x1="48" y1="83" x2="40" y2="81" stroke="#8C623E" stroke-width="2" stroke-linecap="round"/>
+          <line x1="49" y1="87" x2="41" y2="88" stroke="#8C623E" stroke-width="2" stroke-linecap="round"/>
+          <line x1="102" y1="83" x2="110" y2="81" stroke="#8C623E" stroke-width="2" stroke-linecap="round"/>
+          <line x1="101" y1="87" x2="109" y2="88" stroke="#8C623E" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <!-- Action Buttons Stack -->
+      <div class="title-buttons">
+        <button id="btnTitleStart" class="btn-title-main">
+          <div class="btn-title-main-label">
+            <span id="titleStartBtnIcon">🐾</span>
+            <span id="titleStartBtnText">开始新经营</span>
+          </div>
+          <div id="titleStartBtnSub" class="btn-title-main-sub">开启属于你的毛坯小店</div>
+        </button>
+
+        <button id="btnTitleReset" class="btn-title-secondary">
+          <div class="btn-title-sec-label">
+            <span>🔄</span>
+            <span>重新开始 / 重置档案</span>
+          </div>
+          <div class="btn-title-sec-sub">清空所有猫咪与装修进度</div>
+        </button>
+
+        <button id="btnTitleToggleSound" class="btn-title-subtle">
+          <span id="titleSoundIcon">🔊</span>
+          <span id="titleSoundText">游戏音效: 开启</span>
+        </button>
+
+        <div class="title-footer-note">
+          轻触屏幕开启温暖陪伴 · 随时自动保存进度
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
     <!-- VIEW 1: 【主页 · 连锁猫咪咖啡馆】(无限分店/家具升阶/收容盲盒) -->
     <!-- ======================================================== -->
-    <div id="viewJournal" class="app-viewport" style="box-shadow: none;">
+    <div id="viewJournal" class="app-viewport hidden" style="box-shadow: none;">
       <!-- Top Currency Bar -->
       <header class="top-bar">
         <div class="status-group">
@@ -990,7 +1339,7 @@
             <span style="font-size: 12px;">⭐</span>
             <div class="status-pill-text">
               <span class="status-pill-label">星光灵感</span>
-              <span id="headerStars" class="status-pill-val">6</span>
+              <span id="headerStars" class="status-pill-val">0</span>
             </div>
           </div>
           <!-- 营业金币 -->
@@ -998,17 +1347,18 @@
             <span style="font-size: 12px;">🪙</span>
             <div class="status-pill-text">
               <span class="status-pill-label">营业金币</span>
-              <span id="headerCoins" class="status-pill-val">680</span>
+              <span id="headerCoins" class="status-pill-val">0</span>
             </div>
           </div>
           <!-- 旗下猫咪数 -->
           <div class="status-pill">
             <span style="font-size: 11px;">🐾</span>
-            <span id="headerCats" class="status-pill-val" style="color: #5C4434;">2 只</span>
+            <span id="headerCats" class="status-pill-val" style="color: #5C4434;">0 只</span>
           </div>
         </div>
 
         <div class="top-actions">
+          <button id="btnBackToTitle" class="btn-icon-subtle" title="返回游戏封面页">🏠 封面</button>
           <button id="btnLevelSelect" class="btn-icon-subtle">选关</button>
           <button id="btnToggleSoundJournal" class="btn-icon-subtle" style="width: 30px; padding: 0;">🔊</button>
         </div>
@@ -1021,9 +1371,9 @@
           <div class="branch-title-row">
             <span id="branchIcon" style="font-size: 14px;">🪵</span>
             <span id="branchTitle" class="branch-name-text">分店 1: 老街·暖阳木质猫咖</span>
-            <span id="branchTag" class="branch-tag">原木温润</span>
+            <span id="branchTag" class="branch-tag">原木质朴</span>
           </div>
-          <div id="branchProgressSub" class="branch-progress-sub">施工竣工度: 40% (2/5)</div>
+          <div id="branchProgressSub" class="branch-progress-sub">施工竣工度: 0% (0/5)</div>
         </div>
         <button id="btnNextBranch" onclick="navigateBranch(1)" class="branch-nav-btn">▶</button>
       </div>
@@ -1034,7 +1384,7 @@
           <span>🔨</span><span>多阶装修</span>
         </button>
         <button id="tabBtnCats" onclick="switchJournalTab('cats')" class="tab-item">
-          <span>🐾</span><span>猫咪家园 (<span id="tabCatCount">2</span>)</span>
+          <span>🐾</span><span>猫咪家园 (<span id="tabCatCount">0</span>)</span>
         </button>
         <button id="tabBtnDrinks" onclick="switchJournalTab('drinks')" class="tab-item">
           <span>☕</span><span>饮品研发</span>
@@ -1089,7 +1439,7 @@
             <div class="panel-title">
               <span>🪑</span> 本店核心设施多阶升星
             </div>
-            <span id="branchUpgradeSummary" class="panel-sub">总星阶: 6 / 15 ⭐</span>
+            <span id="branchUpgradeSummary" class="panel-sub">总星阶: 0 / 15 ⭐</span>
           </div>
           <div id="facilityCardsContainer" class="card-list"></div>
         </div>
@@ -1100,7 +1450,7 @@
             <div class="panel-title">
               <span>🐾</span> 已收容的猫咪名录 (点击互动增加羁绊)
             </div>
-            <span id="catTotalText" class="panel-sub">共 2 只猫咪</span>
+            <span id="catTotalText" class="panel-sub">共 0 只猫咪</span>
           </div>
           <div id="catCardsContainer" class="card-list"></div>
         </div>
@@ -1126,7 +1476,7 @@
             <div class="panel-title">
               <span>☕</span> 全连锁统一饮品研发
             </div>
-            <span id="drinksProgressText" class="panel-sub">已研发 1 / 6</span>
+            <span id="drinksProgressText" class="panel-sub">已研发 0 / 6</span>
           </div>
           <div id="drinksCardsContainer" class="card-list"></div>
         </div>
@@ -1214,6 +1564,26 @@
       </footer>
     </div>
 
+    <!-- RESET CONFIRMATION MODAL -->
+    <div id="modalResetConfirm" class="modal-backdrop hidden">
+      <div class="modal-box">
+        <div style="font-size: 38px; margin-bottom: 4px;">🏚️ 🐱</div>
+        <h3 style="font-size: 16px; font-weight: 900; color: #5A381E; margin-bottom: 6px;">确定要重新开店吗？</h3>
+        <p style="font-size: 12px; color: #8C623E; line-height: 1.6; margin-bottom: 16px;">
+          确定要清空所有猫咪和装修进度重新开店吗？<br>
+          <span style="color: #DC2626; font-weight: 800;">此操作将永久抹除现有存档，无法撤销！</span>
+        </p>
+        <div style="display: flex; gap: 8px;">
+          <button id="btnCancelReset" class="btn-back" style="flex: 1; height: 38px; justify-content: center; font-size: 12px;">
+            再想想
+          </button>
+          <button id="btnConfirmReset" class="btn-upgrade" style="flex: 1; height: 38px; background: #EF4444; border-color: #991B1B; color: #FFF; font-size: 12px;">
+            确认重置清空
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- VICTORY MODAL -->
     <div id="modalVictory" class="modal-backdrop hidden">
       <div class="modal-box">
@@ -1271,6 +1641,8 @@
   <script>
     // ========================================================
     // ZERO-DEPENDENCY PURE JAVASCRIPT ENGINE
+    // - Robust LocalStorage Save / Pure Initial State Architecture
+    // - Dedicated Title / Splash Screen with Floating Cat Cup
     // - Endless Chain Branches System (Theme Switching & Rebirth)
     // - Multi-Tier Facility Upgrades (Lv.1 to Lv.3 Stars)
     // - Alley Stray Cat Gacha & Infinite Adoption
@@ -1299,42 +1671,42 @@
         o.connect(g); g.connect(c.destination);
         o.start(); o.stop(c.currentTime + 0.06);
       }
-      playMatch(combo = 1) {
+      playMatch() {
         if (!this.enabled) return;
         const c = this.getCtx(); if (!c) return;
-        const now = c.currentTime;
-        const baseFreq = 523.25 * Math.pow(1.059, Math.min(12, combo * 2));
-        [baseFreq, baseFreq * 1.25, baseFreq * 1.5].forEach((f, i) => {
-          const t = now + i * 0.035, o = c.createOscillator(), g = c.createGain();
-          o.type = 'triangle'; o.frequency.setValueAtTime(f, t);
-          g.gain.setValueAtTime(0.14, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+        [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+          const o = c.createOscillator(), g = c.createGain();
+          o.type = 'triangle'; o.frequency.value = freq;
+          const t = c.currentTime + i * 0.04;
+          g.gain.setValueAtTime(0.1, t);
+          g.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
           o.connect(g); g.connect(c.destination);
-          o.start(t); o.stop(t + 0.19);
+          o.start(t); o.stop(t + 0.14);
         });
       }
-      playIceCrack() {
+      playError() {
         if (!this.enabled) return;
         const c = this.getCtx(); if (!c) return;
-        const now = c.currentTime;
-        [1800, 2400, 3200].forEach((f, i) => {
-          const t = now + i * 0.02, o = c.createOscillator(), g = c.createGain();
-          o.type = 'sawtooth'; o.frequency.setValueAtTime(f, t);
-          o.frequency.exponentialRampToValueAtTime(f * 0.4, t + 0.08);
-          g.gain.setValueAtTime(0.15, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.09);
-          o.connect(g); g.connect(c.destination);
-          o.start(t); o.stop(t + 0.1);
-        });
+        const o = c.createOscillator(), g = c.createGain();
+        o.type = 'sawtooth'; o.frequency.setValueAtTime(200, c.currentTime);
+        o.frequency.linearRampToValueAtTime(140, c.currentTime + 0.12);
+        g.gain.setValueAtTime(0.08, c.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.12);
+        o.connect(g); g.connect(c.destination);
+        o.start(); o.stop(c.currentTime + 0.13);
       }
-      playShuffle() {
+      playVictory() {
         if (!this.enabled) return;
         const c = this.getCtx(); if (!c) return;
-        const now = c.currentTime;
-        [400, 520, 680, 850].forEach((f, i) => {
-          const t = now + i * 0.04, o = c.createOscillator(), g = c.createGain();
-          o.type = 'sine'; o.frequency.setValueAtTime(f, t);
-          g.gain.setValueAtTime(0.08, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+        const notes = [523.25, 659.25, 783.99, 1046.5, 1318.5];
+        notes.forEach((f, idx) => {
+          const o = c.createOscillator(), g = c.createGain();
+          o.type = 'sine'; o.frequency.value = f;
+          const t = c.currentTime + idx * 0.07;
+          g.gain.setValueAtTime(0.15, t);
+          g.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
           o.connect(g); g.connect(c.destination);
-          o.start(t); o.stop(t + 0.09);
+          o.start(t); o.stop(t + 0.38);
         });
       }
       playMeow(pitch = 600) {
@@ -1343,39 +1715,38 @@
         const o = c.createOscillator(), g = c.createGain();
         o.type = 'sine';
         o.frequency.setValueAtTime(pitch, c.currentTime);
-        o.frequency.exponentialRampToValueAtTime(pitch * 1.4, c.currentTime + 0.08);
-        o.frequency.exponentialRampToValueAtTime(pitch * 0.85, c.currentTime + 0.22);
-        g.gain.setValueAtTime(0.18, c.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.24);
+        o.frequency.exponentialRampToValueAtTime(pitch * 1.35, c.currentTime + 0.12);
+        o.frequency.exponentialRampToValueAtTime(pitch * 0.9, c.currentTime + 0.28);
+        g.gain.setValueAtTime(0.14, c.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.3);
         o.connect(g); g.connect(c.destination);
-        o.start(); o.stop(c.currentTime + 0.25);
-      }
-      playVictory() {
-        if (!this.enabled) return;
-        const c = this.getCtx(); if (!c) return;
-        const notes = [523.25, 659.25, 783.99, 1046.5];
-        notes.forEach((f, i) => {
-          const t = c.currentTime + i * 0.1, o = c.createOscillator(), g = c.createGain();
-          o.type = 'sine'; o.frequency.setValueAtTime(f, t);
-          g.gain.setValueAtTime(0.18, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
-          o.connect(g); g.connect(c.destination);
-          o.start(t); o.stop(t + 0.3);
-        });
+        o.start(); o.stop(c.currentTime + 0.32);
       }
     }
     const sound = new SoundManager();
 
-    // --- 2. Master Themed Branch Templates & Generative Formulas ---
+    // Trigger container vibration if available
+    function triggerHaptic(style = 'light') {
+      try {
+        if (window.xhs && typeof window.xhs.vibrateShort === 'function') {
+          window.xhs.vibrateShort({ style });
+        } else if (navigator.vibrate) {
+          navigator.vibrate(style === 'heavy' ? 40 : 15);
+        }
+      } catch(e) {}
+    }
+
+    // --- 2. Base Themes Pool for Endless Chain Branches ---
     const BASE_THEMES = [
       {
-        id: 'theme_oldstreet',
+        id: 'theme_wood',
         namePrefix: '老街·暖阳木质猫咖',
         icon: '🪵',
-        tag: '原木温润',
+        tag: '原木质朴',
         facilities: [
           {
             key: 'floor',
-            name: '地板铺设',
+            name: '胡桃木地板',
             icon: '🪵',
             tiers: [
               { name: '简易松木条', desc: '打扫旧水泥，铺上散发松木香的基础地板', costStars: 1, costCoins: 60 },
@@ -1448,37 +1819,37 @@
             tiers: [
               { name: '漂流木拼接水吧', desc: '粗粝海洋漂流木手工组装，质朴自然', costStars: 2, costCoins: 150 },
               { name: '蓝白环形贝壳操作台', desc: '镶嵌海玻璃与白贝壳，清新唯美', costStars: 4, costCoins: 390 },
-              { name: '深海珊瑚夜光水吧', desc: '夜间透出荧光蓝柔光，如梦如幻', costStars: 7, costCoins: 900 }
+              { name: '全景珊瑚透光艺术水吧', desc: '内置微型活体水族箱，透出幽蓝光影', costStars: 7, costCoins: 850 }
             ]
           },
           {
             key: 'grinder',
-            name: '冷萃冰滴水塔',
+            name: '冷萃冰滴萃取塔',
             icon: '🧊',
             tiers: [
-              { name: '海盐冷萃冰滴瓶', desc: '慢速水滴浸润，释放纯粹清亮果酸', costStars: 3, costCoins: 200 },
-              { name: '荷兰立式三层冰滴架', desc: '多重过滤，滴落如同潮起潮落', costStars: 5, costCoins: 480 },
-              { name: '冰晶回流超萃取塔', desc: '低温急速循环萃取，每一滴都散发海洋清新', costStars: 8, costCoins: 1100 }
+              { name: '双柱荷兰木架冰滴', desc: '一秒一滴缓慢凝结纯净咖啡风味', costStars: 3, costCoins: 200 },
+              { name: '多联阀精准冷萃系统', desc: '持续萃取海洋果酸冷萃拼配', costStars: 5, costCoins: 480 },
+              { name: '液氮极速锁鲜冷萃舱', desc: '瞬间封存热带水果花香香气', costStars: 8, costCoins: 1100 }
             ]
           },
           {
             key: 'sofa',
-            name: '露天遮阳卡座',
-            icon: '⛱️',
+            name: '露天遮阳帆布椅',
+            icon: '🏖️',
             tiers: [
-              { name: '海边条纹折叠帆布椅', desc: '蓝白相间，听着浪声乘凉', costStars: 2, costCoins: 180 },
-              { name: '编织藤条摇摇椅', desc: '微风轻拂摇摇晃晃，小猫蜷在膝盖上打呼', costStars: 5, costCoins: 450 },
-              { name: '海风全景遮阳大吊床', desc: '超大波西米亚吊床，看夕阳落入大海', costStars: 8, costCoins: 1150 }
+              { name: '蓝白条纹折叠沙滩椅', desc: '清爽透气，尽享海风抚面', costStars: 2, costCoins: 150 },
+              { name: '编织藤条半包围吊床', desc: '悬空轻轻摇晃，猫咪在肚皮上呼噜', costStars: 5, costCoins: 450 },
+              { name: '全景海景圆形日光大软塌', desc: '可容纳多只猫咪一起享受暖阳日光浴', costStars: 8, costCoins: 1150 }
             ]
           },
           {
             key: 'cattree',
-            name: '水手桅杆瞭望台',
+            name: '海浪栈桥猫爬架',
             icon: '⛵',
             tiers: [
-              { name: '船用粗缆绳抓桩', desc: '紧实结实，猫咪疯狂磨爪', costStars: 3, costCoins: 220 },
-              { name: '帆船吊篮猫咪观景台', desc: '高耸在窗边，宛若航海大冒险', costStars: 5, costCoins: 520 },
-              { name: '海角旋转灯塔城堡', desc: '顶端灯塔缓缓转动，猫咪趴在最高处巡视海面', costStars: 9, costCoins: 1300 }
+              { name: '原木船舵瞭望台', desc: '水手风木桩配以纯棉麻绳', costStars: 3, costCoins: 220 },
+              { name: '帆船绳梯攀爬网络', desc: '悬空跳网如桅杆航行，锻炼猫咪身手', costStars: 5, costCoins: 520 },
+              { name: '飞跃海浪悬空浮桥', desc: '从天花板横跨全店的通顶灯塔乐园', costStars: 8, costCoins: 1300 }
             ]
           }
         ]
@@ -1486,17 +1857,17 @@
       {
         id: 'theme_forest',
         namePrefix: '森林·绿意树屋猫咖',
-        icon: '🌲',
-        tag: '幽静森林',
+        icon: '🌿',
+        tag: '自然树屋',
         facilities: [
           {
             key: 'floor',
-            name: '松针雪松地板',
+            name: '原生态年轮木桩地',
             icon: '🪵',
             tiers: [
-              { name: '原木截面年轮拼板', desc: '天然原木切片拼成，散发芬多精香气', costStars: 2, costCoins: 150 },
-              { name: '芳香雪松一体实木', desc: '防虫抑菌，猫咪走在上面悄无声息', costStars: 4, costCoins: 380 },
-              { name: '空中树冠玻璃栈道', desc: '全透光空中廊道，底下是绿意盎然的苔藓', costStars: 7, costCoins: 850 }
+              { name: '碎石与松针铺面', desc: '野性森林初印象，脚踏松软芬芳', costStars: 2, costCoins: 140 },
+              { name: '年轮原木整切地砖', desc: '保留树木自然年轮，质朴沉静', costStars: 4, costCoins: 360 },
+              { name: '恒湿活体苔藓玻璃地板', desc: '透过强化玻璃可见下方青翠微观苔藓森林', costStars: 7, costCoins: 800 }
             ]
           },
           {
@@ -1648,34 +2019,45 @@
       else if (level <= 40) { rows = 10; cols = 8; }
       else {
         if (level % 2 === 0) { rows = 12; cols = 8; }
-        else { rows = 10; cols = 10; }
+        else { rows = 10; cols = 8; }
       }
-      const totalCells = rows * cols;
-      const iconTypes = Math.min(20, Math.max(4, 4 + Math.floor(level / 3)));
+
+      let totalSlots = rows * cols;
+      if (totalSlots % 2 !== 0) cols += 1;
+      totalSlots = rows * cols;
+
+      const pairs = totalSlots / 2;
+      const iconTypes = Math.min(20, Math.max(4, Math.floor(4 + level * 0.45)));
+
       let obstacleCount = 0;
-      if (level >= 10) {
-        obstacleCount = Math.floor(Math.min(6, Math.floor(level / 8)) / 2) * 2;
+      if (level >= 8) {
+        obstacleCount = Math.min(6, Math.floor((level - 7) / 4) * 2);
       }
-      const playableCells = totalCells - obstacleCount;
-      const pairs = Math.floor(playableCells / 2);
+
       let frozenCount = 0;
-      if (level >= 20) {
-        frozenCount = Math.min(6, 2 + Math.floor((level - 20) / 10) * 2);
+      if (level >= 12) {
+        frozenCount = Math.min(8, Math.floor((level - 10) / 3) * 2);
       }
+
       const isMovesMode = (level >= 15 && level % 5 === 0);
       const mode = isMovesMode ? 'moves' : 'time';
-      const timeLimit = Math.max(40, 90 - Math.floor(level * 1.2));
-      const movesLimit = Math.floor(pairs * 1.35) + 6;
-      const starsReward = 2 + Math.min(4, Math.floor(level / 10));
-      const coinsReward = 80 + level * 15;
 
-      let title = '第 ' + level + ' 关';
-      if (level <= 3) title += ' · 基础起步';
-      else if (level <= 8) title += ' · 烘焙初探';
-      else if (level <= 15) title += ' · 工坊进阶';
-      else if (level <= 25) title += ' · 咖啡大师';
-      else if (level <= 40) title += ' · 极智研磨';
-      else title += ' · 无尽传说';
+      let timeLimit = 0;
+      let movesLimit = 0;
+      if (mode === 'time') {
+        const baseTime = Math.round(pairs * 4.2);
+        const penalty = Math.min(baseTime * 0.45, (level - 1) * 1.5);
+        timeLimit = Math.max(30, Math.round(baseTime - penalty));
+      } else {
+        const extraMoves = Math.max(6, Math.round(pairs * 0.5 - (level * 0.2)));
+        movesLimit = pairs + extraMoves;
+      }
+
+      const starsReward = 3;
+      const coinsReward = 60 + level * 15;
+
+      const titles = ['初探烘焙', '浓缩油脂', '打发奶泡', '花式拉花', '冷萃滴滤', '私房甜点', '夏日冰调', '深夜暖饮'];
+      const title = '关卡 ' + level + ' · ' + titles[(level - 1) % titles.length];
 
       return {
         level, title, rows, cols, pairs, iconTypes,
@@ -1686,100 +2068,181 @@
 
     // --- 6. Unified Drinks Menu ---
     const DRINK_MENU = [
-      { id: 'drink_pourover', name: '耶加雪菲手冲单品', icon: '☕', level: 1, costCoins: 100, passiveCoinRate: 4, bonusCoinPerLevel: 10, desc: '花香与明亮柑橘调，手冲咖啡入门经典' },
-      { id: 'drink_americano', name: '经典冰美式', icon: '🧊', level: 0, costCoins: 250, passiveCoinRate: 7, bonusCoinPerLevel: 15, desc: '深烘拼配浓缩与纯净冰水，醒脑必备' },
-      { id: 'drink_latte', name: '丝绒浓郁拿铁', icon: '🥛', level: 0, costCoins: 450, passiveCoinRate: 11, bonusCoinPerLevel: 25, desc: '细腻微奶泡与坚果醇香交织，口感顺滑' },
-      { id: 'drink_macchiato', name: '焦糖玛奇朵', icon: '🍯', level: 0, costCoins: 750, passiveCoinRate: 16, bonusCoinPerLevel: 35, desc: '香草风味糖浆覆以手淋海盐焦糖网格' },
-      { id: 'drink_matcha', name: '宇治抹茶鲜奶', icon: '🍵', level: 0, costCoins: 1100, passiveCoinRate: 24, bonusCoinPerLevel: 50, desc: '石臼研磨纯抹茶，茶香清冽回甘悠长' },
-      { id: 'drink_cocoa_paw', name: '猫爪棉花糖热可可', icon: '🍫', level: 0, costCoins: 1600, passiveCoinRate: 35, bonusCoinPerLevel: 75, desc: '法芙娜可可融化，漂浮手作Q弹猫爪棉花糖' }
+      { id: 'drink_pourover', name: '耶加雪菲手冲单品', icon: '☕', level: 1, costCoins: 80, passiveCoinRate: 4, bonusCoinPerLevel: 10, desc: '花香与明亮柑橘调，手冲咖啡入门经典' },
+      { id: 'drink_americano', name: '经典冰美式', icon: '🧊', level: 0, costCoins: 200, passiveCoinRate: 7, bonusCoinPerLevel: 15, desc: '深烘拼配浓缩与纯净冰水，醒脑必备' },
+      { id: 'drink_latte', name: '丝绒浓郁拿铁', icon: '🥛', level: 0, costCoins: 400, passiveCoinRate: 11, bonusCoinPerLevel: 25, desc: '细腻微奶泡与坚果醇香交织，口感顺滑' },
+      { id: 'drink_macchiato', name: '焦糖玛奇朵', icon: '🍯', level: 0, costCoins: 700, passiveCoinRate: 16, bonusCoinPerLevel: 35, desc: '香草风味糖浆覆以手淋海盐焦糖网格' },
+      { id: 'drink_matcha', name: '宇治抹茶鲜奶', icon: '🍵', level: 0, costCoins: 1000, passiveCoinRate: 24, bonusCoinPerLevel: 50, desc: '石臼研磨纯抹茶，茶香清冽回甘悠长' },
+      { id: 'drink_cocoa_paw', name: '猫爪棉花糖热可可', icon: '🍫', level: 0, costCoins: 1500, passiveCoinRate: 35, bonusCoinPerLevel: 75, desc: '法芙娜可可融化，漂浮手作Q弹猫爪棉花糖' }
     ];
 
-    // --- 7. App State & Persistence Model ---
-    const STORAGE_KEY = 'purr_cafe_chain_infinite_v2';
-    let stars = 6, coins = 680;
-    let currentBranchIndex = 0;
-    let branches = [
-      {
-        id: 'branch_1',
-        themeIndex: 0,
-        name: '老街·暖阳木质猫咖',
-        icon: '🪵',
-        tag: '原木质朴',
-        prestige: 0,
-        facilityTiers: { floor: 2, bar: 1, grinder: 1, sofa: 1, cattree: 1 },
-        unlocked: true,
-        logs: [
-          '铺面刚刚租下，空荡荡的地板散发着木香，微风吹拂窗帘。',
-          '【08:00】清运了三车碎瓦砾，阳光毫无阻隔地铺在地板上。',
-          '【09:30】胡桃木地板泛着温润的哑光色泽，踩上去悄无声息。'
-        ]
-      }
-    ];
+    // --- 7. Pure Initial State Factory & Save/Load System ---
+    // Strict Clean Out-of-the-box Default State
+    const STORAGE_KEY = 'cat_cafe_save_v1';
 
-    let adoptedCats = [
-      {
-        id: 'cat_init_1',
-        name: '奶黄包',
-        breed: '中华田园橘猫',
-        color: '金黄虎斑',
-        personality: '黏人的',
-        icon: '🐱',
-        affinity: 3,
-        branchId: 'branch_1',
-        story: '第一家店开张时在店门口纸箱里发现的圆滚滚橘猫，最喜欢蹭人下巴。'
-      },
-      {
-        id: 'cat_init_2',
-        name: '小碎花',
-        breed: '招财三花猫',
-        color: '黑白橙三色',
-        personality: '傲娇霸道的',
-        icon: '🐈',
-        affinity: 2,
-        branchId: 'branch_1',
-        story: '从隔壁花店跑进来的灵动三花，巡视全场如高冷掌柜。'
-      }
-    ];
+    function createPureInitialState() {
+      return {
+        level: 1,
+        maxClearedLevel: 0,
+        stars: 0,
+        coins: 0,
+        cashRegister: 0,
+        currentBranchIndex: 0,
+        branches: [
+          {
+            id: 'branch_1',
+            themeIndex: 0,
+            name: '老街·暖阳木质猫咖',
+            icon: '🪵',
+            tag: '原木质朴',
+            prestige: 0,
+            facilityTiers: { floor: 0, bar: 0, grinder: 0, sofa: 0, cattree: 0 },
+            unlocked: true,
+            logs: [
+              '【08:00】铺面刚刚租下，空荡荡的地板上积着一层薄灰。门缝外有一只流浪小橘猫探头探脑。'
+            ]
+          }
+        ],
+        adoptedCats: [],
+        unlockedDrinks: []
+      };
+    }
 
-    let unlockedDrinks = new Set(['drink_pourover']);
-    let maxClearedLevel = 0;
+    // Active App State Variables
     let currentLevel = 1;
-    let currentTab = 'renovate';
+    let maxClearedLevel = 0;
+    let stars = 0;
+    let coins = 0;
     let cashRegister = 0;
+    let currentBranchIndex = 0;
+    let branches = [];
+    let adoptedCats = [];
+    let unlockedDrinks = new Set();
+    let currentTab = 'renovate';
     let currentLevelRange = 1;
 
-    // Load LocalStorage
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const p = JSON.parse(saved);
-        if (typeof p.stars === 'number') stars = p.stars;
-        if (typeof p.coins === 'number') coins = p.coins;
-        if (Array.isArray(p.branches) && p.branches.length > 0) branches = p.branches;
-        if (typeof p.currentBranchIndex === 'number' && p.currentBranchIndex < branches.length) currentBranchIndex = p.currentBranchIndex;
-        if (Array.isArray(p.adoptedCats) && p.adoptedCats.length > 0) adoptedCats = p.adoptedCats;
-        if (Array.isArray(p.unlockedDrinks)) unlockedDrinks = new Set(p.unlockedDrinks);
-        if (typeof p.maxClearedLevel === 'number') maxClearedLevel = p.maxClearedLevel;
-        if (typeof p.currentLevel === 'number') currentLevel = p.currentLevel;
-        if (typeof p.cashRegister === 'number') cashRegister = p.cashRegister;
-      }
-    } catch(e) {}
-
-    function saveState() {
+    // Check if player has real save progress
+    function hasExistingSave() {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({
-          stars, coins, branches, currentBranchIndex,
-          adoptedCats, unlockedDrinks: Array.from(unlockedDrinks),
-          maxClearedLevel, currentLevel, cashRegister
-        }));
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return false;
+        const p = JSON.parse(raw);
+        if (!p) return false;
+        const hasLevelProg = (typeof p.maxClearedLevel === 'number' && p.maxClearedLevel > 0) || (typeof p.level === 'number' && p.level > 1);
+        const hasCats = Array.isArray(p.adoptedCats) && p.adoptedCats.length > 0;
+        const hasDecor = Array.isArray(p.branches) && p.branches.some(b => Object.values(b.facilityTiers || {}).some(t => t > 0));
+        const hasRes = (p.stars && p.stars > 0) || (p.coins && p.coins > 0);
+        return hasLevelProg || hasCats || hasDecor || hasRes;
+      } catch(e) {
+        return false;
+      }
+    }
+
+    function getSaveSummaryText() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return '';
+        const p = JSON.parse(raw);
+        const lvl = (typeof p.maxClearedLevel === 'number' && p.maxClearedLevel > 0) ? p.maxClearedLevel : (p.level || 1);
+        const cats = Array.isArray(p.adoptedCats) ? p.adoptedCats.length : 0;
+        return '已营业至第 ' + lvl + ' 关 · 已收容 ' + cats + ' 只猫咪';
+      } catch(e) {
+        return '';
+      }
+    }
+
+    function saveGame() {
+      try {
+        const payload = {
+          level: currentLevel,
+          maxClearedLevel,
+          stars,
+          coins,
+          cashRegister,
+          currentBranchIndex,
+          branches,
+          adoptedCats,
+          unlockedDrinks: Array.from(unlockedDrinks),
+          timestamp: Date.now()
+        };
+        const str = JSON.stringify(payload);
+        localStorage.setItem(STORAGE_KEY, str);
+        if (window.xhs && typeof window.xhs.setStorage === 'function') {
+          window.xhs.setStorage({ key: STORAGE_KEY, data: str });
+        }
+      } catch(e) {
+        console.error('Failed to save state:', e);
+      }
+    }
+    const saveState = saveGame; // alias
+
+    function loadGame() {
+      const pure = createPureInitialState();
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const p = JSON.parse(raw);
+          if (p && typeof p === 'object') {
+            currentLevel = typeof p.level === 'number' ? Math.max(1, p.level) : 1;
+            maxClearedLevel = typeof p.maxClearedLevel === 'number' ? p.maxClearedLevel : 0;
+            stars = typeof p.stars === 'number' ? p.stars : 0;
+            coins = typeof p.coins === 'number' ? p.coins : 0;
+            cashRegister = typeof p.cashRegister === 'number' ? p.cashRegister : 0;
+            currentBranchIndex = typeof p.currentBranchIndex === 'number' ? p.currentBranchIndex : 0;
+            branches = (Array.isArray(p.branches) && p.branches.length > 0) ? p.branches : pure.branches;
+            adoptedCats = Array.isArray(p.adoptedCats) ? p.adoptedCats : [];
+            unlockedDrinks = new Set(Array.isArray(p.unlockedDrinks) ? p.unlockedDrinks : []);
+            return true;
+          }
+        }
+      } catch(e) {
+        console.error('Failed to parse save:', e);
+      }
+
+      // Initialize with pristine clean default
+      currentLevel = pure.level;
+      maxClearedLevel = pure.maxClearedLevel;
+      stars = pure.stars;
+      coins = pure.coins;
+      cashRegister = pure.cashRegister;
+      currentBranchIndex = pure.currentBranchIndex;
+      branches = pure.branches;
+      adoptedCats = pure.adoptedCats;
+      unlockedDrinks = new Set(pure.unlockedDrinks);
+      return false;
+    }
+
+    function resetGame() {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+        if (window.xhs && typeof window.xhs.removeStorage === 'function') {
+          window.xhs.removeStorage({ key: STORAGE_KEY });
+        }
       } catch(e) {}
+
+      const pure = createPureInitialState();
+      currentLevel = pure.level;
+      maxClearedLevel = pure.maxClearedLevel;
+      stars = pure.stars;
+      coins = pure.coins;
+      cashRegister = pure.cashRegister;
+      currentBranchIndex = pure.currentBranchIndex;
+      branches = pure.branches;
+      adoptedCats = pure.adoptedCats;
+      unlockedDrinks = new Set(pure.unlockedDrinks);
+      saveGame();
+      renderTitleScreen();
     }
 
     // Helper: Get active branch & theme definition
     function getActiveBranch() {
+      if (!branches || branches.length === 0) {
+        branches = createPureInitialState().branches;
+      }
       if (currentBranchIndex >= branches.length) currentBranchIndex = branches.length - 1;
       return branches[currentBranchIndex];
     }
+
     function getBranchTheme(branch) {
       const idx = (branch.themeIndex || 0) % BASE_THEMES.length;
       return BASE_THEMES[idx];
@@ -1791,7 +2254,6 @@
       DRINK_MENU.forEach(d => {
         if (unlockedDrinks.has(d.id)) baseRate += d.passiveCoinRate;
       });
-      // Branch prestige multipliers (+25% per prestige star across all branches)
       let totalPrestige = 0;
       branches.forEach(b => { totalPrestige += (b.prestige || 0); });
       const mult = 1 + totalPrestige * 0.25;
@@ -1825,10 +2287,11 @@
       const collected = cashRegister;
       cashRegister = 0;
       sound.playVictory();
+      triggerHaptic('medium');
       const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
       const b = getActiveBranch();
       b.logs.push('【' + timeStr + ' 提取】从收银机提取了 ' + collected + ' 营业金币 🪙');
-      saveState();
+      saveGame();
       renderJournal();
     }
 
@@ -1838,7 +2301,8 @@
       if (nextIdx >= 0 && nextIdx < branches.length) {
         currentBranchIndex = nextIdx;
         sound.playSelect();
-        saveState();
+        triggerHaptic('light');
+        saveGame();
         renderJournal();
       }
     }
@@ -1848,15 +2312,11 @@
       ['renovate', 'cats', 'drinks'].forEach(t => {
         const btn = document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1));
         const panel = document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1));
-        if (t === tab) {
-          btn.className = 'tab-item active';
-          panel.classList.remove('hidden');
-        } else {
-          btn.className = 'tab-item';
-          panel.classList.add('hidden');
-        }
+        if (btn) btn.classList.toggle('active', t === tab);
+        if (panel) panel.classList.toggle('hidden', t !== tab);
       });
-      renderJournal();
+      sound.playSelect();
+      triggerHaptic('light');
     }
 
     // --- 9. Alley Stray Cat Adoption (Endless Gacha) ---
@@ -1867,7 +2327,6 @@
       }
       stars -= 3;
 
-      // Generate cat
       const breedObj = CAT_BREEDS[Math.floor(Math.random() * CAT_BREEDS.length)];
       const color = breedObj.colors[Math.floor(Math.random() * breedObj.colors.length)];
       const name = CAT_NAMES[Math.floor(Math.random() * CAT_NAMES.length)];
@@ -1888,12 +2347,13 @@
 
       adoptedCats.unshift(newCat);
       sound.playMeow(640);
+      triggerHaptic('heavy');
       setTimeout(() => sound.playVictory(), 200);
 
       const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
       getActiveBranch().logs.push('【' + timeStr + ' 奇遇】收容了新猫咪「' + personality + name + '」(' + breedObj.breed + ')！' + story);
 
-      saveState();
+      saveGame();
       renderJournal();
       switchJournalTab('cats');
       alert('🎉 成功收容流浪名猫「' + personality + name + '」！欢迎加入猫咪大家庭！');
@@ -1906,6 +2366,7 @@
       const bonus = 5 + cat.affinity * 3;
       coins += bonus;
       sound.playMeow(680 + Math.random() * 120);
+      triggerHaptic('light');
 
       const quotes = [
         '「' + cat.name + '」舒服地打着呼噜，用湿漉漉的鼻子蹭了蹭你的手背。',
@@ -1916,7 +2377,7 @@
       const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
       getActiveBranch().logs.push('【' + timeStr + ' 互动】' + q + ' (羁绊 Lv.' + cat.affinity + ', +' + bonus + ' 🪙)');
 
-      saveState();
+      saveGame();
       renderJournal();
     }
 
@@ -1941,17 +2402,17 @@
       branch.facilityTiers[key] = currentTier + 1;
 
       sound.playVictory();
+      triggerHaptic('medium');
       const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
       branch.logs.push('【' + timeStr + ' 升阶】「' + fac.name + '」荣升为「' + nextTierData.name + '」！' + nextTierData.desc);
 
-      saveState();
+      saveGame();
       renderJournal();
     }
 
     function unlockNextBranchOrRebirth() {
       const branch = getActiveBranch();
       const theme = getBranchTheme(branch);
-      // Check if all maxed
       let allMax = true;
       theme.facilities.forEach(f => {
         if ((branch.facilityTiers[f.key] || 0) < f.tiers.length) allMax = false;
@@ -1959,67 +2420,82 @@
 
       if (!allMax) return;
 
-      const nextBranchNumber = branches.length + 1;
-      const nextThemeIdx = branches.length % BASE_THEMES.length;
-      const nextThemeDef = BASE_THEMES[nextThemeIdx];
+      const newBranchIndex = branches.length;
+      const nextThemeIndex = newBranchIndex % BASE_THEMES.length;
+      const nextTheme = BASE_THEMES[nextThemeIndex];
 
-      // Formulate unique branch name
-      const prefix = ['海滨', '森林', '深夜', '老街', '山谷', '云上', '星空', '极光'][branches.length % 8];
       const newBranch = {
-        id: 'branch_' + nextBranchNumber,
-        themeIndex: nextThemeIdx,
-        name: '分店 ' + nextBranchNumber + ': ' + prefix + '·' + nextThemeDef.namePrefix.split('·')[1],
-        icon: nextThemeDef.icon,
-        tag: nextThemeDef.tag,
+        id: 'branch_' + (newBranchIndex + 1),
+        themeIndex: nextThemeIndex,
+        name: '分店 ' + (newBranchIndex + 1) + ': ' + nextTheme.namePrefix,
+        icon: nextTheme.icon,
+        tag: nextTheme.tag,
         prestige: 0,
-        facilityTiers: { floor: 1, bar: 0, grinder: 0, sofa: 0, cattree: 0 },
+        facilityTiers: { floor: 0, bar: 0, grinder: 0, sofa: 0, cattree: 0 },
         unlocked: true,
         logs: [
-          '【庆贺】旗舰分店正式奠基！街坊老常客与可爱的猫咪们一同前来剪彩祝贺！',
-          '新店刚刚铺上初级地板，空旷明亮，等待着书写全新的治愈篇章。'
+          '【新店奠基】「' + nextTheme.namePrefix + '」正式签下租约，等待你开启全新主题篇章！'
         ]
       };
 
-      branch.prestige = (branch.prestige || 0) + 1;
       branches.push(newBranch);
       currentBranchIndex = branches.length - 1;
+      branch.prestige = (branch.prestige || 0) + 1;
 
       sound.playVictory();
-      saveState();
+      triggerHaptic('heavy');
+      saveGame();
       renderJournal();
-      alert('🎊 恭喜！成功创立全新的连锁主题分店「' + newBranch.name + '」！所有分店营收获得 +25% 永久加成！');
+      alert('🎊 恭喜！成功开启全新主题分店「' + newBranch.name + '」！');
     }
 
-    // --- 11. Render Cafe Journal View ---
+    // --- 11. Drinks Research ---
+    function developDrink(drinkId) {
+      const d = DRINK_MENU.find(x => x.id === drinkId);
+      if (!d || unlockedDrinks.has(drinkId)) return;
+
+      if (coins < d.costCoins) {
+        alert('营业金币不足！研发需要 🪙 ' + d.costCoins);
+        return;
+      }
+
+      coins -= d.costCoins;
+      unlockedDrinks.add(drinkId);
+      sound.playVictory();
+      triggerHaptic('medium');
+
+      const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+      getActiveBranch().logs.push('【' + timeStr + ' 研发】成功推出新品「' + d.name + '」！全连锁营业额提升 ' + d.passiveCoinRate + ' 币/分。');
+
+      saveGame();
+      renderJournal();
+    }
+
+    // --- 12. Render Journal UI ---
     function renderJournal() {
+      document.getElementById('headerStars').innerText = stars;
+      document.getElementById('headerCoins').innerText = coins;
+      document.getElementById('headerCats').innerText = adoptedCats.length + ' 只';
+      document.getElementById('tabCatCount').innerText = adoptedCats.length;
+      document.getElementById('catTotalText').innerText = '共 ' + adoptedCats.length + ' 只猫咪';
+      document.getElementById('journalLevelBadge').innerText = '第 ' + currentLevel + ' 关';
+
       const branch = getActiveBranch();
       const theme = getBranchTheme(branch);
 
-      // Currency
-      document.getElementById('headerStars').innerText = stars;
-      document.getElementById('headerCoins').innerText = coins.toLocaleString();
-      document.getElementById('headerCats').innerText = adoptedCats.length + ' 只';
-      document.getElementById('tabCatCount').innerText = adoptedCats.length;
-      document.getElementById('journalLevelBadge').innerText = '第 ' + currentLevel + ' 关';
+      document.getElementById('branchIcon').innerText = theme.icon;
+      document.getElementById('branchTitle').innerText = branch.name;
+      document.getElementById('branchTag').innerText = theme.tag;
 
-      // Switcher
-      document.getElementById('branchIcon').innerText = branch.icon || theme.icon;
-      document.getElementById('branchTitle').innerText = branch.name + (branch.prestige ? ' ⭐'.repeat(branch.prestige) : '');
-      document.getElementById('branchTag').innerText = branch.tag || theme.tag;
-      document.getElementById('btnPrevBranch').disabled = currentBranchIndex === 0;
-      document.getElementById('btnNextBranch').disabled = currentBranchIndex === branches.length - 1;
-
-      // Completion Calculation
-      let totalStars = 0, currentStars = 0;
+      let currentStars = 0;
+      let totalStars = theme.facilities.length * 3;
       theme.facilities.forEach(f => {
-        totalStars += f.tiers.length;
         currentStars += (branch.facilityTiers[f.key] || 0);
       });
-      const pct = Math.floor((currentStars / totalStars) * 100);
-      document.getElementById('branchProgressSub').innerText = '施工竣工度: ' + pct + '% (' + currentStars + '/' + totalStars + ' 阶)';
+      const percent = Math.round((currentStars / totalStars) * 100);
+      document.getElementById('branchProgressSub').innerText = '施工竣工度: ' + percent + '% (' + currentStars + '/' + totalStars + ')';
       document.getElementById('branchUpgradeSummary').innerText = '总星阶: ' + currentStars + ' / ' + totalStars + ' ⭐';
 
-      // Branch 100% action banner
       const banner = document.getElementById('branchUnlockBanner');
       if (currentStars >= totalStars) {
         banner.classList.remove('hidden');
@@ -2027,7 +2503,6 @@
         banner.classList.add('hidden');
       }
 
-      // Logs
       document.getElementById('journalBranchTitle').innerText = branch.name.split(':')[0] + ' · 随笔手记';
       const logsBox = document.getElementById('journalLogsContainer');
       logsBox.innerHTML = '';
@@ -2058,7 +2533,6 @@
 
         const card = document.createElement('div');
         card.className = 'content-card';
-
         const starDisplay = '★'.repeat(currentTier) + '☆'.repeat(fac.tiers.length - currentTier);
 
         card.innerHTML = `
@@ -2070,7 +2544,7 @@
                 <span class="tier-stars">${starDisplay}</span>
               </div>
               <div class="card-desc" style="font-weight: 600; color: #4B3322;">
-                ${currentTier > 0 ? 'Lv.' + currentTier + ' ' + tierInfo.name : '未添置'}
+                ${currentTier > 0 ? 'Lv.' + currentTier + ' ' + tierInfo.name : '未添置 (毛坯)'}
               </div>
               <div class="card-desc">${tierInfo.desc}</div>
               ${!isMax && nextTier ? `<div class="card-cost-line">
@@ -2094,30 +2568,38 @@
     function renderCats() {
       const box = document.getElementById('catCardsContainer');
       box.innerHTML = '';
-      document.getElementById('catTotalText').innerText = '旗下共 ' + adoptedCats.length + ' 只猫咪';
+
+      if (adoptedCats.length === 0) {
+        box.innerHTML = `
+          <div class="content-card" style="text-align: center; justify-content: center; padding: 24px 10px; color: #8C7561;">
+            <div>
+              <div style="font-size: 28px; margin-bottom: 6px;">🐾</div>
+              <div style="font-size: 12px; font-weight: 700; color: #5C4434;">店内暂未收容猫咪</div>
+              <div style="font-size: 10px; margin-top: 4px;">通关赚取 ⭐ 星光灵感，在上方【后巷探寻】偶遇流浪猫！</div>
+            </div>
+          </div>
+        `;
+        return;
+      }
 
       adoptedCats.forEach(cat => {
         const card = document.createElement('div');
         card.className = 'content-card';
-        const affStars = '❤️'.repeat(Math.min(5, cat.affinity || 1));
-
         card.innerHTML = `
           <div class="card-left">
-            <div class="card-icon-box" style="font-size: 20px;">${cat.icon}</div>
+            <div class="card-icon-box" style="background: #FFF7ED;">${cat.icon}</div>
             <div class="card-text-col">
               <div class="card-title-line">
-                <span class="card-main-title">${cat.personality} ${cat.name}</span>
-                <span style="font-size: 8px; font-weight: 700; color: #E11D48;">${affStars} (Lv.${cat.affinity})</span>
+                <span class="card-main-title">${cat.name}</span>
+                <span style="font-size: 9.5px; padding: 1px 5px; border-radius: 6px; background: #FEF3C7; color: #92400E; font-weight: 700;">${cat.breed} · ${cat.color}</span>
               </div>
-              <div class="card-desc" style="color: #6B533E; font-weight: 600;">品种: ${cat.breed} · ${cat.color}</div>
-              <div class="card-desc">${cat.story}</div>
+              <div class="card-desc" style="color: #6B482A;">性格: ${cat.personality} · 羁绊 Lv.${cat.affinity || 1}</div>
+              <div class="card-desc" style="font-size: 9px; color: #A38E7A;">${cat.story}</div>
             </div>
           </div>
-          <div>
-            <button onclick="petAdoptedCat('${cat.id}')" class="btn-upgrade" style="padding: 4px 8px; font-size: 9px; background: linear-gradient(135deg, #F43F5E, #E11D48);">
-              🐾 摸头互动
-            </button>
-          </div>
+          <button onclick="petAdoptedCat('${cat.id}')" class="btn-upgrade" style="padding: 5px 9px;">
+            🐾 抚摸
+          </button>
         `;
         box.appendChild(card);
       });
@@ -2126,575 +2608,600 @@
     function renderDrinks() {
       const box = document.getElementById('drinksCardsContainer');
       box.innerHTML = '';
-      document.getElementById('drinksProgressText').innerText = '已研发 ' + unlockedDrinks.size + ' / ' + DRINK_MENU.length;
+      let unlockedCount = 0;
 
-      DRINK_MENU.forEach(item => {
-        const isUnlocked = unlockedDrinks.has(item.id);
-        const canAfford = coins >= item.costCoins;
+      DRINK_MENU.forEach(d => {
+        const isUnlocked = unlockedDrinks.has(d.id);
+        if (isUnlocked) unlockedCount++;
+
         const card = document.createElement('div');
         card.className = 'content-card';
-
         card.innerHTML = `
           <div class="card-left">
-            <div class="card-icon-box">${item.icon}</div>
+            <div class="card-icon-box">${d.icon}</div>
             <div class="card-text-col">
               <div class="card-title-line">
-                <span class="card-main-title">${item.name}</span>
-                <span style="font-size: 9px; color: #B45309; font-weight: 700; background: #FEF3C7; padding: 1px 4px; border-radius: 4px;">+${item.passiveCoinRate}币/分</span>
+                <span class="card-main-title">${d.name}</span>
+                ${isUnlocked ? '<span class="tag-max" style="padding: 1px 5px; font-size: 9px;">+'+d.passiveCoinRate+' 币/分</span>' : ''}
               </div>
-              <div class="card-desc">${item.desc}</div>
-              <div style="font-size: 9px; color: #047857; font-weight: 600; margin-top: 1px;">关卡通关额外收益: +${item.bonusCoinPerLevel} 币/关</div>
+              <div class="card-desc">${d.desc}</div>
+              ${!isUnlocked ? `<div class="card-cost-line">
+                <span>研发配方:</span>
+                <span class="cost-badge">🪙 ${d.costCoins}</span>
+              </div>` : ''}
             </div>
           </div>
           <div>
             ${isUnlocked
-              ? '<span style="font-size: 9px; font-weight: 700; color: #B45309; background: #FEF3C7; border: 1px solid #FDE68A; padding: 2px 6px; border-radius: 6px;">在售</span>'
-              : `<button onclick="unlockDrink('${item.id}')" class="btn-upgrade" ${!canAfford ? 'disabled' : ''}>🪙 ${item.costCoins}</button>`
+              ? '<span class="tag-max">✓ 已研制</span>'
+              : `<button onclick="developDrink('${d.id}')" class="btn-upgrade" ${coins < d.costCoins ? 'disabled' : ''}>${coins >= d.costCoins ? '研发' : '缺少'}</button>`
             }
           </div>
         `;
         box.appendChild(card);
       });
+
+      document.getElementById('drinksProgressText').innerText = '已研发 ' + unlockedCount + ' / ' + DRINK_MENU.length;
     }
 
-    function unlockDrink(id) {
-      const d = DRINK_MENU.find(m => m.id === id);
-      if (!d) return;
-      if (coins >= d.costCoins) {
-        coins -= d.costCoins;
-        unlockedDrinks.add(d.id);
-        sound.playVictory();
-        const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
-        getActiveBranch().logs.push('【' + timeStr + ' 研发】全连锁成功推出新饮品「' + d.name + '」！被动营收 +' + d.passiveCoinRate + ' 币/分');
-        saveState();
-        renderJournal();
-      }
-    }
+    // --- 13. Title / Splash Screen Manager ---
+    function renderTitleScreen() {
+      const hasSave = hasExistingSave();
+      const startBtnText = document.getElementById('titleStartBtnText');
+      const startBtnSub = document.getElementById('titleStartBtnSub');
+      const startBtnIcon = document.getElementById('titleStartBtnIcon');
 
-    // --- 12. LianLianKan Core Algorithm (Pathfinding & Adaptive Board) ---
-    let rows = 4, cols = 6;
-    let grid = [], frozenMap = [];
-    let selectedTile = null;
-    let clearedCount = 0, totalPairs = 12;
-    let timeLeft = 90, movesLeft = 25;
-    let currentLevelConfig = null;
-    let isFrozen = false;
-    let timerInterval = null;
-    let score = 0, combo = 0;
-    let hintsLeft = 3, shufflesLeft = 2, freezesLeft = 1;
-
-    function isLineEmpty(g, p1, p2) {
-      if (p1.r === p2.r) {
-        const minC = Math.min(p1.c, p2.c), maxC = Math.max(p1.c, p2.c);
-        for (let c = minC + 1; c < maxC; c++) if (g[p1.r][c] !== 0) return false;
-        return true;
-      }
-      if (p1.c === p2.c) {
-        const minR = Math.min(p1.r, p2.r), maxR = Math.max(p1.r, p2.r);
-        for (let r = minR + 1; r < maxR; r++) if (g[r][p1.c] !== 0) return false;
-        return true;
-      }
-      return false;
-    }
-    function check0Turn(g, p1, p2) {
-      if ((p1.r === p2.r || p1.c === p2.c) && isLineEmpty(g, p1, p2)) return [p1, p2];
-      return null;
-    }
-    function check1Turn(g, p1, p2) {
-      const c1 = { r: p1.r, c: p2.c };
-      if (g[c1.r][c1.c] === 0 && isLineEmpty(g, p1, c1) && isLineEmpty(g, c1, p2)) return [p1, c1, p2];
-      const c2 = { r: p2.r, c: p1.c };
-      if (g[c2.r][c2.c] === 0 && isLineEmpty(g, p1, c2) && isLineEmpty(g, c2, p2)) return [p1, c2, p2];
-      return null;
-    }
-    function check2Turn(g, p1, p2) {
-      const dirs = [{dr: -1, dc: 0}, {dr: 1, dc: 0}, {dr: 0, dc: -1}, {dr: 0, dc: 1}];
-      let best = null, minDist = Infinity;
-      for (const d of dirs) {
-        let cr = p1.r + d.dr, cc = p1.c + d.dc;
-        while (cr >= 0 && cr <= rows + 1 && cc >= 0 && cc <= cols + 1) {
-          if (g[cr][cc] !== 0) break;
-          const s1 = { r: cr, c: cc };
-          const sub = check1Turn(g, s1, p2);
-          if (sub) {
-            const dist = Math.abs(p1.r - cr) + Math.abs(p1.c - cc) + Math.abs(cr - sub[1].r) + Math.abs(cc - sub[1].c) + Math.abs(sub[1].r - p2.r) + Math.abs(sub[1].c - p2.c);
-            if (dist < minDist) { minDist = dist; best = [p1, s1, sub[1], p2]; }
-          }
-          cr += d.dr; cc += d.dc;
-        }
-      }
-      return best;
-    }
-    function findPath(g, p1, p2) {
-      if (p1.r === p2.r && p1.c === p2.c) return null;
-      if (g[p1.r][p1.c] <= 0 || g[p1.r][p1.c] !== g[p2.r][p2.c]) return null;
-      const p0 = check0Turn(g, p1, p2); if (p0) return p0;
-      const p1Turn = check1Turn(g, p1, p2); if (p1Turn) return p1Turn;
-      return check2Turn(g, p1, p2);
-    }
-
-    function hasAnyMatch(g) {
-      for (let r1 = 1; r1 <= rows; r1++) {
-        for (let c1 = 1; c1 <= cols; c1++) {
-          if (g[r1][c1] <= 0) continue;
-          for (let r2 = 1; r2 <= rows; r2++) {
-            for (let c2 = 1; c2 <= cols; c2++) {
-              if (r1 === r2 && c1 === c2) continue;
-              if (g[r1][c1] === g[r2][c2]) {
-                if (findPath(g, { r: r1, c: c1 }, { r: r2, c: c2 })) return true;
-              }
-            }
-          }
-        }
-      }
-      return false;
-    }
-
-    function showShuffleToast(text = '无解，自动洗牌 🔄') {
-      const toast = document.createElement('div');
-      toast.className = 'shuffle-toast';
-      toast.innerText = text;
-      document.getElementById('boardContainer').appendChild(toast);
-      setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 1500);
-    }
-
-    function autoReshuffleIfDeadlocked() {
-      if (clearedCount >= totalPairs) return;
-      if (!hasAnyMatch(grid)) {
-        showShuffleToast('当前无解，自动洗牌 🔄');
-        sound.playShuffle();
-        performReshuffle();
-      }
-    }
-
-    function performReshuffle() {
-      const remainingVals = [];
-      const remainingFrozen = [];
-      const positions = [];
-
-      for (let r = 1; r <= rows; r++) {
-        for (let c = 1; c <= cols; c++) {
-          if (grid[r][c] > 0) {
-            remainingVals.push(grid[r][c]);
-            remainingFrozen.push(frozenMap[r][c]);
-            positions.push({ r, c });
-          }
-        }
-      }
-
-      if (positions.length <= 2) return;
-
-      for (let attempt = 0; attempt < 15; attempt++) {
-        for (let i = remainingVals.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [remainingVals[i], remainingVals[j]] = [remainingVals[j], remainingVals[i]];
-          [remainingFrozen[i], remainingFrozen[j]] = [remainingFrozen[j], remainingFrozen[i]];
-        }
-        for (let k = 0; k < positions.length; k++) {
-          const pos = positions[k];
-          grid[pos.r][pos.c] = remainingVals[k];
-          frozenMap[pos.r][pos.c] = remainingFrozen[k];
-        }
-        if (hasAnyMatch(grid)) break;
-      }
-
-      renderTiles();
-    }
-
-    // Canvas laser
-    const canvas = document.getElementById('particleCanvas');
-    const ctx = canvas.getContext('2d');
-    let particles = [], activeLine = null, cellSize = 38;
-
-    function renderCanvas() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      if (activeLine) {
-        activeLine.opacity -= 0.04;
-        if (activeLine.opacity <= 0) activeLine = null;
-        else {
-          ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-          ctx.globalAlpha = activeLine.opacity;
-          ctx.strokeStyle = '#FBBF24'; ctx.lineWidth = Math.max(3, Math.floor(cellSize * 0.12));
-          ctx.shadowColor = '#F59E0B'; ctx.shadowBlur = 14;
-          ctx.beginPath();
-          activeLine.pts.forEach((pt, i) => { if (i === 0) ctx.moveTo(pt.x, pt.y); else ctx.lineTo(pt.x, pt.y); });
-          ctx.stroke();
-          ctx.lineWidth = Math.max(1.5, Math.floor(cellSize * 0.06));
-          ctx.strokeStyle = '#FFFDF5'; ctx.stroke();
-          ctx.restore();
-        }
-      }
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
-        p.life++; p.x += p.vx; p.y += p.vy; p.alpha = 1 - p.life / p.maxLife;
-        if (p.life >= p.maxLife) particles.splice(i, 1);
-        else {
-          ctx.save(); ctx.globalAlpha = p.alpha;
-          if (p.isPaw) { ctx.font = Math.max(10, Math.floor(cellSize * 0.35)) + 'px sans-serif'; ctx.fillText('🐾', p.x, p.y); }
-          else { ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill(); }
-          ctx.restore();
-        }
-      }
-      requestAnimationFrame(renderCanvas);
-    }
-    requestAnimationFrame(renderCanvas);
-
-    function triggerSparks(center) {
-      for (let i = 0; i < 14; i++) {
-        const angle = Math.random() * Math.PI * 2, spd = 2 + Math.random() * 3.5;
-        particles.push({
-          x: center.x, y: center.y, vx: Math.cos(angle) * spd, vy: Math.sin(angle) * spd,
-          color: ['#F59E0B', '#FBBF24', '#38BDF8', '#FFFDF8'][Math.floor(Math.random() * 4)],
-          size: Math.max(2, cellSize * 0.06) + Math.random() * 2, life: 0, maxLife: 18 + Math.random() * 10, alpha: 1,
-          isPaw: i % 4 === 0
-        });
-      }
-    }
-
-    // Puzzle level initialization
-    function initPuzzle(lvlNum = currentLevel) {
-      currentLevel = lvlNum;
-      currentLevelConfig = generateLevelConfig(currentLevel);
-      rows = currentLevelConfig.rows;
-      cols = currentLevelConfig.cols;
-      clearedCount = 0;
-      totalPairs = currentLevelConfig.pairs;
-      score = 0; combo = 0;
-      hintsLeft = 3; shufflesLeft = 2; freezesLeft = 1;
-      selectedTile = null;
-
-      document.getElementById('puzzleLevelTitle').innerText = currentLevelConfig.title;
-      document.getElementById('modeBadge').innerText = currentLevelConfig.mode === 'moves' ? '步数模式' : '限时模式';
-
-      if (currentLevelConfig.mode === 'moves') {
-        movesLeft = currentLevelConfig.movesLimit;
-        document.getElementById('timerText').innerText = movesLeft + ' 步';
+      if (hasSave) {
+        startBtnIcon.innerText = '☕';
+        startBtnText.innerText = '继续营业';
+        startBtnSub.innerText = getSaveSummaryText() || '继续经营你的猫咪连锁小店';
       } else {
-        timeLeft = currentLevelConfig.timeLimit;
-        isFrozen = false;
-        const m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
-        const s = String(timeLeft % 60).padStart(2, '0');
-        document.getElementById('timerText').innerText = m + ':' + s;
+        startBtnIcon.innerText = '🐾';
+        startBtnText.innerText = '开始新经营';
+        startBtnSub.innerText = '开启属于你的毛坯小店';
       }
 
-      grid = Array.from({ length: rows + 2 }, () => Array(cols + 2).fill(0));
-      frozenMap = Array.from({ length: rows + 2 }, () => Array(cols + 2).fill(false));
+      const sndIcon = document.getElementById('titleSoundIcon');
+      const sndText = document.getElementById('titleSoundText');
+      if (sndIcon) sndIcon.innerText = sound.enabled ? '🔊' : '🔇';
+      if (sndText) sndText.innerText = '游戏音效: ' + (sound.enabled ? '开启' : '静音');
+    }
 
-      const totalInnerCells = rows * cols;
-      const obstacles = currentLevelConfig.obstacleCount;
-      const playable = totalInnerCells - obstacles;
-      const actualPairs = Math.floor(playable / 2);
+    function showTitleView() {
+      renderTitleScreen();
+      const titleView = document.getElementById('viewTitle');
+      titleView.classList.remove('hidden');
+      titleView.classList.remove('fade-out');
 
-      const activeIconTypes = currentLevelConfig.iconTypes;
-      const pool = [];
-      for (let i = 0; i < actualPairs; i++) {
-        const t = (i % activeIconTypes) + 1;
-        pool.push(t, t);
-      }
-      for (let i = pool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
-      }
+      document.getElementById('viewJournal').classList.add('hidden');
+      document.getElementById('viewPuzzle').classList.add('hidden');
+    }
 
-      const cellPositions = [];
-      for (let r = 1; r <= rows; r++) for (let c = 1; c <= cols; c++) cellPositions.push({ r, c });
-      for (let i = cellPositions.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [cellPositions[i], cellPositions[j]] = [cellPositions[j], cellPositions[i]];
-      }
+    function enterGameFromTitle() {
+      sound.playMeow(620);
+      triggerHaptic('medium');
 
-      let obsPlaced = 0;
-      for (let i = 0; i < cellPositions.length && obsPlaced < obstacles; i++) {
-        grid[cellPositions[i].r][cellPositions[i].c] = -1;
-        obsPlaced++;
-      }
+      const titleView = document.getElementById('viewTitle');
+      titleView.classList.add('fade-out');
 
-      let poolIdx = 0;
-      for (let r = 1; r <= rows; r++) {
-        for (let c = 1; c <= cols; c++) {
-          if (grid[r][c] === 0 && poolIdx < pool.length) grid[r][c] = pool[poolIdx++];
+      setTimeout(() => {
+        titleView.classList.add('hidden');
+        showJournalView();
+      }, 300);
+    }
+
+    function showJournalView() {
+      document.getElementById('viewTitle').classList.add('hidden');
+      document.getElementById('viewPuzzle').classList.add('hidden');
+      document.getElementById('viewJournal').classList.remove('hidden');
+      renderJournal();
+    }
+
+    // --- 14. LianLianKan Core Puzzle Engine ---
+    let puzzleConfig = null;
+    let board = [];
+    let selectedTile = null;
+    let timerId = null;
+    let timeLeft = 0;
+    let movesLeft = 0;
+    let remainingPairs = 0;
+    let score = 0;
+    let hintPair = null;
+    let hintsRemain = 3;
+    let shufflesRemain = 2;
+    let freezeRemain = 1;
+
+    function showPuzzleView(levelNum) {
+      currentLevel = levelNum;
+      puzzleConfig = generateLevelConfig(levelNum);
+      document.getElementById('viewTitle').classList.add('hidden');
+      document.getElementById('viewJournal').classList.add('hidden');
+      document.getElementById('viewPuzzle').classList.remove('hidden');
+      initPuzzleLevel();
+    }
+
+    function initPuzzleLevel() {
+      selectedTile = null;
+      hintPair = null;
+      hintsRemain = 3;
+      shufflesRemain = 2;
+      freezeRemain = 1;
+      updatePowerupsUI();
+
+      document.getElementById('puzzleLevelTitle').innerText = puzzleConfig.title.split('·')[0];
+      document.getElementById('modeBadge').innerText = puzzleConfig.mode === 'moves' ? '步数' : '限时';
+
+      const totalSlots = puzzleConfig.rows * puzzleConfig.cols;
+      remainingPairs = puzzleConfig.pairs;
+      score = 0;
+      updateScoreUI();
+
+      board = [];
+      for (let r = 0; r < puzzleConfig.rows; r++) {
+        board[r] = [];
+        for (let c = 0; c < puzzleConfig.cols; c++) {
+          board[r][c] = null;
         }
       }
 
-      let fCount = currentLevelConfig.frozenCount;
-      let fAttempts = 0;
-      while (fCount > 0 && fAttempts < 100) {
-        fAttempts++;
-        const rr = Math.floor(Math.random() * rows) + 1;
-        const cc = Math.floor(Math.random() * cols) + 1;
-        if (grid[rr][cc] > 0 && !frozenMap[rr][cc]) {
-          frozenMap[rr][cc] = true;
-          fCount--;
+      const activeIcons = THEME_ICONS_20.slice(0, puzzleConfig.iconTypes);
+      const tilesPool = [];
+      for (let p = 0; p < puzzleConfig.pairs; p++) {
+        const icon = activeIcons[p % activeIcons.length];
+        tilesPool.push(icon, icon);
+      }
+      shuffleArray(tilesPool);
+
+      let idx = 0;
+      for (let r = 0; r < puzzleConfig.rows; r++) {
+        for (let c = 0; c < puzzleConfig.cols; c++) {
+          board[r][c] = {
+            r, c,
+            icon: tilesPool[idx++],
+            frozen: false,
+            obstacle: false
+          };
         }
       }
 
-      if (!hasAnyMatch(grid)) performReshuffle();
+      if (puzzleConfig.frozenCount > 0) {
+        let fCount = 0;
+        while (fCount < puzzleConfig.frozenCount) {
+          const rr = Math.floor(Math.random() * puzzleConfig.rows);
+          const cc = Math.floor(Math.random() * puzzleConfig.cols);
+          if (board[rr][cc] && !board[rr][cc].frozen) {
+            board[rr][cc].frozen = true;
+            fCount++;
+          }
+        }
+      }
 
-      updateBadges();
+      ensureSolvable();
       resizeBoard();
       renderTiles();
 
-      if (timerInterval) clearInterval(timerInterval);
-      if (currentLevelConfig.mode === 'time') {
-        timerInterval = setInterval(() => {
-          if (!isFrozen && timeLeft > 0) {
-            timeLeft--;
-            const m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
-            const s = String(timeLeft % 60).padStart(2, '0');
-            document.getElementById('timerText').innerText = m + ':' + s;
-            if (timeLeft === 0) {
-              clearInterval(timerInterval);
-              alert('时间耗尽！猫咪们想要再试一次！');
-              showJournalView();
-            }
+      if (timerId) clearInterval(timerId);
+      const clockBox = document.getElementById('clockBox');
+      clockBox.classList.remove('warning');
+
+      if (puzzleConfig.mode === 'time') {
+        timeLeft = puzzleConfig.timeLimit;
+        updateClockUI();
+        timerId = setInterval(() => {
+          timeLeft--;
+          updateClockUI();
+          if (timeLeft <= 10) clockBox.classList.add('warning');
+          if (timeLeft <= 0) {
+            clearInterval(timerId);
+            sound.playError();
+            alert('⏰ 时间耗尽！别灰心，整理心情再次挑战！');
+            showJournalView();
           }
         }, 1000);
+      } else {
+        movesLeft = puzzleConfig.movesLimit;
+        updateClockUI();
       }
     }
 
-    function updateBadges() {
-      document.getElementById('badgeHint').innerText = 'x' + hintsLeft;
-      document.getElementById('badgeShuffle').innerText = 'x' + shufflesLeft;
-      document.getElementById('badgeFreeze').innerText = 'x' + freezesLeft;
+    function updateClockUI() {
+      const el = document.getElementById('timerText');
+      if (puzzleConfig.mode === 'time') {
+        const m = Math.floor(timeLeft / 60);
+        const s = timeLeft % 60;
+        el.innerText = (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
+      } else {
+        el.innerText = '步数: ' + movesLeft;
+      }
+    }
+
+    function updateScoreUI() {
       document.getElementById('scoreText').innerText = '得分: ' + score;
-      document.getElementById('pairProgress').innerText = clearedCount + ' / ' + totalPairs;
-      const pct = Math.min(100, (clearedCount / totalPairs) * 100);
-      document.getElementById('clearanceBar').style.width = pct + '%';
+      document.getElementById('pairProgress').innerText = (puzzleConfig.pairs - remainingPairs) + ' / ' + puzzleConfig.pairs;
+      const progress = ((puzzleConfig.pairs - remainingPairs) / puzzleConfig.pairs) * 100;
+      document.getElementById('clearanceBar').style.width = Math.max(4, progress) + '%';
+    }
+
+    function updatePowerupsUI() {
+      document.getElementById('badgeHint').innerText = 'x' + hintsRemain;
+      document.getElementById('badgeShuffle').innerText = 'x' + shufflesRemain;
+      document.getElementById('badgeFreeze').innerText = 'x' + freezeRemain;
     }
 
     function resizeBoard() {
-      const cont = document.getElementById('boardContainer');
-      if (!cont) return;
-      const maxW = cont.clientWidth - 8;
-      const maxH = cont.clientHeight - 8;
+      const container = document.getElementById('boardContainer');
+      const inner = document.getElementById('boardInner');
+      const wrapper = document.getElementById('tilesWrapper');
 
-      const cellW = Math.floor(maxW / (cols + 2));
-      const cellH = Math.floor(maxH / (rows + 2));
-      cellSize = Math.max(18, Math.min(48, Math.min(cellW, cellH)));
+      const maxW = container.clientWidth - 16;
+      const maxH = container.clientHeight - 16;
 
-      const bW = cellSize * (cols + 2);
-      const bH = cellSize * (rows + 2);
-      const bInner = document.getElementById('boardInner');
-      bInner.style.width = bW + 'px';
-      bInner.style.height = bH + 'px';
-      canvas.width = cont.clientWidth;
-      canvas.height = cont.clientHeight;
+      const cellSize = Math.min(
+        Math.floor(maxW / puzzleConfig.cols),
+        Math.floor(maxH / puzzleConfig.rows),
+        48
+      );
+
+      const totalW = cellSize * puzzleConfig.cols;
+      const totalH = cellSize * puzzleConfig.rows;
+
+      wrapper.style.width = totalW + 'px';
+      wrapper.style.height = totalH + 'px';
+      inner.style.width = (totalW + 6) + 'px';
+      inner.style.height = (totalH + 6) + 'px';
+
+      const canvas = document.getElementById('particleCanvas');
+      canvas.width = container.clientWidth;
+      canvas.height = container.clientHeight;
     }
 
     function renderTiles() {
       const wrapper = document.getElementById('tilesWrapper');
       wrapper.innerHTML = '';
-      const fontSize = Math.max(11, Math.floor(cellSize * 0.65));
+      const cellSize = Math.floor(wrapper.clientWidth / puzzleConfig.cols);
 
-      for (let r = 1; r <= rows; r++) {
-        for (let c = 1; c <= cols; c++) {
-          const v = grid[r][c];
-          if (v === 0) continue;
-          const isObstacle = v === -1;
-          const isIce = frozenMap[r][c];
+      for (let r = 0; r < puzzleConfig.rows; r++) {
+        for (let c = 0; c < puzzleConfig.cols; c++) {
+          const item = board[r][c];
+          if (!item) continue;
 
-          const btn = document.createElement('button');
-          btn.id = 'tile-' + r + '-' + c;
-          btn.style.left = (c * cellSize) + 'px';
-          btn.style.top = (r * cellSize) + 'px';
-          btn.style.width = cellSize + 'px';
-          btn.style.height = cellSize + 'px';
-          btn.className = 'tile-btn';
+          const div = document.createElement('div');
+          div.className = 'tile-cell';
+          div.style.width = (cellSize - 3) + 'px';
+          div.style.height = (cellSize - 3) + 'px';
+          div.style.left = (c * cellSize + 1.5) + 'px';
+          div.style.top = (r * cellSize + 1.5) + 'px';
+          div.style.fontSize = Math.floor(cellSize * 0.52) + 'px';
 
-          if (isObstacle) {
-            btn.innerHTML = `<div class="tile-obstacle" style="font-size: ${Math.max(10, Math.floor(cellSize * 0.55))}px;">📦</div>`;
-          } else {
-            const isSel = selectedTile && selectedTile.r === r && selectedTile.c === c;
-            btn.innerHTML = `
-              <div class="tile-inner ${isSel ? 'selected' : ''}" style="font-size: ${fontSize}px;">
-                ${THEME_ICONS_20[(v - 1) % THEME_ICONS_20.length]}
-                ${isIce ? `<div class="tile-ice-overlay" style="font-size: ${Math.max(9, Math.floor(cellSize * 0.35))}px;">🧊</div>` : ''}
-              </div>
-            `;
-            btn.onclick = () => onTileClick(r, c);
+          div.innerText = item.icon;
+
+          if (item.frozen) div.classList.add('frozen');
+          if (item.obstacle) div.classList.add('obstacle');
+          if (selectedTile && selectedTile.r === r && selectedTile.c === c) div.classList.add('selected');
+          if (hintPair && ((hintPair[0].r === r && hintPair[0].c === c) || (hintPair[1].r === r && hintPair[1].c === c))) {
+            div.classList.add('hinted');
           }
 
-          wrapper.appendChild(btn);
+          div.onclick = () => onTileClick(r, c);
+          wrapper.appendChild(div);
         }
       }
     }
 
-    function getCanvasPointsForPath(path) {
-      const canvasRect = canvas.getBoundingClientRect();
-      const bInner = document.getElementById('boardInner');
-      const bRect = bInner.getBoundingClientRect();
-      const cellW = bRect.width / (cols + 2);
-      const cellH = bRect.height / (rows + 2);
-
-      return path.map(pt => {
-        const el = document.getElementById('tile-' + pt.r + '-' + pt.c);
-        if (el) {
-          const tRect = el.getBoundingClientRect();
-          return {
-            x: tRect.left + tRect.width / 2 - canvasRect.left,
-            y: tRect.top + tRect.height / 2 - canvasRect.top
-          };
-        }
-        return {
-          x: bRect.left + (pt.c + 0.5) * cellW - canvasRect.left,
-          y: bRect.top + (pt.r + 0.5) * cellH - canvasRect.top
-        };
-      });
-    }
-
+    // Tile Click & Elimination
     function onTileClick(r, c) {
-      if (grid[r][c] <= 0) return;
-      sound.playSelect();
-      if (!selectedTile) {
-        selectedTile = { r, c }; renderTiles(); return;
-      }
-      if (selectedTile.r === r && selectedTile.c === c) {
-        selectedTile = null; renderTiles(); return;
-      }
+      const tile = board[r][c];
+      if (!tile || tile.obstacle) return;
 
-      if (currentLevelConfig.mode === 'moves') {
-        movesLeft--;
-        document.getElementById('timerText').innerText = movesLeft + ' 步';
-      }
-
-      const path = findPath(grid, selectedTile, { r, c });
-      if (path) {
-        const p1 = selectedTile, p2 = { r, c };
-        const canvasPts = getCanvasPointsForPath(path);
-        activeLine = { pts: canvasPts, opacity: 1 };
-        triggerSparks(canvasPts[0]); triggerSparks(canvasPts[canvasPts.length - 1]);
-
-        const p1Ice = frozenMap[p1.r][p1.c];
-        const p2Ice = frozenMap[p2.r][p2.c];
-
-        if (p1Ice || p2Ice) {
-          sound.playIceCrack();
-          if (p1Ice) frozenMap[p1.r][p1.c] = false; else grid[p1.r][p1.c] = 0;
-          if (p2Ice) frozenMap[p2.r][p2.c] = false; else grid[p2.r][p2.c] = 0;
-          score += 60;
-        } else {
-          grid[p1.r][p1.c] = 0; grid[p2.r][p2.c] = 0;
-          clearedCount++; combo++;
-          score += 100 + (combo - 1) * 35;
-          sound.playMatch(combo);
-        }
-
-        // Adjacent thaw
-        const checkAdjacentThaw = (pt) => {
-          const adj = [{r: pt.r - 1, c: pt.c}, {r: pt.r + 1, c: pt.c}, {r: pt.r, c: pt.c - 1}, {r: pt.r, c: pt.c + 1}];
-          adj.forEach(a => {
-            if (a.r >= 1 && a.r <= rows && a.c >= 1 && a.c <= cols && frozenMap[a.r][a.c]) {
-              frozenMap[a.r][a.c] = false;
-              sound.playIceCrack();
-              score += 40;
-            }
-          });
-        };
-        checkAdjacentThaw(p1);
-        checkAdjacentThaw(p2);
-
-        selectedTile = null;
+      if (tile.frozen) {
+        sound.playError();
+        triggerHaptic('light');
+        tile.frozen = false;
         renderTiles();
-        updateBadges();
+        return;
+      }
 
-        if (clearedCount >= totalPairs) {
-          if (timerInterval) clearInterval(timerInterval);
-          sound.playVictory();
+      hintPair = null;
 
-          if (currentLevel > maxClearedLevel) {
-            maxClearedLevel = currentLevel;
+      if (!selectedTile) {
+        selectedTile = { r, c };
+        sound.playSelect();
+        triggerHaptic('light');
+        renderTiles();
+        return;
+      }
+
+      if (selectedTile.r === r && selectedTile.c === c) {
+        selectedTile = null;
+        sound.playSelect();
+        renderTiles();
+        return;
+      }
+
+      const prevTile = board[selectedTile.r][selectedTile.c];
+      if (prevTile.icon === tile.icon) {
+        const path = findPath(selectedTile.r, selectedTile.c, r, c);
+        if (path) {
+          board[selectedTile.r][selectedTile.c] = null;
+          board[r][c] = null;
+          remainingPairs--;
+          score += 100;
+          sound.playMatch();
+          triggerHaptic('medium');
+
+          drawMatchEffect(path);
+          selectedTile = null;
+          updateScoreUI();
+          renderTiles();
+
+          if (puzzleConfig.mode === 'moves') {
+            movesLeft--;
+            updateClockUI();
           }
 
-          const earnedStars = currentLevelConfig.starsReward;
-          let earnedCoins = currentLevelConfig.coinsReward;
-          DRINK_MENU.forEach(d => { if (unlockedDrinks.has(d.id)) earnedCoins += d.bonusCoinPerLevel; });
+          if (remainingPairs <= 0) {
+            handleLevelClear();
+            return;
+          }
 
-          stars += earnedStars;
-          coins += earnedCoins;
-          document.getElementById('vicStarsEarned').innerText = '+' + earnedStars + ' 星光灵感';
-          document.getElementById('vicCoinsEarned').innerText = '+' + earnedCoins + ' 营业金币';
+          ensureSolvable();
+          return;
+        }
+      }
 
-          const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
-          getActiveBranch().logs.push('【' + timeStr + ' 采购】' + currentLevelConfig.title + ' 食材采购大获全胜！(+' + earnedStars + ' ⭐, +' + earnedCoins + ' 🪙)');
-          saveState();
-          document.getElementById('modalVictory').classList.remove('hidden');
-        } else {
-          autoReshuffleIfDeadlocked();
-          if (currentLevelConfig.mode === 'moves' && movesLeft <= 0) {
-            alert('步数耗尽！再接再厉喵！');
-            showJournalView();
+      // Not match or no path
+      if (puzzleConfig.mode === 'moves') {
+        movesLeft--;
+        updateClockUI();
+        if (movesLeft <= 0) {
+          sound.playError();
+          alert('🚫 步数已用尽！');
+          showJournalView();
+          return;
+        }
+      }
+
+      selectedTile = { r, c };
+      sound.playSelect();
+      triggerHaptic('light');
+      renderTiles();
+    }
+
+    // 0, 1, 2 Bends Pathfinding (BFS with 1-padding)
+    function findPath(r1, c1, r2, c2) {
+      const R = puzzleConfig.rows + 2;
+      const C = puzzleConfig.cols + 2;
+      const grid = Array.from({ length: R }, () => Array(C).fill(0));
+
+      for (let r = 0; r < puzzleConfig.rows; r++) {
+        for (let c = 0; c < puzzleConfig.cols; c++) {
+          if (board[r][c] !== null) {
+            grid[r + 1][c + 1] = 1;
           }
         }
-      } else {
-        selectedTile = { r, c }; renderTiles();
-        if (currentLevelConfig.mode === 'moves' && movesLeft <= 0) {
-          alert('步数用完啦！');
-          showJournalView();
+      }
+      grid[r1 + 1][c1 + 1] = 0;
+      grid[r2 + 1][c2 + 1] = 0;
+
+      const start = { r: r1 + 1, c: c1 + 1 };
+      const target = { r: r2 + 1, c: c2 + 1 };
+
+      const minBends = Array.from({ length: R }, () =>
+        Array.from({ length: C }, () => Array(4).fill(999))
+      );
+
+      const queue = [];
+      for (let d = 0; d < 4; d++) {
+        minBends[start.r][start.c][d] = 0;
+        queue.push({ r: start.r, c: start.c, dir: d, bends: 0, path: [start] });
+      }
+
+      const dr = [-1, 1, 0, 0];
+      const dc = [0, 0, -1, 1];
+
+      let bestPath = null;
+      let minFoundBends = 999;
+
+      while (queue.length > 0) {
+        const curr = queue.shift();
+        if (curr.bends > 2) continue;
+
+        if (curr.r === target.r && curr.c === target.c) {
+          if (curr.bends < minFoundBends) {
+            minFoundBends = curr.bends;
+            bestPath = curr.path;
+          }
+          continue;
+        }
+
+        for (let nd = 0; nd < 4; nd++) {
+          const nr = curr.r + dr[nd];
+          const nc = curr.c + dc[nd];
+
+          if (nr < 0 || nr >= R || nc < 0 || nc >= C) continue;
+          if (grid[nr][nc] === 1) continue;
+
+          const nb = curr.dir === nd ? curr.bends : curr.bends + 1;
+          if (nb > 2) continue;
+
+          if (nb < minBends[nr][nc][nd]) {
+            minBends[nr][nc][nd] = nb;
+            queue.push({
+              r: nr, c: nc, dir: nd, bends: nb,
+              path: [...curr.path, { r: nr, c: nc }]
+            });
+          }
+        }
+      }
+
+      if (bestPath) {
+        return bestPath.map(p => ({ r: p.r - 1, c: p.c - 1 }));
+      }
+      return null;
+    }
+
+    // Deadlock Prevention & Reshuffle
+    function findAnyValidPair() {
+      const tiles = [];
+      for (let r = 0; r < puzzleConfig.rows; r++) {
+        for (let c = 0; c < puzzleConfig.cols; c++) {
+          if (board[r][c] && !board[r][c].obstacle) {
+            tiles.push(board[r][c]);
+          }
+        }
+      }
+
+      for (let i = 0; i < tiles.length; i++) {
+        for (let j = i + 1; j < tiles.length; j++) {
+          if (tiles[i].icon === tiles[j].icon) {
+            const p = findPath(tiles[i].r, tiles[i].c, tiles[j].r, tiles[j].c);
+            if (p) return [tiles[i], tiles[j]];
+          }
+        }
+      }
+      return null;
+    }
+
+    function ensureSolvable() {
+      if (remainingPairs <= 0) return;
+      let valid = findAnyValidPair();
+      let attempts = 0;
+
+      while (!valid && attempts < 25) {
+        reshuffleBoardQuietly();
+        valid = findAnyValidPair();
+        attempts++;
+      }
+    }
+
+    function reshuffleBoardQuietly() {
+      const items = [];
+      for (let r = 0; r < puzzleConfig.rows; r++) {
+        for (let c = 0; c < puzzleConfig.cols; c++) {
+          if (board[r][c] && !board[r][c].obstacle) {
+            items.push(board[r][c].icon);
+          }
+        }
+      }
+      shuffleArray(items);
+
+      let idx = 0;
+      for (let r = 0; r < puzzleConfig.rows; r++) {
+        for (let c = 0; c < puzzleConfig.cols; c++) {
+          if (board[r][c] && !board[r][c].obstacle) {
+            board[r][c].icon = items[idx++];
+          }
         }
       }
     }
 
-    // Power-ups
+    // Power-up Triggers
     document.getElementById('btnHint').onclick = () => {
-      if (hintsLeft <= 0) return;
-      for (let r1 = 1; r1 <= rows; r1++) {
-        for (let c1 = 1; c1 <= cols; c1++) {
-          if (grid[r1][c1] <= 0) continue;
-          for (let r2 = 1; r2 <= rows; r2++) {
-            for (let c2 = 1; c2 <= cols; c2++) {
-              if (r1 === r2 && c1 === c2) continue;
-              if (grid[r1][c1] === grid[r2][c2]) {
-                const path = findPath(grid, { r: r1, c: c1 }, { r: r2, c: c2 });
-                if (path) {
-                  hintsLeft--; updateBadges();
-                  activeLine = { pts: getCanvasPointsForPath(path), opacity: 1 };
-                  return;
-                }
-              }
-            }
-          }
-        }
+      if (hintsRemain <= 0) {
+        alert('提示次数已用完！');
+        return;
       }
-      showShuffleToast('当前无可连方块，请重排！');
+      const pair = findAnyValidPair();
+      if (pair) {
+        hintsRemain--;
+        updatePowerupsUI();
+        hintPair = pair;
+        sound.playSelect();
+        renderTiles();
+      }
     };
 
     document.getElementById('btnShuffle').onclick = () => {
-      if (shufflesLeft <= 0) return;
-      shufflesLeft--;
-      sound.playShuffle();
-      performReshuffle();
-      updateBadges();
-      showShuffleToast('重排完成 🔄');
+      if (shufflesRemain <= 0) {
+        alert('重排次数已用完！');
+        return;
+      }
+      shufflesRemain--;
+      updatePowerupsUI();
+      sound.playSelect();
+      reshuffleBoardQuietly();
+      ensureSolvable();
+      renderTiles();
     };
 
     document.getElementById('btnFreeze').onclick = () => {
-      if (freezesLeft <= 0) return;
-      freezesLeft--;
-      if (currentLevelConfig.mode === 'moves') {
-        movesLeft += 8;
-        document.getElementById('timerText').innerText = movesLeft + ' 步';
-      } else {
-        isFrozen = true; timeLeft += 20;
-        document.getElementById('freezeText').innerText = '冰冻中';
-        setTimeout(() => { isFrozen = false; document.getElementById('freezeText').innerText = '加时/步'; }, 10000);
+      if (freezeRemain <= 0) {
+        alert('加时道具已用完！');
+        return;
       }
-      updateBadges();
+      freezeRemain--;
+      updatePowerupsUI();
+      sound.playVictory();
+      if (puzzleConfig.mode === 'time') {
+        timeLeft += 20;
+        updateClockUI();
+      } else {
+        movesLeft += 5;
+        updateClockUI();
+      }
     };
 
-    // View Transitions
-    function showJournalView() {
-      document.getElementById('viewJournal').classList.remove('hidden');
-      document.getElementById('viewPuzzle').classList.add('hidden');
-      if (timerInterval) clearInterval(timerInterval);
-      renderJournal();
-    }
-    function showPuzzleView(lvl = currentLevel) {
-      document.getElementById('viewJournal').classList.add('hidden');
-      document.getElementById('viewPuzzle').classList.remove('hidden');
-      initPuzzle(lvl);
+    // Draw Particle Line on Canvas
+    function drawMatchEffect(path) {
+      const canvas = document.getElementById('particleCanvas');
+      const ctx = canvas.getContext('2d');
+      const wrapper = document.getElementById('tilesWrapper');
+      const rect = wrapper.getBoundingClientRect();
+      const canvasRect = canvas.getBoundingClientRect();
+
+      const offsetX = rect.left - canvasRect.left;
+      const offsetY = rect.top - canvasRect.top;
+      const cellSize = wrapper.clientWidth / puzzleConfig.cols;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = '#F59E0B';
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      path.forEach((pt, i) => {
+        const x = offsetX + (pt.c + 0.5) * cellSize;
+        const y = offsetY + (pt.r + 0.5) * cellSize;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+
+      setTimeout(() => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }, 220);
     }
 
-    // Modal Level Select
+    function handleLevelClear() {
+      if (timerId) clearInterval(timerId);
+      sound.playVictory();
+      triggerHaptic('heavy');
+
+      stars += puzzleConfig.starsReward;
+      coins += puzzleConfig.coinsReward;
+      if (currentLevel > maxClearedLevel) {
+        maxClearedLevel = currentLevel;
+      }
+
+      document.getElementById('vicStarsEarned').innerText = '+' + puzzleConfig.starsReward + ' 星光灵感';
+      document.getElementById('vicCoinsEarned').innerText = '+' + puzzleConfig.coinsReward + ' 营业金币';
+
+      const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+      getActiveBranch().logs.push('【' + timeStr + ' 捷报】通关了' + puzzleConfig.title + '，带回 ' + puzzleConfig.starsReward + '⭐ 与 ' + puzzleConfig.coinsReward + '🪙！');
+
+      saveGame();
+      document.getElementById('modalVictory').classList.remove('hidden');
+    }
+
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+    }
+
+    // --- 15. Level Select Modal (100+ Levels) ---
     function renderLevelSelectModal(startRange = 1) {
       currentLevelRange = startRange;
       const tabs = document.getElementById('levelRangeTabs');
@@ -2752,7 +3259,46 @@
       document.getElementById('modalLevelSelect').classList.remove('hidden');
     };
 
-    // Event Bindings
+    // --- 16. Event Bindings ---
+    // Title Screen Events
+    document.getElementById('btnTitleStart').onclick = enterGameFromTitle;
+
+    document.getElementById('btnTitleReset').onclick = () => {
+      sound.playSelect();
+      document.getElementById('modalResetConfirm').classList.remove('hidden');
+    };
+
+    document.getElementById('btnCancelReset').onclick = () => {
+      sound.playSelect();
+      document.getElementById('modalResetConfirm').classList.add('hidden');
+    };
+
+    document.getElementById('btnConfirmReset').onclick = () => {
+      document.getElementById('modalResetConfirm').classList.add('hidden');
+      resetGame();
+      sound.playError();
+      alert('已清空所有档案，恢复出厂纯净小铺！');
+    };
+
+    const toggleSound = () => {
+      sound.enabled = !sound.enabled;
+      const text = sound.enabled ? '🔊' : '🔇';
+      document.getElementById('btnToggleSoundJournal').innerText = text;
+      document.getElementById('btnToggleSoundPuzzle').innerText = text;
+      renderTitleScreen();
+    };
+
+    document.getElementById('btnTitleToggleSound').onclick = toggleSound;
+    document.getElementById('btnToggleSoundJournal').onclick = toggleSound;
+    document.getElementById('btnToggleSoundPuzzle').onclick = toggleSound;
+
+    // Return to Title from Journal
+    document.getElementById('btnBackToTitle').onclick = () => {
+      sound.playSelect();
+      showTitleView();
+    };
+
+    // Game view navigation
     document.getElementById('btnStartProcure').onclick = () => showPuzzleView(currentLevel);
     document.getElementById('btnBackToJournal').onclick = () => showJournalView();
     document.getElementById('btnBackToJournalFromVic').onclick = () => {
@@ -2765,23 +3311,15 @@
       showPuzzleView(currentLevel);
     };
 
-    const toggleSound = () => {
-      sound.enabled = !sound.enabled;
-      const text = sound.enabled ? '🔊' : '🔇';
-      document.getElementById('btnToggleSoundJournal').innerText = text;
-      document.getElementById('btnToggleSoundPuzzle').innerText = text;
-    };
-    document.getElementById('btnToggleSoundJournal').onclick = toggleSound;
-    document.getElementById('btnToggleSoundPuzzle').onclick = toggleSound;
-
     window.onresize = () => {
       if (!document.getElementById('viewPuzzle').classList.contains('hidden')) {
         resizeBoard(); renderTiles();
       }
     };
 
-    // First load
-    showJournalView();
+    // --- 17. Boot Engine ---
+    loadGame();
+    showTitleView();
   </script>
 </body>
 </html>
