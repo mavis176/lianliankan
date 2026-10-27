@@ -1,0 +1,6 @@
+{
+  "name": "连连看 · 极光奇境 (Connect Joy)",
+  "description": "现代精美高品质连连看休闲小游戏，包含12个难度递进关卡、动态光影连线、粒子消解、Combo连击加成及Web Audio合成音效。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

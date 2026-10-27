@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>暖喵咖啡馆 · 营业日志与食材连连看 (Purr & Coffee Match)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * { -webkit-tap-highlight-color: transparent; user-select: none; box-sizing: border-box; }
+    body { background-color: #FAF7F2; color: #2C2219; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+    @keyframes tilePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+    .animate-tile-pulse { animation: tilePulse 1.2s ease-in-out infinite; }
+    @keyframes floatUp { 0% { opacity: 0; transform: translateY(0); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-24px); } }
+    .animate-float-up { animation: floatUp 1s ease-out forwards; }
+  </style>
+</head>
+<body class="w-full h-full min-h-[100dvh] bg-[#FAF7F2] flex flex-col items-center justify-center p-0 m-0 overflow-x-hidden font-sans select-none">
+
+  <!-- Mobile Viewport Container -->
+  <div class="relative w-full max-w-md h-[100dvh] flex flex-col justify-between overflow-hidden shadow-2xl bg-[#FAF7F2]">
+
+    <!-- ======================================================== -->
+    <!-- VIEW 1: 【主页 · 猫咪咖啡馆日志】(纯文字治愈经营与卡片列表) -->
+    <!-- ======================================================== -->
+    <div id="viewJournal" class="relative w-full h-full flex flex-col justify-between overflow-hidden">
+      <!-- 1. Top Status Bar -->
+      <header class="w-full px-4 pt-3 pb-2.5 flex items-center justify-between shrink-0 bg-[#FAF7F2]/90 backdrop-blur-sm border-b border-[#E8DEC8] z-20">
+        <div class="flex items-center gap-2">
+          <!-- 星光灵感 -->
+          <div class="flex items-center gap-1.5 bg-[#FFFDF9] border border-[#D9CDB8] px-2.5 py-1 rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+            <span class="text-sm">⭐</span>
+            <div class="flex flex-col leading-none">
+              <span class="text-[9px] text-[#8C6544] font-medium">星光灵感</span>
+              <span id="headerStars" class="text-xs font-bold text-[#2C2219] font-mono">3</span>
+            </div>
+          </div>
+          <!-- 营业金币 -->
+          <div class="flex items-center gap-1.5 bg-[#FFFDF9] border border-[#D9CDB8] px-2.5 py-1 rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+            <span class="text-sm">🪙</span>
+            <div class="flex flex-col leading-none">
+              <span class="text-[9px] text-[#8C6544] font-medium">营业金币</span>
+              <span id="headerCoins" class="text-xs font-bold text-[#2C2219] font-mono">350</span>
+            </div>
+          </div>
+          <!-- 驻店猫咪数 -->
+          <div class="flex items-center gap-1 bg-[#FFFDF9] border border-[#D9CDB8] px-2 py-1 rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+            <span class="text-xs">🐾</span>
+            <span id="headerCats" class="text-xs font-bold text-[#5C4434] font-mono">0 只</span>
+          </div>
+        </div>
+
+        <button id="btnToggleSoundJournal" class="w-8 h-8 rounded-xl bg-[#FFFDF9] border border-[#D9CDB8] flex items-center justify-center text-[#5C4434] hover:bg-[#F4ECE1] active:translate-y-0.5 transition-all text-xs cursor-pointer shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+          🔊
+        </button>
+      </header>
+
+      <!-- 2. Scrollable Body Area -->
+      <main class="flex-1 w-full overflow-y-auto px-3.5 py-3 space-y-3.5 min-h-0">
+        <!-- A. 动态文字日志窗口 (营业随笔 / 猫咪日常) -->
+        <section class="w-full bg-[#FFFDF9] border border-[#E2D6C2] rounded-2xl shadow-[0_2px_8px_rgba(107,72,42,0.04)] p-3.5 flex flex-col">
+          <div class="flex items-center justify-between pb-2 border-b border-[#EFE7D8] mb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="text-sm">📖</span>
+              <h2 class="text-xs sm:text-sm font-bold text-[#3B2C20] tracking-wide">猫咪咖啡馆随笔 · 营业日志</h2>
+            </div>
+            <div class="flex items-center gap-1 bg-[#F5EFEB] text-[#8C6544] text-[10px] font-medium px-2 py-0.5 rounded-full">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>温润营业中</span>
+            </div>
+          </div>
+          <!-- Journal Log entries -->
+          <div id="journalLogsContainer" class="h-36 sm:h-44 overflow-y-auto space-y-2 pr-1.5 text-xs text-[#4A3B2C] leading-relaxed scroll-smooth">
+            <!-- Dynamically populated -->
+          </div>
+        </section>
+
+        <!-- B. 驻店猫咪互动栏 (点击轻抚互动) -->
+        <section id="catPettingSection" class="w-full bg-[#FFFDF9] border border-[#E2D6C2] rounded-2xl p-3 shadow-[0_2px_6px_rgba(0,0,0,0.03)] hidden">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-[#5C4434] flex items-center gap-1.5">
+              <span>🐾</span> 驻店猫咪 (轻抚互动)
+            </span>
+            <span class="text-[10px] text-[#A38265]">抚摸奖励小金币</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2" id="catButtonsWrapper">
+            <!-- Cat interaction buttons rendered dynamically -->
+          </div>
+        </section>
+
+        <!-- C. 设施建设与文字卡片列表 -->
+        <section class="space-y-2">
+          <div class="flex items-center justify-between px-0.5">
+            <span class="text-xs font-bold text-[#5C4434] flex items-center gap-1.5">
+              <span>🔨</span> 咖啡馆设施建设计划
+            </span>
+            <span id="stagesProgressText" class="text-[11px] font-mono text-[#8C6544]">已竣工 1 / 8</span>
+          </div>
+          <div id="stagesCardsContainer" class="space-y-2.5">
+            <!-- Stages rendered dynamically -->
+          </div>
+        </section>
+      </main>
+
+      <!-- 3. Bottom Action Bar -->
+      <footer class="w-full px-4 pt-2.5 pb-4 shrink-0 bg-[#FAF7F2]/95 backdrop-blur-sm border-t border-[#E8DEC8] z-20">
+        <button id="btnStartProcure" class="w-full h-13 rounded-2xl bg-gradient-to-r from-[#D97706] via-[#B45309] to-[#8C4309] hover:from-[#E68A17] hover:to-[#9A4B0B] text-white font-bold text-sm sm:text-base shadow-[0_4px_12px_rgba(180,83,9,0.25)] active:translate-y-0.5 transition-all flex items-center justify-center gap-2.5 cursor-pointer">
+          <span class="text-lg animate-bounce">🐾</span>
+          <span class="tracking-wide">开始采购食材</span>
+          <span id="journalLevelBadge" class="bg-black/25 text-amber-100 text-xs font-mono font-medium px-2 py-0.5 rounded-full border border-white/20">第 1 关</span>
+          <span class="text-xs">▶</span>
+        </button>
+      </footer>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- VIEW 2: 【关卡页 · 经典食材连连看】(大面积专注消除手机端) -->
+    <!-- ======================================================== -->
+    <div id="viewPuzzle" class="relative w-full h-full flex flex-col justify-between overflow-hidden p-2.5 sm:p-3 hidden bg-[#FAF5EE]">
+      <!-- 1. Top Puzzle Header -->
+      <header class="w-full flex items-center justify-between gap-2 pb-2 shrink-0 z-20">
+        <button id="btnBackToJournal" class="h-10 px-3 rounded-2xl bg-[#FFFDF8] hover:bg-[#FAF3E8] border-2 border-[#6B482A] shadow-[0_2px_0_#6B482A] active:translate-y-0.5 flex items-center gap-1.5 cursor-pointer shrink-0">
+          <span class="text-sm font-bold text-[#6B482A]">⬅</span>
+          <span class="text-xs sm:text-sm font-black text-[#5A381E]">返回咖啡馆</span>
+        </button>
+
+        <div class="flex-1 flex flex-col items-center justify-center min-w-0 px-1">
+          <span id="puzzleLevelTitle" class="text-xs sm:text-sm font-black text-[#5A381E] truncate">第 1 关 · 烘焙原料</span>
+          <div class="flex items-center gap-1.5 text-[11px] font-bold text-[#8C623E]">
+            <span>目标配对:</span>
+            <span id="pairProgress" class="bg-[#8C603D] text-white px-2 py-0.2 rounded-full font-mono text-[10px]">0 / 18</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-1.5 shrink-0">
+          <!-- Cat-Eared Alarm Clock -->
+          <div id="clockBox" class="relative w-12 h-10 bg-[#FFFDF8] border-2 border-[#6B482A] rounded-xl flex items-center justify-center shadow-[0_2px_0_#6B482A]">
+            <div class="absolute -top-1.5 -left-1 w-3 h-3 bg-amber-400 border border-[#6B482A] rotate-[-25deg] rounded-tl-sm"></div>
+            <div class="absolute -top-1.5 -right-1 w-3 h-3 bg-amber-400 border border-[#6B482A] rotate-[25deg] rounded-tr-sm"></div>
+            <span id="timerText" class="text-xs font-black text-[#6B482A] font-mono">01:30</span>
+          </div>
+          <button id="btnToggleSoundPuzzle" class="w-8 h-8 rounded-full bg-[#FFFDF8] border-2 border-[#6B482A] flex items-center justify-center text-xs active:translate-y-0.5 cursor-pointer">
+            🔊
+          </button>
+        </div>
+      </header>
+
+      <!-- 2. Power-ups Bar -->
+      <div class="w-full grid grid-cols-3 gap-2 pb-2 shrink-0 z-20">
+        <button id="btnHint" class="relative h-11 rounded-2xl bg-[#FFFDF8] hover:bg-[#FAF3E8] border-2 border-[#6B482A] shadow-[0_2px_0_#6B482A] active:translate-y-0.5 flex items-center justify-center gap-1.5 cursor-pointer">
+          <span class="text-base">💡</span>
+          <span class="text-xs sm:text-sm font-black text-[#5A381E]">提示</span>
+          <span id="badgeHint" class="absolute -bottom-1 -right-1 bg-[#6B482A] text-white text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-full border border-white">x3</span>
+        </button>
+
+        <button id="btnShuffle" class="relative h-11 rounded-2xl bg-[#FFFDF8] hover:bg-[#FAF3E8] border-2 border-[#6B482A] shadow-[0_2px_0_#6B482A] active:translate-y-0.5 flex items-center justify-center gap-1.5 cursor-pointer">
+          <span class="text-base">🔄</span>
+          <span class="text-xs sm:text-sm font-black text-[#5A381E]">重排</span>
+          <span id="badgeShuffle" class="absolute -bottom-1 -right-1 bg-[#6B482A] text-white text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-full border border-white">x2</span>
+        </button>
+
+        <button id="btnFreeze" class="relative h-11 rounded-2xl bg-[#FFFDF8] hover:bg-[#FAF3E8] border-2 border-[#6B482A] shadow-[0_2px_0_#6B482A] active:translate-y-0.5 flex items-center justify-center gap-1.5 cursor-pointer">
+          <span class="text-base">⏳</span>
+          <span id="freezeText" class="text-xs sm:text-sm font-black text-[#5A381E]">加时</span>
+          <span id="badgeFreeze" class="absolute -bottom-1 -right-1 bg-[#6B482A] text-white text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-full border border-white">x1</span>
+        </button>
+      </div>
+
+      <!-- 3. Main Board (>70% Screen Space, Exact getBoundingClientRect Center Coordinates) -->
+      <main id="boardContainer" class="relative flex-1 w-full min-h-0 flex items-center justify-center overflow-hidden z-10">
+        <canvas id="particleCanvas" class="absolute inset-0 pointer-events-none z-30"></canvas>
+        <div id="boardInner" class="relative rounded-3xl bg-[#7D5537] border-4 border-[#8C603C] shadow-[0_5px_0_#5C3D26] p-0.5">
+          <div id="tilesWrapper" class="relative w-full h-full"></div>
+        </div>
+      </main>
+
+      <!-- 4. Bottom Progress Bar -->
+      <footer class="w-full pt-2 flex items-center justify-between gap-3 shrink-0 z-20">
+        <div class="flex-1 h-10 bg-[#FFFDF8] border-2 border-[#6B482A] rounded-2xl p-1.5 shadow-[0_2px_0_#6B482A] flex items-center">
+          <div class="w-full h-full bg-[#E8DCBF] border border-[#6B482A] rounded-xl p-0.5 overflow-hidden shadow-inner flex items-center">
+            <div id="clearanceBar" class="h-full bg-gradient-to-r from-[#A5D67D] to-[#86C852] border border-[#5E9B2F] rounded-lg transition-all duration-300" style="width: 4%;"></div>
+          </div>
+        </div>
+        <div class="px-3 h-10 rounded-2xl bg-[#FFFDF8] border-2 border-[#6B482A] shadow-[0_2px_0_#6B482A] flex items-center justify-center shrink-0">
+          <span id="scoreText" class="text-xs font-black text-[#5A381E] font-mono">得分: 0</span>
+        </div>
+      </footer>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- VICTORY MODAL (食材采购成功)                    -->
+    <!-- ============================================== -->
+    <div id="modalVictory" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm hidden">
+      <div class="relative w-full max-w-sm bg-[#FFFDF8] border-2 border-[#6B482A] rounded-3xl shadow-2xl p-6 text-center">
+        <span class="text-4xl animate-bounce inline-block">🎉</span>
+        <h2 class="text-xl font-black text-[#5A381E] mt-1">食材采购成功！🐾</h2>
+        <div id="vicStars" class="text-2xl my-2 text-amber-400">⭐⭐⭐</div>
+        <p class="text-xs text-[#8C623E] mb-4">新鲜香浓原料已送达咖啡馆，获得了新灵感！</p>
+
+        <div class="w-full flex items-center justify-center gap-4 bg-[#FAF5EE] border border-[#6B482A]/20 rounded-2xl py-3 mb-5">
+          <div class="flex items-center gap-1 font-mono font-black text-amber-600">
+            <span>⭐</span><span id="vicStarsEarned">+3 星光灵感</span>
+          </div>
+          <div class="flex items-center gap-1 font-mono font-black text-amber-600">
+            <span>🪙</span><span id="vicCoinsEarned">+120 营业金币</span>
+          </div>
+        </div>
+
+        <div class="w-full flex flex-col gap-2.5">
+          <button id="btnBackToJournalFromVic" class="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 border-2 border-[#6B482A] font-black text-white text-sm shadow-[0_3px_0_#6B482A] active:translate-y-0.5 cursor-pointer">
+            返回咖啡馆装扮 📖
+          </button>
+          <button id="btnNextLevel" class="w-full py-2.5 rounded-2xl bg-[#FFFDF8] hover:bg-[#FAF3E8] border-2 border-[#6B482A] font-bold text-[#5A381E] text-xs shadow-[0_2px_0_#6B482A] active:translate-y-0.5 cursor-pointer">
+            继续采购下一关 🐾
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // --- 1. Web Audio Synthesizer ---
+    class SoundManager {
+      constructor() { this.ctx = null; this.enabled = true; }
+      getCtx() {
+        if (!this.ctx) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (AC) this.ctx = new AC();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+        return this.ctx;
+      }
+      playSelect() {
+        if (!this.enabled) return;
+        const c = this.getCtx(); if (!c) return;
+        const o = c.createOscillator(), g = c.createGain();
+        o.type = 'sine'; o.frequency.setValueAtTime(540, c.currentTime);
+        o.frequency.exponentialRampToValueAtTime(880, c.currentTime + 0.05);
+        g.gain.setValueAtTime(0.12, c.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.05);
+        o.connect(g); g.connect(c.destination);
+        o.start(); o.stop(c.currentTime + 0.06);
+      }
+      playMatch(combo = 1) {
+        if (!this.enabled) return;
+        const c = this.getCtx(); if (!c) return;
+        const now = c.currentTime;
+        const baseFreq = 523.25 * Math.pow(1.059, Math.min(12, combo * 2));
+        [baseFreq, baseFreq * 1.25, baseFreq * 1.5].forEach((f, i) => {
+          const t = now + i * 0.035, o = c.createOscillator(), g = c.createGain();
+          o.type = 'triangle'; o.frequency.setValueAtTime(f, t);
+          g.gain.setValueAtTime(0.14, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+          o.connect(g); g.connect(c.destination);
+          o.start(t); o.stop(t + 0.19);
+        });
+      }
+      playMeow(pitch = 600) {
+        if (!this.enabled) return;
+        const c = this.getCtx(); if (!c) return;
+        const o = c.createOscillator(), g = c.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(pitch, c.currentTime);
+        o.frequency.exponentialRampToValueAtTime(pitch * 1.4, c.currentTime + 0.08);
+        o.frequency.exponentialRampToValueAtTime(pitch * 0.85, c.currentTime + 0.22);
+        g.gain.setValueAtTime(0.18, c.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.24);
+        o.connect(g); g.connect(c.destination);
+        o.start(); o.stop(c.currentTime + 0.25);
+      }
+      playVictory() {
+        if (!this.enabled) return;
+        const c = this.getCtx(); if (!c) return;
+        const notes = [523.25, 659.25, 783.99, 1046.5];
+        notes.forEach((f, i) => {
+          const t = c.currentTime + i * 0.1, o = c.createOscillator(), g = c.createGain();
+          o.type = 'sine'; o.frequency.setValueAtTime(f, t);
+          g.gain.setValueAtTime(0.18, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+          o.connect(g); g.connect(c.destination);
+          o.start(t); o.stop(t + 0.3);
+        });
+      }
+    }
+    const sound = new SoundManager();
+
+    // --- 2. Data & Milestones ---
+    const JOURNAL_STAGES = [
+      { stage: 1, id: 'stage_1_floor', name: '打扫与铺设原木地板', subtitle: '清扫浮灰，铺设散发天然松木香气的温润木板', costStars: 1, costCoins: 80, log: '【08:30】新铺的松木地板散发着森林般的清香，晨光从玻璃窗倾泻而入。', icon: '🪵' },
+      { stage: 2, id: 'stage_2_bar', name: '搭建手工胡桃木吧台', subtitle: '手工细磨深色胡桃木台面，搭配一盏黄铜小暖灯', costStars: 2, costCoins: 160, log: '【09:45】手工打磨的胡桃木吧台温润厚实，摆上一盏黄铜小台灯，角落瞬间有了温度。', icon: '☕' },
+      { stage: 3, id: 'stage_3_cat_custard', name: '领养第一只小橘猫「奶黄包」', subtitle: '圆滚滚的小橘猫，性情温和黏人爱打呼噜', costStars: 2, costCoins: 240, log: '【11:20】小橘猫「奶黄包」正式入住！它小心翼翼地嗅了嗅地板，随后在吧台下舒服地伸了个大懒腰。', catId: 'custard', catName: '奶黄包', icon: '🐱' },
+      { stage: 4, id: 'stage_4_cattree', name: '添置多层猫爬架与软垫', subtitle: '麻绳抓柱与云朵软垫，猫咪专属的高空日光浴场', costStars: 3, costCoins: 350, log: '【14:00】「奶黄包」蜷缩在猫爬架最高层，尾巴尖轻轻扫着微风，睡得很香。', icon: '🏰' },
+      { stage: 5, id: 'stage_5_espressomachine', name: '购置专业意式咖啡机', subtitle: '双头黄铜萃取机，开启浓醇微醺的深烘坚果香气', costStars: 3, costCoins: 480, log: '【10:15】咖啡机噗嗤噗嗤喷出浓郁的白雾，整间屋子都浸泡在焦糖风味里。', icon: '☕' },
+      { stage: 6, id: 'stage_6_table_guest', name: '开放窗边雅座并接待首位常客', subtitle: '藤编双人座椅与落地木窗，迎来第一位爱猫客人', costStars: 4, costCoins: 650, log: '【15:30】第一位常客推开门铃叮当作响。他点了一杯拿铁，坐在窗边看「奶黄包」打盹，待了整整一个下午。', icon: '🪑' },
+      { stage: 7, id: 'stage_7_cat_dango', name: '领养漫步三花猫「团子」', subtitle: '优雅高贵的三色招财猫，巡视全场的猫界掌柜', costStars: 4, costCoins: 800, log: '【16:45】三花猫「团子」慢悠悠地踱步进来，和「奶黄包」碰了碰鼻尖，迅速霸占了阳光最好的软垫。', catId: 'dango', catName: '团子', icon: '🐈' },
+      { stage: 8, id: 'stage_8_neon_night', name: '悬挂复古暖黄招牌与常客夜市', subtitle: '暮色下的手写猫咪招牌，咖啡馆成为街角温暖明灯', costStars: 5, costCoins: 1000, log: '【19:20】夜幕降临，门头的暖黄招牌亮起，晚风送来咖啡香，几位客人低声谈笑，两只猫咪在脚边轻快穿行。', icon: '✨' },
+    ];
+
+    const CAT_QUOTES = {
+      custard: [
+        '你挠了挠「奶黄包」的下巴，它发出轻柔舒缓的呼噜声 💤',
+        '「奶黄包」用毛茸茸的脑袋蹭了蹭你的手腕，翻开肚皮求抚摸 🐾',
+        '你给「奶黄包」梳了梳毛，它惬意地踩奶，小呼噜打得震天响 ☁️',
+      ],
+      dango: [
+        '「团子」优雅地伸了个懒腰，用爪垫轻轻按了按你的手背 💖',
+        '你递了一小条冻干，「团子」吃得津津有味，发出了满意的细软叫声 🐟',
+        '「团子」慢条斯理地舔了舔爪子，轻轻蹭了蹭咖啡杯 🌿',
+      ],
+    };
+
+    // State
+    const STORAGE_KEY = 'purr_cafe_standalone_journal_v5';
+    let stars = 3, coins = 350;
+    let unlockedStages = new Set(['stage_1_floor']);
+    let journalLogs = [
+      '铺面刚刚租下，空荡荡的地板上积着一层薄灰。门缝外有一只流浪小橘猫探头探脑。',
+      JOURNAL_STAGES[0].log,
+    ];
+    let currentLevel = 1;
+
+    // Load LocalStorage
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const p = JSON.parse(saved);
+        if (typeof p.stars === 'number') stars = p.stars;
+        if (typeof p.coins === 'number') coins = p.coins;
+        if (Array.isArray(p.unlockedStages)) unlockedStages = new Set(p.unlockedStages);
+        if (Array.isArray(p.journalLogs) && p.journalLogs.length > 0) journalLogs = p.journalLogs;
+        if (typeof p.currentLevel === 'number') currentLevel = p.currentLevel;
+      }
+    } catch(e) {}
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          stars, coins, unlockedStages: Array.from(unlockedStages), journalLogs, currentLevel
+        }));
+      } catch(e) {}
+    }
+
+    // --- 3. View Switcher & Journal UI ---
+    function showJournalView() {
+      document.getElementById('viewJournal').classList.remove('hidden');
+      document.getElementById('viewPuzzle').classList.add('hidden');
+      if (timerInterval) clearInterval(timerInterval);
+      renderJournal();
+    }
+    function showPuzzleView() {
+      document.getElementById('viewJournal').classList.add('hidden');
+      document.getElementById('viewPuzzle').classList.remove('hidden');
+      initPuzzle();
+    }
+
+    function renderJournal() {
+      document.getElementById('headerStars').innerText = stars;
+      document.getElementById('headerCoins').innerText = coins.toLocaleString();
+      document.getElementById('journalLevelBadge').innerText = '第 ' + currentLevel + ' 关';
+      document.getElementById('stagesProgressText').innerText = '已竣工 ' + unlockedStages.size + ' / ' + JOURNAL_STAGES.length;
+
+      // Render Logs
+      const logsBox = document.getElementById('journalLogsContainer');
+      logsBox.innerHTML = '';
+      journalLogs.forEach(entry => {
+        const div = document.createElement('div');
+        const isHighlight = entry.startsWith('【');
+        div.className = 'p-2 rounded-xl ' + (isHighlight ? 'bg-[#FBF6EE] border-l-2 border-[#C49B71] text-[#332417]' : 'bg-[#FAF8F5] text-[#554332]');
+        div.innerText = entry;
+        logsBox.appendChild(div);
+      });
+      logsBox.scrollTop = logsBox.scrollHeight;
+
+      // Render Cats
+      const hasCustard = unlockedStages.has('stage_3_cat_custard');
+      const hasDango = unlockedStages.has('stage_7_cat_dango');
+      const catCount = (hasCustard ? 1 : 0) + (hasDango ? 1 : 0);
+      document.getElementById('headerCats').innerText = catCount + ' 只';
+
+      const catSec = document.getElementById('catPettingSection');
+      const catWrap = document.getElementById('catButtonsWrapper');
+      if (catCount > 0) {
+        catSec.classList.remove('hidden');
+        catWrap.innerHTML = '';
+        if (hasCustard) {
+          const btn = document.createElement('button');
+          btn.className = 'flex items-center gap-2 p-2 rounded-xl bg-[#FAF4EB] hover:bg-[#F3EADA] border border-[#E5DAC8] active:scale-95 cursor-pointer';
+          btn.innerHTML = '<span class="text-xl">🐱</span><div class="flex flex-col text-left leading-tight"><span class="text-xs font-bold text-[#3B2C20]">奶黄包</span><span class="text-[10px] text-[#8C6544]">黏人橘猫 · 挠下巴</span></div>';
+          btn.onclick = () => petCat('custard', '奶黄包', 3);
+          catWrap.appendChild(btn);
+        }
+        if (hasDango) {
+          const btn = document.createElement('button');
+          btn.className = 'flex items-center gap-2 p-2 rounded-xl bg-[#FAF4EB] hover:bg-[#F3EADA] border border-[#E5DAC8] active:scale-95 cursor-pointer';
+          btn.innerHTML = '<span class="text-xl">🐈</span><div class="flex flex-col text-left leading-tight"><span class="text-xs font-bold text-[#3B2C20]">团子</span><span class="text-[10px] text-[#8C6544]">傲娇三花 · 递冻干</span></div>';
+          btn.onclick = () => petCat('dango', '团子', 4);
+          catWrap.appendChild(btn);
+        }
+      } else {
+        catSec.classList.add('hidden');
+      }
+
+      // Render Stages Cards
+      const cardsBox = document.getElementById('stagesCardsContainer');
+      cardsBox.innerHTML = '';
+      JOURNAL_STAGES.forEach((item, idx) => {
+        const isUnlocked = unlockedStages.has(item.id);
+        const prevUnlocked = idx === 0 || unlockedStages.has(JOURNAL_STAGES[idx - 1].id);
+        const canAfford = stars >= item.costStars && coins >= item.costCoins;
+        const isAvail = prevUnlocked && !isUnlocked;
+
+        const card = document.createElement('div');
+        card.className = 'w-full p-3 rounded-2xl border transition-all ' +
+          (isUnlocked ? 'bg-[#F9F6F0] border-[#E8DEC8] opacity-90' : isAvail ? 'bg-[#FFFDF9] border-[#D9CDB8] shadow-sm' : 'bg-[#F5F2EB]/60 border-[#E8DEC8]/60 opacity-60');
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-2.5">
+            <div class="flex items-start gap-2.5 flex-1 min-w-0">
+              <div class="w-9 h-9 rounded-xl bg-[#F5EFEB] border border-[#E2D6C2] flex items-center justify-center text-lg shrink-0 mt-0.5">${item.icon}</div>
+              <div class="flex flex-col min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[10px] font-mono font-bold bg-[#EFE8DA] text-[#6B533E] px-1.5 py-0.2 rounded-md">阶段 ${item.stage}</span>
+                  <h3 class="text-xs sm:text-sm font-bold text-[#2C2219] truncate">${item.name}</h3>
+                </div>
+                <p class="text-[11px] text-[#78614E] mt-0.5 line-clamp-2 leading-tight">${item.subtitle}</p>
+                ${!isUnlocked ? `<div class="flex items-center gap-2 mt-1.5 text-[10px] font-mono font-bold text-[#8C6544]">
+                  <span class="bg-[#FAF4EB] border border-[#E8DEC8] px-1.5 py-0.5 rounded-md">⭐ ${item.costStars} 星</span>
+                  <span class="bg-[#FAF4EB] border border-[#E8DEC8] px-1.5 py-0.5 rounded-md">🪙 ${item.costCoins} 币</span>
+                </div>` : ''}
+              </div>
+            </div>
+            <div class="shrink-0 flex items-center self-center">
+              ${isUnlocked
+                ? '<div class="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-xl">✓ 已竣工</div>'
+                : isAvail
+                ? `<button onclick="unlockStage('${item.id}')" class="px-3 py-1.5 rounded-xl text-xs font-bold ${canAfford ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-sm cursor-pointer' : 'bg-[#E8DEC8] text-[#8C7560] cursor-not-allowed'}" ${!canAfford ? 'disabled' : ''}>${canAfford ? '建设' : '缺少资源'}</button>`
+                : '<span class="text-[10px] text-[#A38E7A] bg-[#EFEAE0] px-2 py-1 rounded-lg">待前置解锁</span>'
+              }
+            </div>
+          </div>
+        `;
+        cardsBox.appendChild(card);
+      });
+    }
+
+    function petCat(key, name, bonus) {
+      sound.playMeow(key === 'custard' ? 620 : 780);
+      coins += bonus;
+      const arr = CAT_QUOTES[key] || [];
+      const quote = arr[Math.floor(Math.random() * arr.length)];
+      const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+      journalLogs.push('【' + timeStr + ' 互动】' + quote + ' (+' + bonus + ' 🪙)');
+      saveState();
+      renderJournal();
+    }
+
+    window.unlockStage = function(id) {
+      const stage = JOURNAL_STAGES.find(s => s.id === id);
+      if (!stage) return;
+      if (stars >= stage.costStars && coins >= stage.costCoins) {
+        stars -= stage.costStars;
+        coins -= stage.costCoins;
+        unlockedStages.add(stage.id);
+        journalLogs.push(stage.log);
+        sound.playVictory();
+        if (stage.catId) setTimeout(() => sound.playMeow(650), 300);
+        saveState();
+        renderJournal();
+      }
+    };
+
+    // --- 4. Hardcore LianLianKan Pathfinding & Coordinate Logic ---
+    const ICONS = ['☕', '🍰', '🥐', '🍩', '🐾', '🥛', '🍓', '🍵', '🍪', '🥪'];
+    let rows = 6, cols = 6;
+    let grid = [];
+    let selectedTile = null;
+    let clearedCount = 0, totalPairs = 18;
+    let timeLeft = 90, isFrozen = false;
+    let timerInterval = null;
+    let score = 0, combo = 0;
+    let hintsLeft = 3, shufflesLeft = 2, freezesLeft = 1;
+
+    function isLineEmpty(g, p1, p2) {
+      if (p1.r === p2.r) {
+        const minC = Math.min(p1.c, p2.c), maxC = Math.max(p1.c, p2.c);
+        for (let c = minC + 1; c < maxC; c++) if (g[p1.r][c] !== 0) return false;
+        return true;
+      }
+      if (p1.c === p2.c) {
+        const minR = Math.min(p1.r, p2.r), maxR = Math.max(p1.r, p2.r);
+        for (let r = minR + 1; r < maxR; r++) if (g[r][p1.c] !== 0) return false;
+        return true;
+      }
+      return false;
+    }
+    function check0Turn(g, p1, p2) {
+      if ((p1.r === p2.r || p1.c === p2.c) && isLineEmpty(g, p1, p2)) return [p1, p2];
+      return null;
+    }
+    function check1Turn(g, p1, p2) {
+      const c1 = { r: p1.r, c: p2.c };
+      if (g[c1.r][c1.c] === 0 && isLineEmpty(g, p1, c1) && isLineEmpty(g, c1, p2)) return [p1, c1, p2];
+      const c2 = { r: p2.r, c: p1.c };
+      if (g[c2.r][c2.c] === 0 && isLineEmpty(g, p1, c2) && isLineEmpty(g, c2, p2)) return [p1, c2, p2];
+      return null;
+    }
+    function check2Turn(g, p1, p2) {
+      const dirs = [{dr: -1, dc: 0}, {dr: 1, dc: 0}, {dr: 0, dc: -1}, {dr: 0, dc: 1}];
+      let best = null, minDist = Infinity;
+      for (const d of dirs) {
+        let cr = p1.r + d.dr, cc = p1.c + d.dc;
+        while (cr >= 0 && cr <= rows + 1 && cc >= 0 && cc <= cols + 1) {
+          if (g[cr][cc] !== 0) break;
+          const s1 = { r: cr, c: cc };
+          const sub = check1Turn(g, s1, p2);
+          if (sub) {
+            const dist = Math.abs(p1.r - cr) + Math.abs(p1.c - cc) + Math.abs(cr - sub[1].r) + Math.abs(cc - sub[1].c) + Math.abs(sub[1].r - p2.r) + Math.abs(sub[1].c - p2.c);
+            if (dist < minDist) { minDist = dist; best = [p1, s1, sub[1], p2]; }
+          }
+          cr += d.dr; cc += d.dc;
+        }
+      }
+      return best;
+    }
+    function findPath(g, p1, p2) {
+      if (p1.r === p2.r && p1.c === p2.c) return null;
+      if (g[p1.r][p1.c] <= 0 || g[p1.r][p1.c] !== g[p2.r][p2.c]) return null;
+      const p0 = check0Turn(g, p1, p2); if (p0) return p0;
+      const p1Turn = check1Turn(g, p1, p2); if (p1Turn) return p1Turn;
+      return check2Turn(g, p1, p2);
+    }
+
+    // --- 5. Precise Canvas Laser Line & Sparks ---
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [], activeLine = null, cellSize = 46;
+
+    function renderCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (activeLine) {
+        activeLine.opacity -= 0.04; // 0.25s fade
+        if (activeLine.opacity <= 0) activeLine = null;
+        else {
+          ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.globalAlpha = activeLine.opacity;
+          ctx.strokeStyle = '#FBBF24'; ctx.lineWidth = 6;
+          ctx.shadowColor = '#F59E0B'; ctx.shadowBlur = 16;
+          ctx.setLineDash([8, 6]);
+          ctx.beginPath();
+          activeLine.pts.forEach((pt, i) => {
+            if (i === 0) ctx.moveTo(pt.x, pt.y); else ctx.lineTo(pt.x, pt.y);
+          });
+          ctx.stroke();
+          ctx.lineWidth = 3; ctx.strokeStyle = '#FFFDF5'; ctx.stroke();
+
+          // Paw nodes
+          ctx.setLineDash([]);
+          activeLine.pts.forEach((pt, pIdx) => {
+            ctx.beginPath(); ctx.arc(pt.x, pt.y, 4.5, 0, Math.PI * 2);
+            ctx.fillStyle = '#FFFDF5'; ctx.fill();
+            if (pIdx === 0 || pIdx === activeLine.pts.length - 1) {
+              ctx.font = '14px sans-serif'; ctx.fillText('🐾', pt.x - 7, pt.y - 10);
+            }
+          });
+          ctx.restore();
+        }
+      }
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.life++; p.x += p.vx; p.y += p.vy; p.alpha = 1 - p.life / p.maxLife;
+        if (p.life >= p.maxLife) particles.splice(i, 1);
+        else {
+          ctx.save(); ctx.globalAlpha = p.alpha;
+          if (p.isPaw) { ctx.font = '13px sans-serif'; ctx.fillText('🐾', p.x, p.y); }
+          else { ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill(); }
+          ctx.restore();
+        }
+      }
+      requestAnimationFrame(renderCanvas);
+    }
+    requestAnimationFrame(renderCanvas);
+
+    function triggerSparks(center) {
+      for (let i = 0; i < 16; i++) {
+        const angle = Math.random() * Math.PI * 2, spd = 2 + Math.random() * 4;
+        particles.push({
+          x: center.x, y: center.y, vx: Math.cos(angle) * spd, vy: Math.sin(angle) * spd,
+          color: ['#F59E0B', '#FBBF24', '#FFFDF8'][Math.floor(Math.random() * 3)],
+          size: 2.5 + Math.random() * 2.5, life: 0, maxLife: 20 + Math.random() * 10, alpha: 1,
+          isPaw: i % 4 === 0
+        });
+      }
+    }
+
+    // --- 6. Puzzle Execution ---
+    function initPuzzle() {
+      clearedCount = 0; totalPairs = 18; score = 0; combo = 0;
+      timeLeft = 90; isFrozen = false;
+      hintsLeft = 3; shufflesLeft = 2; freezesLeft = 1;
+      document.getElementById('puzzleLevelTitle').innerText = '第 ' + currentLevel + ' 关 · 烘焙原料';
+      updateBadges();
+
+      grid = Array.from({ length: rows + 2 }, () => Array(cols + 2).fill(0));
+      const pool = [];
+      for (let i = 0; i < 18; i++) {
+        const t = (i % 6) + 1; pool.push(t, t);
+      }
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+      let idx = 0;
+      for (let r = 1; r <= rows; r++) {
+        for (let c = 1; c <= cols; c++) {
+          grid[r][c] = pool[idx++];
+        }
+      }
+      resizeBoard();
+      renderTiles();
+
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (!isFrozen && timeLeft > 0) {
+          timeLeft--;
+          const m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+          const s = String(timeLeft % 60).padStart(2, '0');
+          document.getElementById('timerText').innerText = m + ':' + s;
+          if (timeLeft === 0) {
+            clearInterval(timerInterval);
+            alert('采购时间到啦！猫咪们想要再试一次！');
+            showJournalView();
+          }
+        }
+      }, 1000);
+    }
+
+    function updateBadges() {
+      document.getElementById('badgeHint').innerText = 'x' + hintsLeft;
+      document.getElementById('badgeShuffle').innerText = 'x' + shufflesLeft;
+      document.getElementById('badgeFreeze').innerText = 'x' + freezesLeft;
+      document.getElementById('scoreText').innerText = '得分: ' + score;
+      document.getElementById('pairProgress').innerText = clearedCount + ' / ' + totalPairs;
+      const pct = (clearedCount / totalPairs) * 100;
+      document.getElementById('clearanceBar').style.width = pct + '%';
+    }
+
+    function resizeBoard() {
+      const cont = document.getElementById('boardContainer');
+      const maxW = cont.clientWidth - 16;
+      const maxH = cont.clientHeight - 16;
+      cellSize = Math.min(54, Math.floor(Math.min(maxW / (cols + 2), maxH / (rows + 2))));
+      const bW = cellSize * (cols + 2), bH = cellSize * (rows + 2);
+      const bInner = document.getElementById('boardInner');
+      bInner.style.width = bW + 'px'; bInner.style.height = bH + 'px';
+      canvas.width = cont.clientWidth; canvas.height = cont.clientHeight;
+    }
+
+    function renderTiles() {
+      const wrapper = document.getElementById('tilesWrapper');
+      wrapper.innerHTML = '';
+      for (let r = 1; r <= rows; r++) {
+        for (let c = 1; c <= cols; c++) {
+          const v = grid[r][c];
+          if (v === 0) continue;
+          const btn = document.createElement('button');
+          btn.id = 'tile-' + r + '-' + c;
+          btn.style.left = (c * cellSize) + 'px';
+          btn.style.top = (r * cellSize) + 'px';
+          btn.style.width = cellSize + 'px';
+          btn.style.height = cellSize + 'px';
+          btn.className = 'absolute p-1 cursor-pointer transition-transform active:scale-90';
+
+          const inner = document.createElement('div');
+          const isSel = selectedTile && selectedTile.r === r && selectedTile.c === c;
+          inner.className = 'w-full h-full rounded-2xl flex items-center justify-center text-xl font-bold transition-all ' +
+            (isSel ? 'bg-[#FFFDF5] border-2 border-amber-400 ring-4 ring-amber-300 shadow-[0_0_12px_rgba(251,191,36,0.9)] scale-105' :
+             'bg-[#FFFDF8] hover:bg-[#FAF6EE] border-2 border-[#8C6541] shadow-[0_2px_0_#734F30]');
+          inner.innerText = ICONS[(v - 1) % ICONS.length];
+
+          btn.appendChild(inner);
+          btn.onclick = () => onTileClick(r, c);
+          wrapper.appendChild(btn);
+        }
+      }
+    }
+
+    // Precise getBoundingClientRect center coordinate path calculation
+    function getCanvasPointsForPath(path) {
+      const canvasRect = canvas.getBoundingClientRect();
+      const bInner = document.getElementById('boardInner');
+      const bRect = bInner.getBoundingClientRect();
+      const cellW = bRect.width / (cols + 2);
+      const cellH = bRect.height / (rows + 2);
+
+      return path.map(pt => {
+        const el = document.getElementById('tile-' + pt.r + '-' + pt.c);
+        if (el) {
+          const tRect = el.getBoundingClientRect();
+          return {
+            x: tRect.left + tRect.width / 2 - canvasRect.left,
+            y: tRect.top + tRect.height / 2 - canvasRect.top
+          };
+        }
+        return {
+          x: bRect.left + (pt.c + 0.5) * cellW - canvasRect.left,
+          y: bRect.top + (pt.r + 0.5) * cellH - canvasRect.top
+        };
+      });
+    }
+
+    function onTileClick(r, c) {
+      if (grid[r][c] <= 0) return;
+      sound.playSelect();
+      if (!selectedTile) {
+        selectedTile = { r, c }; renderTiles(); return;
+      }
+      if (selectedTile.r === r && selectedTile.c === c) {
+        selectedTile = null; renderTiles(); return;
+      }
+      const path = findPath(grid, selectedTile, { r, c });
+      if (path) {
+        const p1 = selectedTile, p2 = { r, c };
+        const canvasPts = getCanvasPointsForPath(path);
+        activeLine = { pts: canvasPts, opacity: 1 };
+        triggerSparks(canvasPts[0]); triggerSparks(canvasPts[canvasPts.length - 1]);
+        grid[p1.r][p1.c] = 0; grid[p2.r][p2.c] = 0;
+        selectedTile = null;
+        clearedCount++; combo++;
+        score += 100 + (combo - 1) * 35;
+        sound.playMatch(combo);
+        renderTiles();
+        updateBadges();
+
+        if (clearedCount >= totalPairs) {
+          clearInterval(timerInterval);
+          sound.playVictory();
+          stars += 3; coins += 120;
+          const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+          journalLogs.push('【' + timeStr + ' 采购】第 ' + currentLevel + ' 关食材采购大获全胜，带回了新鲜香浓原料！(+3 ⭐, +120 🪙)');
+          saveState();
+          document.getElementById('modalVictory').classList.remove('hidden');
+        }
+      } else {
+        selectedTile = { r, c }; renderTiles();
+      }
+    }
+
+    // Power-ups
+    document.getElementById('btnHint').onclick = () => {
+      if (hintsLeft <= 0) return;
+      for (let r1 = 1; r1 <= rows; r1++) {
+        for (let c1 = 1; c1 <= cols; c1++) {
+          if (grid[r1][c1] <= 0) continue;
+          for (let r2 = 1; r2 <= rows; r2++) {
+            for (let c2 = 1; c2 <= cols; c2++) {
+              if (r1 === r2 && c1 === c2) continue;
+              if (grid[r1][c1] === grid[r2][c2]) {
+                const path = findPath(grid, { r: r1, c: c1 }, { r: r2, c: c2 });
+                if (path) {
+                  hintsLeft--; updateBadges();
+                  activeLine = { pts: getCanvasPointsForPath(path), opacity: 1 };
+                  return;
+                }
+              }
+            }
+          }
+        }
+      }
+    };
+    document.getElementById('btnShuffle').onclick = () => {
+      if (shufflesLeft <= 0) return;
+      shufflesLeft--;
+      const remaining = [];
+      for (let r = 1; r <= rows; r++) for (let c = 1; c <= cols; c++) if (grid[r][c] > 0) remaining.push(grid[r][c]);
+      for (let i = remaining.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1)); [remaining[i], remaining[j]] = [remaining[j], remaining[i]];
+      }
+      let idx = 0;
+      for (let r = 1; r <= rows; r++) for (let c = 1; c <= cols; c++) if (grid[r][c] > 0) grid[r][c] = remaining[idx++];
+      updateBadges(); renderTiles();
+    };
+    document.getElementById('btnFreeze').onclick = () => {
+      if (freezesLeft <= 0) return;
+      freezesLeft--; isFrozen = true; timeLeft += 15;
+      document.getElementById('freezeText').innerText = '冰冻中';
+      updateBadges();
+      setTimeout(() => { isFrozen = false; document.getElementById('freezeText').innerText = '加时'; }, 10000);
+    };
+
+    // Event Bindings
+    document.getElementById('btnStartProcure').onclick = () => showPuzzleView();
+    document.getElementById('btnBackToJournal').onclick = () => showJournalView();
+    document.getElementById('btnBackToJournalFromVic').onclick = () => {
+      document.getElementById('modalVictory').classList.add('hidden');
+      showJournalView();
+    };
+    document.getElementById('btnNextLevel').onclick = () => {
+      document.getElementById('modalVictory').classList.add('hidden');
+      currentLevel++;
+      showPuzzleView();
+    };
+
+    const toggleSound = () => {
+      sound.enabled = !sound.enabled;
+      const text = sound.enabled ? '🔊' : '🔇';
+      document.getElementById('btnToggleSoundJournal').innerText = text;
+      document.getElementById('btnToggleSoundPuzzle').innerText = text;
+    };
+    document.getElementById('btnToggleSoundJournal').onclick = toggleSound;
+    document.getElementById('btnToggleSoundPuzzle').onclick = toggleSound;
+
+    window.onresize = () => {
+      if (!document.getElementById('viewPuzzle').classList.contains('hidden')) {
+        resizeBoard(); renderTiles();
+      }
+    };
+
+    showJournalView();
+  </script>
+</body>
+</html>
