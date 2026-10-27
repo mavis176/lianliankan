@@ -727,6 +727,55 @@
       transform: none;
     }
 
+    .btn-pet-disabled {
+      opacity: 0.65 !important;
+      cursor: not-allowed !important;
+      background: #E5E7EB !important;
+      border-color: #9CA3AF !important;
+      color: #6B7280 !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+
+    .cat-mood-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 9.5px;
+      color: #7A6553;
+      margin-top: 2px;
+    }
+
+    .cat-mood-hearts {
+      letter-spacing: 1px;
+      font-size: 10px;
+    }
+
+    .cat-exp-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 2px;
+      font-size: 8.5px;
+      color: #92400E;
+    }
+
+    .cat-exp-track {
+      flex: 1;
+      max-width: 65px;
+      height: 4px;
+      background: #EADBC8;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .cat-exp-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #F59E0B, #EF4444);
+      border-radius: 3px;
+      transition: width 0.25s ease;
+    }
+
     .tag-max {
       font-size: 10px;
       color: #059669;
@@ -2190,7 +2239,15 @@
             cashRegister = typeof p.cashRegister === 'number' ? p.cashRegister : 0;
             currentBranchIndex = typeof p.currentBranchIndex === 'number' ? p.currentBranchIndex : 0;
             branches = (Array.isArray(p.branches) && p.branches.length > 0) ? p.branches : pure.branches;
-            adoptedCats = Array.isArray(p.adoptedCats) ? p.adoptedCats : [];
+            adoptedCats = (Array.isArray(p.adoptedCats) ? p.adoptedCats : []).map(cat => ({
+              ...cat,
+              affinity: typeof cat.affinity === 'number' ? Math.min(10, Math.max(1, cat.affinity)) : 1,
+              affinityExp: typeof cat.affinityExp === 'number' ? cat.affinityExp : 0,
+              mood: typeof cat.mood === 'number' ? Math.min(3, Math.max(0, cat.mood)) : 3,
+              maxMood: 3,
+              lastPetTime: typeof cat.lastPetTime === 'number' ? cat.lastPetTime : 0,
+              lastMoodRegenTime: typeof cat.lastMoodRegenTime === 'number' ? cat.lastMoodRegenTime : Date.now()
+            }));
             unlockedDrinks = new Set(Array.isArray(p.unlockedDrinks) ? p.unlockedDrinks : []);
             return true;
           }
@@ -2320,6 +2377,29 @@
     }
 
     // --- 9. Alley Stray Cat Adoption (Endless Gacha) ---
+    // --- Cat Mood, Cooldown & Affinity EXP Rules ---
+    const AFFINITY_MAX_LEVEL = 10;
+    const AFFINITY_EXP_TABLE = [0, 3, 5, 8, 12, 18, 25, 35, 48, 65];
+    function getRequiredExp(level) {
+      return AFFINITY_EXP_TABLE[level] || 80;
+    }
+
+    function updateCatMood(cat) {
+      const now = Date.now();
+      const maxM = cat.maxMood || 3;
+      if (typeof cat.mood !== 'number') cat.mood = maxM;
+      if (cat.mood < maxM) {
+        const elapsed = now - (cat.lastMoodRegenTime || now);
+        const recovered = Math.floor(elapsed / 60000);
+        if (recovered > 0) {
+          cat.mood = Math.min(maxM, cat.mood + recovered);
+          cat.lastMoodRegenTime = now - (elapsed % 60000);
+        }
+      } else {
+        cat.lastMoodRegenTime = now;
+      }
+    }
+
     function rescueAlleyCat() {
       if (stars < 3) {
         alert('后巷探寻需要 3 颗 ⭐ 星光灵感！先去通关连连看获取吧！');
@@ -2341,6 +2421,11 @@
         personality,
         icon: breedObj.icon,
         affinity: 1,
+        affinityExp: 0,
+        mood: 3,
+        maxMood: 3,
+        lastPetTime: 0,
+        lastMoodRegenTime: Date.now(),
         branchId: getActiveBranch().id,
         story
       };
@@ -2362,20 +2447,72 @@
     function petAdoptedCat(catId) {
       const cat = adoptedCats.find(c => c.id === catId);
       if (!cat) return;
-      cat.affinity = Math.min(10, (cat.affinity || 1) + 1);
-      const bonus = 5 + cat.affinity * 3;
-      coins += bonus;
+
+      updateCatMood(cat);
+      const now = Date.now();
+
+      // 1. Anti-spam 5-second cooldown check
+      const cdRemaining = Math.max(0, Math.ceil(((cat.lastPetTime || 0) + 5000 - now) / 1000));
+      if (cdRemaining > 0) {
+        alert('「' + cat.name + '」正在惬意地回味刚才的抚摸呢，请稍等 ' + cdRemaining + ' 秒～');
+        return;
+      }
+
+      // 2. Mood check (0 mood = sleeping)
+      if (cat.mood <= 0) {
+        alert('「' + cat.name + '」困得打哈欠啦！通关连连看采购鲜食犒劳，或等待休息即可唤醒它～');
+        return;
+      }
+
+      // 3. Consume 1 mood
+      cat.mood -= 1;
+      cat.lastPetTime = now;
+      cat.lastMoodRegenTime = now;
+
+      // 4. Balanced economy: strictly 5~10 coins per pet
+      const coinReward = 5 + Math.min(5, Math.floor((cat.affinity || 1) / 2));
+      coins += coinReward;
+
+      // 5. Affinity EXP progression
+      const isCrit = Math.random() < 0.15;
+      const expGain = isCrit ? 2 : 1;
+      cat.affinityExp = (cat.affinityExp || 0) + expGain;
+
+      let leveledUp = false;
+      const currentLvl = cat.affinity || 1;
+      if (currentLvl < AFFINITY_MAX_LEVEL) {
+        const needExp = getRequiredExp(currentLvl);
+        if (cat.affinityExp >= needExp) {
+          cat.affinity = currentLvl + 1;
+          cat.affinityExp = 0;
+          leveledUp = true;
+        }
+      }
+
       sound.playMeow(680 + Math.random() * 120);
       triggerHaptic('light');
 
-      const quotes = [
-        '「' + cat.name + '」舒服地打着呼噜，用湿漉漉的鼻子蹭了蹭你的手背。',
-        '「' + cat.name + '」在阳光下翻开肚皮，前爪有节奏地起伏踩奶。',
-        '「' + cat.name + '」舔了舔你的指尖，眼神里满是依赖与温柔。'
-      ];
-      const q = quotes[Math.floor(Math.random() * quotes.length)];
       const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
-      getActiveBranch().logs.push('【' + timeStr + ' 互动】' + q + ' (羁绊 Lv.' + cat.affinity + ', +' + bonus + ' 🪙)');
+      const branch = getActiveBranch();
+
+      if (leveledUp) {
+        sound.playVictory();
+        triggerHaptic('heavy');
+        branch.logs.push('【' + timeStr + ' 💖羁绊升阶】与「' + cat.name + '」的羁绊提升至 Lv.' + cat.affinity + '！猫咪更加依赖你了！');
+      } else {
+        const quotes = [
+          '「' + cat.name + '」舒服地打着呼噜，用湿漉漉的鼻子蹭了蹭你的手背。',
+          '「' + cat.name + '」在阳光下翻开肚皮，前爪有节奏地起伏踩奶。',
+          '「' + cat.name + '」舔了舔你的指尖，眼神里满是依赖与温柔。'
+        ];
+        const q = quotes[Math.floor(Math.random() * quotes.length)];
+        const critText = isCrit ? ' (心花怒放! 经验+2)' : ' (经验+1)';
+        branch.logs.push('【' + timeStr + ' 互动】' + q + critText + ' (+' + coinReward + ' 🪙)');
+      }
+
+      if (cat.mood === 0) {
+        branch.logs.push('【' + timeStr + ' 💤午睡】「' + cat.name + '」舒服地打了个哈欠，跳上猫爬架呼呼大睡了，暂时不想被打扰。(通关连连看或休息后恢复)');
+      }
 
       saveGame();
       renderJournal();
@@ -2582,24 +2719,67 @@
         return;
       }
 
+      const now = Date.now();
+
       adoptedCats.forEach(cat => {
+        updateCatMood(cat);
+
         const card = document.createElement('div');
         card.className = 'content-card';
+
+        const cdRemaining = Math.max(0, Math.ceil(((cat.lastPetTime || 0) + 5000 - now) / 1000));
+        const isSleeping = (cat.mood || 0) <= 0;
+        const isCd = cdRemaining > 0;
+
+        let moodHearts = '';
+        for (let i = 0; i < 3; i++) {
+          moodHearts += i < (cat.mood || 0) ? '💖' : '🖤';
+        }
+
+        const currentLvl = cat.affinity || 1;
+        const isMaxLvl = currentLvl >= AFFINITY_MAX_LEVEL;
+        const needExp = getRequiredExp(currentLvl);
+        const currExp = isMaxLvl ? needExp : (cat.affinityExp || 0);
+        const expPercent = isMaxLvl ? 100 : Math.min(100, Math.round((currExp / needExp) * 100));
+
+        let actionBtnHtml = '';
+        if (isCd) {
+          actionBtnHtml = `<button class="btn-upgrade btn-pet-disabled" disabled style="padding: 5px 8px; font-size: 10.5px;">⏳ ${cdRemaining}s</button>`;
+        } else if (isSleeping) {
+          actionBtnHtml = `<button class="btn-upgrade btn-pet-disabled" disabled style="padding: 5px 8px; font-size: 10.5px;">💤 午睡中</button>`;
+        } else {
+          actionBtnHtml = `<button onclick="petAdoptedCat('${cat.id}')" class="btn-upgrade" style="padding: 5px 8px; font-size: 10.5px;">🐾 抚摸 (-1💖)</button>`;
+        }
+
         card.innerHTML = `
           <div class="card-left">
-            <div class="card-icon-box" style="background: #FFF7ED;">${cat.icon}</div>
+            <div class="card-icon-box" style="background: ${isSleeping ? '#F3F4F6' : '#FFF7ED'};">${cat.icon}</div>
             <div class="card-text-col">
               <div class="card-title-line">
                 <span class="card-main-title">${cat.name}</span>
                 <span style="font-size: 9.5px; padding: 1px 5px; border-radius: 6px; background: #FEF3C7; color: #92400E; font-weight: 700;">${cat.breed} · ${cat.color}</span>
               </div>
-              <div class="card-desc" style="color: #6B482A;">性格: ${cat.personality} · 羁绊 Lv.${cat.affinity || 1}</div>
-              <div class="card-desc" style="font-size: 9px; color: #A38E7A;">${cat.story}</div>
+              <div class="card-desc" style="color: #6B482A; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                <span>性格: ${cat.personality}</span>
+                <span style="font-weight: 700; color: #B45309;">Lv.${currentLvl} ${isMaxLvl ? '典藏' : ''}</span>
+              </div>
+              <div class="cat-exp-bar-wrap">
+                <span>羁绊:</span>
+                <div class="cat-exp-track">
+                  <div class="cat-exp-fill" style="width: ${expPercent}%;"></div>
+                </div>
+                <span>${isMaxLvl ? 'MAX' : currExp + '/' + needExp}</span>
+              </div>
+              <div class="cat-mood-row">
+                <span>心情:</span>
+                <span class="cat-mood-hearts">${moodHearts}</span>
+                <span style="color: ${isSleeping ? '#9CA3AF' : '#D97706'}; font-weight: 700;">(${cat.mood || 0}/3${isSleeping ? ' · 呼呼大睡中' : ''})</span>
+              </div>
             </div>
           </div>
-          <button onclick="petAdoptedCat('${cat.id}')" class="btn-upgrade" style="padding: 5px 9px;">
-            🐾 抚摸
-          </button>
+          <div>
+            ${actionBtnHtml}
+          </div>
         `;
         box.appendChild(card);
       });
@@ -3184,11 +3364,22 @@
         maxClearedLevel = currentLevel;
       }
 
+      // Restore all adopted cats' mood to 3/3 on LianLianKan clear!
+      let restoredMoodCount = 0;
+      adoptedCats.forEach(c => {
+        if (typeof c.mood !== 'number' || c.mood < (c.maxMood || 3)) {
+          c.mood = (c.maxMood || 3);
+          c.lastMoodRegenTime = Date.now();
+          restoredMoodCount++;
+        }
+      });
+
       document.getElementById('vicStarsEarned').innerText = '+' + puzzleConfig.starsReward + ' 星光灵感';
       document.getElementById('vicCoinsEarned').innerText = '+' + puzzleConfig.coinsReward + ' 营业金币';
 
       const timeStr = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
-      getActiveBranch().logs.push('【' + timeStr + ' 捷报】通关了' + puzzleConfig.title + '，带回 ' + puzzleConfig.starsReward + '⭐ 与 ' + puzzleConfig.coinsReward + '🪙！');
+      const catLogSuffix = restoredMoodCount > 0 ? ' 带回的鲜美食材让 ' + restoredMoodCount + ' 只猫咪饱餐一顿，心情全部满格（💖 3/3）！' : '';
+      getActiveBranch().logs.push('【' + timeStr + ' 捷报】通关了' + puzzleConfig.title + '，带回 ' + puzzleConfig.starsReward + '⭐ 与 ' + puzzleConfig.coinsReward + '🪙！' + catLogSuffix);
 
       saveGame();
       document.getElementById('modalVictory').classList.remove('hidden');
@@ -3316,6 +3507,22 @@
         resizeBoard(); renderTiles();
       }
     };
+
+    // 1-second ticker for Cat Pet CD countdown and mood natural recovery
+    setInterval(() => {
+      if (currentTab === 'cats' && !document.getElementById('viewJournal').classList.contains('hidden')) {
+        const now = Date.now();
+        let needRefresh = false;
+        adoptedCats.forEach(c => {
+          if ((c.lastPetTime && now - c.lastPetTime < 6000) || (c.mood || 0) < (c.maxMood || 3)) {
+            needRefresh = true;
+          }
+        });
+        if (needRefresh) {
+          renderCats();
+        }
+      }
+    }, 1000);
 
     // --- 17. Boot Engine ---
     loadGame();
